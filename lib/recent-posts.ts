@@ -3,6 +3,24 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
+    title: "使用 Claude Code 的六周回顾",
+    description: "Puzzmo 工程师 Orta Therox 在生产开发中使用 Claude Code 六周后的回顾与思考，涵盖维护改进、工作流程变化和真实项目示例。",
+    date: "2025-07-30",
+    category: "best-practices",
+    language: "zh",
+    slug: "zh/best-practices/six-weeks-of-claude-code",
+    url: "/docs/zh/best-practices/six-weeks-of-claude-code"
+  },
+  {
+    title: "6 Weeks of Claude Code",
+    description: "A retrospective on using Claude Code for 6 weeks in production development, covering maintenance improvements, workflow changes, and real-world project examples.",
+    date: "2025-07-30",
+    category: "best-practices",
+    language: "en",
+    slug: "en/best-practices/six-weeks-of-claude-code",
+    url: "/docs/en/best-practices/six-weeks-of-claude-code"
+  },
+  {
     title: "手把手教你逆向Claude Code：如何监控AI每一次'内心独白'？",
     description: "通过技术手段逆向分析Claude Code的API交互过程，揭秘AI编程之王的多模型协作策略、精巧的系统提示词设计和智能工具调用机制。",
     date: "2025-01-15",

@@ -6,20 +6,16 @@ lang: en
 
 # Best Practices
 
-## Common Best Practices (ranked by community frequency)
+Welcome to the Best Practices section! Here you'll find valuable resources and guides about Best Practices.
 
-- **CLAUDE.md and memory**: Maintain concise `CLAUDE.md` at repo root (and subfolders/home). Use `#` to capture commands, patterns, and rules the model should follow.
-- **Plan before coding**: Ask Claude to research and propose a plan (Explore → Plan → Code → Commit). Use extended thinking ("think hard/ultrathink") and avoid one-shot mega prompts.
-- **Keep context focused**: Use `/clear` between tasks, start fresh sessions per task, and `/compact` at natural breakpoints.
-- **Tests first, human-written**: Prefer TDD. Run tests/typecheck/lint after small edits. Do not let AI write or modify test expectations for critical areas.
-- **Safety and permissions**: Configure allowlists; use auto-accept sparingly. YOLO (`--dangerously-skip-permissions`) only in constrained environments with backups.
-- **Be specific and reference context**: State exact requirements, edge cases, and success criteria; reference files; attach images/URLs when relevant.
-- **Iterate in small steps**: Stage early and often, interrupt to course-correct, undo when needed, and avoid large, hard-to-review diffs.
-- **Parallelize with subagents and worktrees**: Use Task/subagents, multiple Claude instances, multiple checkouts or git worktrees for independent tasks.
-- **Customize your setup**: Create custom slash commands and hooks; fine-tune `.claude/settings.json`; install `gh` CLI; enable IDE/terminal integrations.
-- **Use Claude for git/GitHub**: Generate commits/PRs, fix failing builds, triage issues, and handle complex git flows via guided commands.
-- **Headless/CI automation**: Use headless mode in scripts and CI to lint, triage, or run structured workflows.
-- **Respect "never-touch" zones**: Keep migrations, API contracts, secrets, and security-critical code under human control with explicit boundaries.
+## What You'll Find Here
+
+This section contains:
+
+- **Practical Guides**: Detailed usage guides for Best Practices
+- **Best Practices**: Proven best practices and techniques
+- **Case Studies**: Real-world application examples
+- **Advanced Tips**: Advanced techniques to improve efficiency
 
 ## Featured Articles
 
@@ -43,6 +39,11 @@ lang: en
     title="One and a Half Months of Intensive Claude Code Usage Experience" 
     description="Personal experience and insights from intensive use of Claude Code over one and a half months"
     href="/docs/en/best-practices/onevcat-claude-code-experience" 
+  />
+  <Card 
+    title="6 Weeks of Claude Code" 
+    description="A retrospective on using Claude Code for 6 weeks in production development"
+    href="/docs/en/best-practices/six-weeks-of-claude-code" 
   />
   <Card 
     title="How I Use Claude Code" 

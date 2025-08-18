@@ -1,0 +1,107 @@
+---
+title: "Context Engineering 模板：让 AI 编码助手真正落地的系统方法"
+description: "基于 coleam00/context-engineering-intro 的上下文工程模板与实践，涵盖 INITIAL/PRP 工作流、示例库与最佳实践"
+language: "zh"
+author: "deepto.ai"
+source: "https://github.com/coleam00/context-engineering-intro"
+date: "2025-08-06"
+---
+
+# Context Engineering 模板：让 AI 编码助手真正落地的系统方法
+
+> **参考项目**：[`coleam00/context-engineering-intro`](https://github.com/coleam00/context-engineering-intro)（8k+ ⭐）
+
+**Context Engineering（上下文工程）** 是让 AI 编码助手端到端完成任务的关键方法论：与其“花哨地写提示词”，不如系统化地“喂给模型完成任务所需的一切上下文”。相比 Prompt Engineering（提示工程），它强调完整的项目规则、示例、验证与闭环执行。
+
+## 为什么需要 Context Engineering
+
+- **减少失败**：大多数“代理失败”是上下文缺失而非模型能力问题
+- **保证一致性**：强制遵循项目约定、代码风格与测试标准
+- **支持复杂特性**：提供足够上下文后，模型可以完成多步实现
+- **自我修正**：通过验证与测试回路自动发现并修复问题
+
+> 正如项目 README 所述：Context Engineering 是“写完整剧本”，而不是给模型贴一张“便利贴”。参见项目说明的“What is Context Engineering”章节。[项目链接](https://github.com/coleam00/context-engineering-intro?tab=readme-ov-file#what-is-context-engineering)
+
+## 模板结构一览
+
+该仓库提供了可直接落地的目录结构（节选）：
+
+```
+.claude/
+  commands/
+    generate-prp.md    # 生成 PRP（Product Requirements Prompt）
+    execute-prp.md     # 执行 PRP 实现功能
+  settings.local.json # Claude Code 权限
+PRPs/
+  templates/
+    prp_base.md        # PRP 基础模板
+  EXAMPLE_multi_agent_prp.md
+examples/              # 关键！存放可复用代码示例与模式
+CLAUDE.md              # 项目全局规则
+INITIAL.md             # 初始功能需求
+INITIAL_EXAMPLE.md     # 初始需求示例
+README.md
+```
+
+## 推荐工作流
+
+1. 在 `CLAUDE.md` 设定项目规则（代码结构、测试、风格、文档等）
+2. 编辑 `INITIAL.md` 描述要实现的功能（包含示例、文档链接、注意事项）
+3. 在 Claude Code 中运行：
+
+```bash
+/generate-prp INITIAL.md
+```
+
+生成完整的 PRP 到 `PRPs/xxx.md` 后，继续执行：
+
+```bash
+/execute-prp PRPs/your-feature-name.md
+```
+
+助手会读取 PRP、制定任务清单、实现与验证、运行测试并迭代直到通过。
+
+## INITIAL.md 编写要点
+
+- **FEATURE**：明确、可验证的功能描述
+- **EXAMPLES**：在 `examples/` 放入可复用代码模式，并说明仿照内容
+- **DOCUMENTATION**：罗列 API、库文档、MCP 资源等链接
+- **OTHER CONSIDERATIONS**：鉴权、配额、性能、常见坑等
+
+项目 README 对比了 Prompt vs Context Engineering，强调“提供完整上下文与验证”的价值。[查看 README 相关部分](https://github.com/coleam00/context-engineering-intro?tab=readme-ov-file#what-is-context-engineering)
+
+## 与工具链的配合
+
+- **与 `Claude Code Router` 配合**：为不同子任务提供合适模型与路由策略
+- **与 `Claude Code Templates` 配合**：批量生成项目规则、命令与监控
+- **MCP 集成**：接入 GitHub、数据库、构建系统等，为实现与验证提供能力
+
+## 最佳实践清单
+
+- 在 `examples/` 中放入“你希望模型模仿的代码”。示例越多，效果越稳定
+- 用 PRP 的“验证关卡”把质量把控为必经步骤，确保测试与构建通过
+- 明确“成功标准”和“退出条件”，避免无限制迭代
+- 把“团队共识”沉淀进 `CLAUDE.md`，让助手天然遵循规范
+- 适度拆分多 PRP，分别聚焦不同子域（如 API、前端、DB 模式）
+
+## 什么时候选 Context Engineering
+
+- 需要“端到端”地交付一项功能，而不仅是代码片段
+- 团队多人协作，需要让 AI 助手遵循一致的流程与标准
+- 跨领域集成（前后端、数据、CI/CD、文档），需要完整上下文
+
+## 参考与来源
+
+- 项目主页：[`coleam00/context-engineering-intro`](https://github.com/coleam00/context-engineering-intro)
+- What is Context Engineering 章节：[`README#what-is-context-engineering`](https://github.com/coleam00/context-engineering-intro?tab=readme-ov-file#what-is-context-engineering)
+
+> 许可证：MIT（请遵循原仓库 LICENSE）。
+
+---
+
+本文根据上述仓库的内容梳理与提炼，旨在帮助你快速上手“上下文工程”，让 AI 编码助手在真实项目中稳定产出可用代码与文档。
+
+
+
+
+

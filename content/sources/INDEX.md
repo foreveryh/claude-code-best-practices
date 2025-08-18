@@ -30,10 +30,23 @@
 
 ---
 
+### 2. 6 Weeks of Claude Code
+
+- **原文标题**：6 Weeks of Claude Code
+- **原文URL**：https://blog.puzzmo.com/posts/2025/07/30/six-weeks-of-claude-code/
+- **抓取日期**：2025-01-15
+- **主题分类**：最佳实践
+- **相关文档页面**：`/docs/en/best-practices/six-weeks-of-claude-code`、`/docs/zh/best-practices/six-weeks-of-claude-code`
+- **简短描述**：Puzzmo 工程师 Orta Therox 使用 Claude Code 六周后的回顾与思考，涵盖维护改进、工作流程变化和真实项目示例
+- **发布状态**：✅ 已发布（中英文双语版本）
+- **原文文件**：`six-weeks-of-claude-code_2025-07-30.md`
+
+---
+
 ## 统计信息
 
-- **总计原文数量**：1
-- **已发布文档数量**：1
+- **总计原文数量**：2
+- **已发布文档数量**：2
 - **待发布文档数量**：0
 
-*最后更新：2025-08-04*
+*最后更新：2025-01-15*

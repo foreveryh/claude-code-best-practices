@@ -1,0 +1,215 @@
+# 6 Weeks of Claude Code
+
+*Jul 30, 2025 - Orta Therox*
+
+It is wild to think that it has been only a handful of weeks.
+
+Claude Code has considerably changed my relationship to writing and maintaining code at scale. I still write code at the same level of quality, but I feel like I have a new freedom of expression which is hard to fully articulate.
+
+Claude Code has decoupled myself from writing every line of code, I still consider myself fully responsible for everything I ship to Puzzmo, but the ability to instantly create a whole scene instead of going line by line, word by word is incredibly powerful.
+
+I believe with Claude Code, we are at the *"introduction of photography"* period of programming. Painting by hand just doesn't have the same appeal anymore when a single concept can just appear and you shape it into the thing you want with your code review and editing skills.
+
+If this feels like an intimidating line-of-thought then welcome to the mid-2020s, nothing is stable anymore and change is the only constant. Sorry. I didn't make it so nearly all of culture's changes are *bad*, and I think that LLMs are already doing social damage and will do much worse in the future - but this genie is fully out of the bottle and it is substantially going to change what we think of as programming.
+
+## A Retrospective on the last 6 Weeks
+
+This article builds on "On Coding with Claude" which I wrote after using Claude for a week. If you think that I am AI-pilled, you can get my nuanced take on LLMs at the start of that post.
+
+That said, this is transformative and I want to try give you some perspective from the last 6 weeks of activity in the Puzzmo engineering space to try and show you what I've been seeing.
+
+### Maintenance is Significantly Cheaper
+
+I have been on many projects with people which have taken weeks full-time to perform some sort of mundane task: "converting this JS codebase to TypeScript", "Update to Swift X", "Switch to a monorepo" they're the kind of things which are delicate migrations which require a gazillion rebases.
+
+Here is a list of things which I have completed, **solo**, since getting access to Claude Code:
+
+* Converting hundreds of React Native components to just React
+* Replaced 3 non-trivial RedwoodJS systems with home-grown or mature, supported replacements
+* Built complex REPLs for multiple internal and external projects
+* Switched almost every db model to have a consistent 'flags' system for booleans
+* Converted from Jest to Vitest
+* Created our front-end testing strategies for React
+* Moved many things defined in code to run via the CMS
+* Made significant headway on server-side rendering
+* Re-wrote the iOS app's launch system due to deprecations
+* Built a suite of LLM created (and framed as such, hen hand annotated) documentation for systems like leaderboards, dailies etc
+* Converted a significant amount of our design system primitives to use base-ui
+* Migrated significant code from inline styles to stylex
+* Converted all animations in puzzmo.com to use the same techniques as games
+* Fixed multiple bugs which have been around since the start of Puzzmo
+* Updated all Vite integrations
+* Migrate all Puzzmo production projects to node 22
+* Convert the games repo to a real monorepo
+* Built iPad support for the Puzzmo app
+
+None of these projects are the "actual work" which I need to do on a day to day basis as the 'bizdev' guy on Puzzmo for this year. These are *literally side-projects* which I did *on my own* while working on something else.
+
+For clarity in the back because this is shocking to me, while I was still working on the existing roadmap I had prior to Claude Code over the last 6 weeks, I accomplished all of these things on my own. Mostly in the background (and then with a polish pass day for some of the larger ones). I didn't go from working ~10 hour days to working ~16 hours or anything like that either.
+
+This was years of *"tech debt" / "tech innovation"* backlog for me! Done in just over a month and a half.
+
+If you understand what you are doing, the capacity for building and handling the breadth of tasks which typically live within the remit of "technical debt" *do not need to be treated as debt* and you can just do it as you are working on other things.
+
+*'carving out some time on the schedule'* is now so incredibly cheap that getting started and making a serious dint is *something you can prime before going into a meeting*, then deciding if you thought it was the right thing after. Mind-blowing.
+
+### Write First, Decide Later
+
+A habit I have been trying to form is to give an idea a shot before I fully shoot it down. For example, since day 1 on Puzzmo I had been waiting on figuring out a testing strategy for the front-end because I wanted to be able to hire someone to fully own "puzzmo.com" and a part of that is figuring out how to not do as many regressions as we get.
+
+Figuring out a testing strategy for the front-end isn't pretty, and I have seen a lot of really bad test suites which over-test and become brittle things that engineers don't like to work with. The mix of networking, react, the scope of contexts, the dom, flakiness in tooling just leads to answers where you are looking for the least bad solution which you've used yourself and feel comfortable maintaining.
+
+I wondered if I needed to wait for someone else, so instead of just "adding a test suite" - I opted to have Claude Code write tests for every pull request I made to the front end over the course of two weeks.
+
+Then, after seeing the tests, I deleted them. It added an extra 5m to my process, but gave me an insight each time into different ways in which other projects deal with the problem. After weeks of this, I was ready to start looking at that problem systemically.
+
+The idea of writing tests for every pull request and then deleting it would just be so much time, there would be no way I'd be OK with doing.
+
+Or a recent example from slack where I just vibed for half a day in the background on trying to make an abstraction for CRUD resources in our CMS tools:
+
+A slack statement around making CRUD apps with relay + graphql 
+
+Did it work? Nope, was it worth an exploration - sure.
+
+### Living the Two Clones lifestyle
+
+Anthropic have information about how to use worktrees - I would like to argue for a simpler approach. Two clones, different VS Code profiles.
+
+This means you can work in each independently and still visually recognize the differences in you workspaces by having a different theme:
+
+![VS Code with different themes for different clones](/images/six-weeks-of-claude-code/vscode-themes.png)
+
+My best argument is simply that each clone represents a single pull request that you can work on at a time. If you are writing pull requests and collaborating with others then that is still pretty important. I made it so that our dev servers close any processes using the ports you want and its trivial to jump between the two clones as Claude Code is working stuff out before you are looking build.
+
+### Game design collaboration
+
+Since Puzzmo was created this was the process of creating a game:
+
+* We create some prototypes using all sorts of technologies
+* Collectively we work through the prototypes with feedback
+* We decide if this game is worth shipping
+* The game team re-write the from scratch in our tech stack, and with puzzmo's system integrations
+
+The process of this is weeks before any production code is written, if at all. At our current throughput, we roughly release a game a quarter at the level of polish we want to achieve.
+
+In a post-Claude Code world, this model can be simplified greatly and it is a space we are exploring. I created a new Puzzmo monorepo (that's three now, "app", "games" and this new one "prototypes") which emulates the infrastructure of the games repo but has significantly different expectations on the type of code being shipped. With this repo, a game designer can go from an idea to something running on puzzmo.com for admins in a couple of hours, you write the code, then go into our admin CMS and click a few buttons and it's done.
+
+To go from "this is good for the team" to "we should make this public" takes a bit of hands-on work from me and Saman, but it's a different ball park of effort compared to our current production pipeline.
+
+We released Missing Link using this technique, which seems to be a hit. This… actually is a bit of a problem for us. I am happy for us to have a game designer's code running on Puzzmo for a time-gated experiment, but I am not OK with this turning into Puzzmo canon with the rest of the games.
+
+![Missing Link puzzle with shuffled cells](/images/six-weeks-of-claude-code/missing-link-puzzle.png)
+
+The flexibility which allows a game designer to make a prototype is the same flexibility which means that the code quality is not what I want to ship to our users. This is a tension which we are still working through.
+
+### "You can just do it" for Side Projects
+
+Throughout my entire programming career, like all humans I have been largely constrained in my capacity for side-projects and one-offs by the fact I still want to have a life. I choose to devote myself to contributing to large-scale open source to make me feel good about the amount of time I commit to the craft.
+
+In concrete terms, that means spending time on projects like CocoaPods, Danger, Jest, GraphQL were things I did instead of making fun projects to explore a technology, or to fix a smaller nit.
+
+Now it's different. I can just take a stab and decide if I like the result. In one hour of exploration with Claude Code, I feel like can do roughly a weekends worth of exploration.
+
+#### E.g. Inline Chats
+
+For example, this blog post. When I was musing about it, I thought, *'it'd be nice to show the Claude Code conversations inline'* and then subsequently, *"wouldn't it be fun to bring back Adium themes for it"*. So. I just got started.
+
+So, I spec'd out a rough idea of what I was looking for. Described it pretty well up-front, took the dogs for an hour-long walk and came back to a reasonable approximation of the CLI which would have taken me a few hours to build by hand.
+
+It wasn't a lot of code, but it was a lot of research, how do I re-create the Adium theme HTML, how do you make sense of claude code's message formatting, how do you handle keeping resources local for a preview.
+
+With that working enough to be able to correctly mix the ideas, I gave it a polish pass.
+
+I've polished and deployed enough npm modules (174?!), so again, totally within my skills to do this without thinking too hard. Instead I treated this project as a fun side gig while watching Apex Legends.
+
+If you read the chat, you'll see that I do spend some time figuring out how to filter some things, how do you show messages in a particular way but this is systemic babysitting and code which I really don't care about.
+
+A feature like this is a *full weekend* project, easily about 10-12 hours to get right and feel shippable for me. Instead most of the work happened when I was away and then the polishing was sporadic. Maybe the whole thing took ~2 hours of my thinking time? *This is wild*.
+
+If you want to see the rest of the conversations to get it to the point where I shipped this blog post, here they are:
+
+* Chronologically continuing from the 2 above: 3, 4, 5, 6
+
+You can use it right now if you install Adium then run `npx claude-code-to-adium` and it'll take you through a wizard which ends with a self-contained subfolder full of html/css/images.
+
+### Some Examples of What These Conversations Look Like
+
+I will try to cherry-pick some of the 147 conversations I've had over 19 separate repo/projects since starting. I'll aim for breadth of goals and give my opinion to the side.
+
+#### Making a "delete 30 day old games" Task
+
+This is a chat where I have a general sense of what I want, but know that I don't actually know the answer around postgres indexing and how it effects mass deletes.
+
+So first I ask a general question where it is using my prisma definition file to determine what is currently set up in the db.
+
+We iterate on a scripting improvement, and make it possible to test locally.
+
+After trying locally, I give it a "kinda" and then ask for a more explicit technique.
+
+With that set up I go through all the code, review it locally, fix up style make it work according to how I would write it.
+
+You might note that it makes some guesses ("10-20%" of our gameplays are anon users), then make bold promises from that guess:
+
+> *That's an 80-85% reduction in index size!*
+
+Which I doubt. However, the code was solid, it's got significantly more logs than I would have written (useful for a daily task) and I feel like I understand what the index does. I went and added a bunch of glue comments *"this script works with the index in migration y, so any updates…"*
+
+#### Adding Barred Grid Support to a Crossword
+
+I knew this was going to be nightmare PR, which you can see here.
+
+I started by adding fixtures into the repo, and providing context via an issue which I had left ideas in. To get started, I framed this task as 'this is the long term goal, to get started we will do Y.' Y here being an ASCII snapshot of the bars.
+
+We started by building out a way to visualize the work, and Claude Code got very close. In the end, I took it's work and finished the integration myself.
+
+Once I had a way to visualize the solution, we could start looking at the main chunk of the work
+
+I used tests based on ASCII snapshot to hardcode test using the explicit version of the bars in the imported file format jpz, then created a test which relied on the algorithm we were going to create. This meant I, and Claude, had a very explicit way to judge how the algorithm was working.
+
+The import algorithm which existed for a jpz was too naive, and imported clues were wrong which meant we spent a long time trying to get the two snapshots to match. Claude kept cheating and hardcoding the answers! It took till I re-evaluated all of the clues (by making a separate test on the import for these clues) for a fresh re-examination of the algorithm to start getting somewhere.
+
+#### Creating a REPL for a Puzzle
+
+A quick, fully vibed prototype of a way to visually design a puzzle for the game Circuits.
+
+I give a screenshot, and try to describe how the game works and how I see a REPL could work. We iterate a bit, and I basically never write any code.
+
+This is then passed off to others to experiment with and figure out their opinions on how to make a working dev tool for the game.
+
+#### Print Pages for Crosswords
+
+I wanted to build a design for printable PDFs of Crosswords. I already had a working pipeline for generating them and needed to work on the layout specifically.
+
+I would have considered this a relatively easy problem to work with, but it turned out that there just isn't a set of CSS primitives that allows for columns *and* re-flows around an image.
+
+Claude was good for trying the different css properties and systems I was working with, and I experimented with different ways to describe or show the problem but never managed to get it working.
+
+I think I had the wrong core abstraction in mind in these conversations, either by being too specific in my recommendations or experimenting through half answers.
+
+In the end, I will have to re-write it to use JavaScript to do the layouts I think.
+
+### But Seriously, How Good Is This Thing?
+
+Perhaps an interesting place to end it, is how do I think about this tool in terms of its capabilities. Claude Code knows a lot, and you can easily send it reference material in terms of links, screenshots and extra code for context. I've found it to sit somewhere at the stage of "Post-Junior", there's a lot of experience there and a whole boat-load of energy but it doesn't really do a good job remembering things you ask (even via `CLAUDE.md` and the scope of it's ownership is obviously trivial).
+
+At Artsy, early on we had a 5 step technical ladder for engineers:
+
+> Engineer 1 - Can ship a well defined product feature.
+> 
+> Engineer 2 - Can independently own a product feature and can handle the communication with others around it.
+
+Hitting part 2 requires actually being around in some form, and having some sort of sense of ownership. This is an interesting thing to muse about because I guess it might have some ownership in the sense that parts of the codebase which are fully vibed and humans do not really read are fully "owned" by these tools.
+
+However, pragmatically, as a pairing partner with an experienced engineer constantly reviewing, amending and understanding the output - you can really treat Claude like a Pair Programming buddy with infinite time and patience, a bit too much sycophancy, and the ability to ship reasonable code given reasonable constraints in a speed I've not seen before.
+
+And that is like a new way to build things.
+
+---
+
+**Source:** [https://blog.puzzmo.com/posts/2025/07/30/six-weeks-of-claude-code/](https://blog.puzzmo.com/posts/2025/07/30/six-weeks-of-claude-code/)
+
+**Author:** Orta Therox
+
+**Date:** July 30, 2025
+
+**Tags:** tech, claude, llms, programming
