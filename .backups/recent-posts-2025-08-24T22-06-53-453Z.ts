@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "掌握 Claude Code 的 33 个必知设置技巧",
-    description: "通过 33 个基础到高级的技巧全面掌握 Claude Code，涵盖快捷键、提示技巧、MCP 服务器、项目规则和自动化钩子。从新手到专家级生产力的完整指南。",
+    title: "33 Claude Code Setup Tips You NEED to Know",
+    description: "Master Claude Code with 33 essential tips covering shortcuts, prompting techniques, MCP servers, project rules, and automation hooks. Transform from beginner to expert level productivity.",
     date: "2025-08-11",
     category: "advanced",
-    language: "zh",
-    slug: "zh/advanced/claude-code-setup-tips",
-    url: "/docs/zh/advanced/claude-code-setup-tips"
+    language: "en",
+    slug: "en/advanced/claude-code-setup-tips",
+    url: "/docs/en/advanced/claude-code-setup-tips"
   },];
 
 // 获取首页最近文章的函数

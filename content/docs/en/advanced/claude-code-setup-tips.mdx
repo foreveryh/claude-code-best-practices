@@ -1,0 +1,678 @@
+---
+title: "33 Claude Code Setup Tips You NEED to Know"
+description: "Master Claude Code with 33 essential tips covering shortcuts, prompting techniques, MCP servers, project rules, and automation hooks. Transform from beginner to expert level productivity."
+date: "2025-08-11"
+author: "PageAI"
+source: "https://pageai.pro/blog/31-claude-code-setup-tips"
+category: "advanced"
+language: "en"
+tags: ["claude-code", "ai-coding", "productivity", "automation", "mcp", "tips"]
+---
+
+# 33 Claude Code Setup Tips You NEED to Know
+
+After shipping many apps to production with both Cursor and Claude Code, I found out that Claude Code is quite low-level and there are many secrets you need to unlock to turn Claude Code from pretty good to mind-blowing.
+
+In this guide, I'll share 33 tips that will take you from a Claude Code noob to Sam Altman levels of expertise (well, almost). These tips are fully packed with gems that will boost your productivity and reduce time consuming errors.
+
+Without these tips, you'll likely be more productive in Cursor, Windsurf, and dare I say even in GitHub Copilot then in Claude Code.
+
+If video is your jam, here's a full tutorial on YouTube:
+
+<div className="w-full max-w-4xl mx-auto my-8">
+  <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+    <iframe
+      src="https://www.youtube.com/embed/Z8b6h8cNx-Y"
+      title="33 Claude Code Setup Tips You NEED to Know"
+      className="absolute top-0 left-0 w-full h-full rounded-lg"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  </div>
+</div>
+
+My first week with Claude Code was a disaster.
+
+It was making so many silly mistakes, type errors, reinstalling packages I already had, lint errors, inconsistent formatting, straight up unicode and mangled output in my source code (`/n/n`).
+
+Besides that, it doesn't have checkpoints like Cursor does, so often I couldn't revert to a working state and had to start over.
+
+## What you'll learn
+
+This comprehensive guide covers everything from basic keyboard shortcuts to advanced automation with hooks. By the end, you'll have mastered:
+
+1. Essential keyboard shortcuts and modes
+2. IDE integration and setup
+3. Prompting techniques
+4. Best MCP servers
+5. Project rules and Claude.md configuration
+6. Automation with hooks
+
+Let's dive in! 🏊‍♂️
+
+## Part 1: Getting Started & Basic Setup
+
+These foundational tips will get you up and running with Claude Code. Fast.
+
+### 1. Cycle through modes with Shift+Tab
+
+Claude Code has three input modes that fundamentally change how it behaves. Master these to work efficiently:
+
+- **Edit mode (default)**: Requires your approval before making file changes
+- **Auto-accept mode** (1 Shift+Tab): Writes files without asking permission. Best for most tasks to be honest.
+- **Plan mode** (2 Shift+Tabs): Creates action plans without making code changes. Perfect for research.
+
+```bash
+# Quick mode switching
+Shift+Tab -> Auto-accept mode
+Shift+Tab -> Plan mode
+Shift+Tab -> Back to Edit mode
+```
+
+### 2. Add Claude Code to your IDE
+
+Installing Claude Code as an extension will give you the best out of both worlds: the best of the terminal and the best of the IDE.
+
+[Check the Anthropic docs for more info](https://docs.anthropic.com/en/docs/claude-code/ide-integrations#installation).
+
+Once you have it installed, it'll be able to hook into IDE diagnostics, provide context and show diffs right inside your favorite text editor.
+
+Works with VS Code, Cursor, Windsurf, JetBrains, and more.
+
+### 3. Configure multi-line prompts with terminal setup
+
+Multi-line prompts are essential for complex instructions. Set them up once:
+
+```bash
+/terminal-setup # This configures Shift+Enter for multi-line prompts
+```
+
+### 4. Connect your IDE for automatic context
+
+When connected to your IDE, Claude Code automatically includes selected lines in its context:
+
+```bash
+/ide # Select your IDE from VS Code, Cursor, or JetBrains etc.
+```
+
+### 5. Quick open with Command+Escape
+
+You'll open Claude Code instantly with:
+
+- `CMD`/`CTRL` + `Escape` (Mac/Windows)
+
+### 6. Other shortcuts you'll use a lot
+
+- `CMD`/`CTRL` + `L` clear screen
+- `ESC` + `ESC` jump to prev
+- `SHIFT` + `TAB` to auto accept edits Hit twice for planning
+- `SHIFT` + `ENTER` for new line without slash after running `/terminal-setup`
+- `CMD`/`CTRL` + `R` verbose output
+
+> **PageAI comes with over 41+ rules, commands and hooks.**
+> 
+> **Get an entire codebase in minutes and skip the setup.**
+
+## Part 2: Core Features
+
+These features form the backbone of productive Claude Code usage.
+
+### 7. Work with images directly
+
+Claude Code is multimodal. You can:
+
+- Drag and drop screenshots directly on to the Claude Code window OR
+- Copy-paste images into the prompt input
+
+This is perfect for "make it look like this" type prompts.
+
+### 8. Track costs with detailed analysis
+
+If you want to see a detailed breakdown of your token usage, you can use:
+
+```bash
+npx ccusage
+# Shows detailed breakdown of input/output tokens
+# Tracks costs over time
+```
+
+It even has a live usage view with `blocks --live`!
+
+**Pro tip**: Get the Claude Max subscription ($100/month) for (nearly) unlimited usage if you're spending more than that every month. The $100/month unlimited plan is enough for all day Sonnet usage for most people.
+
+You don't get a lot of Opus though.
+
+### 9. Create custom slash commands
+
+You can easily extend Claude Code with your own commands:
+
+```bash
+# Create a file in .claude/commands/
+# Example: .claude/commands/release.md
+```
+
+Now you can use `/release` in Claude Code!
+
+### 10. Clear context strategically
+
+Anthropic models are pretty good at coding and have a huge context window. However, they tend to get confused if you don't clear the context after major tasks.
+
+```bash
+/clear
+# Use after completing major tasks
+# Prevents context pollution
+# Reduces token usage
+```
+
+### 11. Resume sessions after crashes
+
+Sometimes we accidentally close Claude Code and lose our work, our IDE updates or if you live up north: your power goes out.
+
+You can pick up where you left off with:
+
+```bash
+/resume
+# Shows all past sessions
+# Select any to continue where you left off
+# Works even after power outages
+```
+
+### 12. Handle long prompts efficiently
+
+For complex prompts with code samples and formatting:
+
+1. Press `CMD`/`CTRL` + `N` to open a new buffer
+2. Type your entire prompt with proper formatting
+3. Select all (`CMD`/`CTRL` + `A`)
+4. Copy (`CMD`/`CTRL` + `C`)
+5. Paste into Claude Code prompt
+
+This collapses everything into a manageable single line.
+
+## Part 3: Advanced Prompting Techniques
+
+These prompts will get you the most out of Claude Code. Regular prompts work, but there are a few keywords that will get you even better results.
+
+### 13. Control thinking budget
+
+Claude Code allocates "thinking tokens" based on your prompt:
+
+```bash
+# Basic thinking (fast, simple tasks)
+"think about this and implement..."
+
+# More thinking (complex logic)
+"think harder about the architecture..."
+
+# Maximum thinking (critical decisions)
+"ultrathink about the security implications..."
+```
+
+Thinking appears as italic gray text in the terminal.
+
+### 14. Leverage subagents for complex tasks
+
+Claude Code can spawn multiple agents to parallelize work:
+
+```bash
+"Use subagents to refactor this codebase"
+# Claude will automatically:
+# - Analyze the task complexity
+# - Spawn appropriate number of agents
+# - Coordinate their work
+# - Merge results
+```
+
+You can also create customized subagents, check [this guide](https://docs.anthropic.com/en/docs/claude-code/sub-agents). For example, you can create a subagent that only writes UI code and another that only writes tests and another that only reviews code.
+
+### 15. Run tasks in loops
+
+Since Claude Code is great at tool calling (and Anthropic's models are trained to be good at tool calling), it is the perfect AI for iterative fixes:
+
+```bash
+"Run the build in a loop and fix all errors as they appear"
+# Claude will:
+# 1. Run the build
+# 2. Analyze errors
+# 3. Fix them
+# 4. Repeat until clean
+```
+
+This is also great for large refactors when it'll need to go over entire directories and make changes spanning multiple files.
+
+> **Get an entire codebase in minutes with MCPs, hooks and over 41+ commands and rules 🫡**
+
+## Part 4: Must-Have MCP Extensions
+
+I am not crazy about MCP servers, but these have always helped me a lot. I install them by default in all my projects.
+
+### 16. TaskMaster AI MCP - Essential for complex projects
+
+[TaskMaster AI](https://github.com/eyaltoledano/claude-task-master) breaks work into manageable chunks and tracks dependencies:
+
+```json
+{
+  "mcpServers": {
+    "taskmaster-ai": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+      "env": {}
+    }
+  }
+}
+```
+
+This is the absolute best way to reduce errors in your project. Check out our [detailed TaskMaster AI tutorial](https://pageai.pro/blog/claude-code-taskmaster-ai-tutorial).
+
+### 17. Playwright MCP - Browser automation
+
+The [Playwright MCP](https://github.com/microsoft/playwright-mcp) gives Claude Code the ability to interact with browsers:
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {}
+    }
+  }
+}
+```
+
+Now Claude can:
+
+- Click around your app
+- Check for console errors
+- Take screenshots
+- Run E2E tests
+
+### 18. Context7 MCP - Up-to-date documentation
+
+Have you ever been fighting AI trying to get it to use the latest version of a framework or library?
+
+Well, the [Context7 MCP](https://github.com/upstash/context7) fixes that:
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {}
+    }
+  }
+}
+```
+
+This MCP provides current documentation and prevents Claude from outputting outdated patterns.
+
+### 19. Review changes with another AI
+
+This is a tip that the Anthropic team itself recommends.
+
+Use other models, subagents or review AIs such as [CodeRabbit](https://www.coderabbit.ai/) to double-check Claude's work.
+
+Try to give them a different, critical personality for best results.
+
+## Part 5: Project Setup & Rules
+
+Configure Claude Code to understand your project deeply.
+
+This not only makes things faster, but also eliminates duplication of modules and libraries in a large codebase.
+
+### 20. Initialize existing codebases
+
+For existing projects, generate conventions automatically:
+
+```bash
+/init
+# Generates claude.md with:
+# - Detected conventions
+# - File structure
+# - Dependencies
+# - Patterns
+```
+
+### 21. Add memories/rules dynamically
+
+Add memories/rules on the fly.
+
+Type this anywhere in a conversation:
+
+`# "Always use async/await instead of .then()"`
+
+Claude will add it to `Claude.md`.
+
+### 22. Nest Claude.md files for context
+
+You can create directory-specific rules and Claude Code will automatically pick the right one for the current directory:
+
+```
+project/
+└─ claude.md           # Global rules
+└─ frontend/
+   └─ claude.md      # Frontend-specific rules
+└─ backend/
+   └─ claude.md      # Backend-specific rules
+```
+
+### 23. Reference files in rules
+
+It's also possible to reference other rules by file name. This allows sharing rules between AIs and tools and eliminates duplication of rules:
+
+```markdown
+## Coding Standards
+See: @.cursor/rules/self-improvement.mdc
+
+## API Documentation
+See: @docs/api.md
+```
+
+> **Ready to ship today?**
+> 
+> **Over 41+ rules, commands and a complete codebase with a beautiful design.**
+
+## Part 6: Essential Rules for Every Project
+
+These rules will save you hundreds of hours of debugging.
+
+Also, they'll increase consistency and add abilities Cursor etc. had for a while, like automatic "checkpoints" and autofixing.
+
+### 24. Automatic version control (Cursor checkpoint alternative)
+
+Since Claude Code doesn't have checkpoints like Cursor, you are likely to lose work eventually.
+
+With this rule, you can add a checkpoint after every major task:
+
+```markdown
+## Git & Version Control
+
+- Add and commit automatically whenever an entire task is finished
+- Use descriptive commit messages that capture the full scope of changes
+```
+
+### 25. IDE diagnostics after tasks
+
+This is probably the most important rule you'll add to Claude Code.
+
+For every edited file, it'll run IDE error checks (linting, type errors, etc.) and fix them automatically. This not only saves you some extra prompts, but also uses the correct config you have already set up in your project.
+
+```markdown
+## EXTREMELY IMPORTANT: Code Quality Checks
+
+**ALWAYS run the following commands before completing any task:**
+
+Automatically use the IDE's built-in diagnostics tool to check for linting and type errors:
+   - Run `mcp__ide__getDiagnostics` to check all files for diagnostics
+   - Fix any linting or type errors before considering the task complete
+   - Do this for any file you create or modify
+
+This is a CRITICAL step that must NEVER be skipped when working on any code-related task.
+```
+
+### 26. Documentation lookup rule
+
+This rule makes Claude Code look up the latest documentation for the framework or library you are using.
+
+It works hand in hand with the Context7 MCP mentioned above:
+
+```markdown
+## Look up documentation with Context7
+
+When code examples, setup or configuration steps, or library/API documentation are requested, use the Context7 mcp server to get the information.
+```
+
+### 27. Dependency management
+
+I caught Claude Code often installing the same packages multiple times, or installing a slightly outdated version of a package.
+
+This rule prevents duplicate installations:
+
+```markdown
+## Spamoose Tech Stack & Dependencies
+
+**Version:** 1.0.0
+**Node.js Requirement:** >=22.0.0
+**Last Updated:** January 2025
+
+### Core Framework Stack
+
+#### Next.js & React (Latest Generation)
+- **Next.js**: `^15.3.2` - App Router, Latest features
+- **React**: `^19.1.0` - Latest React 19 with Concurrent Features
+- **React DOM**: `^19.1.0` - Matching React version
+- **TypeScript**: `^5.7.3` - Latest stable TypeScript
+```
+
+> **NB**: you should generate this rule automatically with this prompt:
+> 
+> `@package.json Analyze all major dependencies and create a memory in Claude.md outlining the stack of the application and the versions I'm using, and any remarks on best practices on those versions.`
+
+### 28. Project structure documentation
+
+It often happens that Claude Code misses existing modules and creates similar duplicates, often in the wrong place.
+
+This not only makes it faster, but also more accurate:
+
+```markdown
+# Project Structure Guide
+
+This rule explains the folder structure of the project. Use this as a reference for navigating and understanding the codebase.
+
+## Root Directory
+
+The root contains configuration files and the main project folders:
+- [package.json](mdc:package.json): Project dependencies and scripts
+- [tsconfig.json](mdc:tsconfig.json): TypeScript configuration
+- [next.config.js](mdc:next.config.js): Next.js configuration
+```
+
+> **NB**: you should generate this rule automatically with this prompt:
+> 
+> `@src List all source files and folders in the project, and create a new rule/memory outlining the directory structure and important files and folders.`
+
+### 29. Self-improvement rule
+
+This rule helps Claude learn from its own mistakes and improve over time:
+
+```markdown
+## Rule Improvement Triggers
+
+- New code patterns not covered by existing rules
+- Repeated similar implementations across files
+- Common error patterns that could be prevented
+- New libraries or tools being used consistently
+- Emerging best practices in the codebase
+
+## Analysis Process:
+- Compare new code with existing rules
+- Identify patterns that should be standardized
+- Look for references to external documentation
+- Check for consistent error handling patterns
+- Monitor test patterns and coverage
+```
+
+## Part 7: Advanced Automation with Hooks
+
+[Claude Code Hooks](https://docs.anthropic.com/en/docs/claude-code/hooks) are Claude's secret weapon for automation. They're _deterministic_ commands that execute automatically at specific points during Claude Code's workflow, opening up the door for a ton of automation.
+
+### Available Hook Types
+
+Claude Code supports several hook events that cover the entire agentic lifecycle:
+
+| Hook Event | When It Runs | Common Use Cases |
+|------------|--------------|------------------|
+| `PreToolUse` | Before any tool execution | Validation, environment checks, backups |
+| `PostToolUse` | After tool completion | Formatting, linting, testing, commits |
+| `UserPromptSubmit` | When user submits prompt | Input validation, context injection |
+| `Notification` | On system notifications | Alerts, logging, monitoring |
+| `Stop` | When Claude finishes response | Cleanup, final checks, notifications |
+| `SubagentStop` | When subagent completes | Subagent-specific cleanup |
+
+### 30. Using hooks for good: Bell sound on completion (like Cursor)
+
+Since they are so powerful, I obviously used them to... get notified when tasks complete:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Funk.aiff"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Ironically, this was one of the things that I've missed the most from Cursor.
+
+### 31. More advanced hooks: use a script
+
+Hooks can also be entire scripts or even applications.
+
+So the same example with the bell sound can be expanded to:
+
+```json
+{
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/play-sound.js notification"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/play-sound.js"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 32. Auto-format on file write
+
+There's nothing more annoying than making a 1 line change and having your formatter change 200 lines instead.
+
+This hook will run the formatter only on the file that was just edited:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx prettier --write \"$FILE_PATH\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 33. Always verify changes
+
+Current generation of LLMs can get lazy, assume things and make superficial mistakes.
+
+A workaround is to add a hook that will remind you to always verify changes before each prompt is sent:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/pre-tool-use.js"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 34. (Bonus) Webhook notifications
+
+Hooks don't necessarily need to be scripts.
+
+You can use them to trigger webhooks, which is useful for long-running tasks.
+
+For example, you can use them to get Discord/Slack notifications for long-running tasks:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -X POST https://discord.com/api/webhooks/YOUR_WEBHOOK -H 'Content-Type: application/json' -d '{\"content\":\"Task completed!\"}'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Wrapping it up
+
+These 33 tips transform Claude Code from a good AI assistant into an excellent one. Start with the basics, gradually add automation, and soon you'll be shipping code faster than you can say "Claude Code".
+
+Happy coding! 🚀
+
+---
+
+## Common Pitfalls to Avoid
+
+### Don't start from scratch
+
+Always use a bootstrapped codebase. Claude Code struggles with initial setup.
+
+### Don't ignore context limits
+
+Use `/clear` regularly to maintain performance.
+
+### Don't skip reviews
+
+Always review Claude's changes, especially for security-sensitive code.
+
+### Don't forget to commit
+
+Unlike Cursor, Claude Code doesn't have automatic checkpoints. Commit frequently or use the rule above to do so automatically.
+
+---
+
+Want more Claude Code tips? Check out how to build entire apps with your [Claude Code TaskMaster AI tutorial](https://pageai.pro/blog/claude-code-taskmaster-ai-tutorial)!

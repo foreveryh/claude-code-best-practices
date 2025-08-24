@@ -1,0 +1,678 @@
+---
+title: "掌握 Claude Code 的 33 个必知设置技巧"
+description: "通过 33 个基础到高级的技巧全面掌握 Claude Code，涵盖快捷键、提示技巧、MCP 服务器、项目规则和自动化钩子。从新手到专家级生产力的完整指南。"
+date: "2025-08-11"
+author: "PageAI"
+source: "https://pageai.pro/blog/31-claude-code-setup-tips"
+category: "advanced"
+language: "zh"
+tags: ["claude-code", "ai-编程", "生产力", "自动化", "mcp", "技巧"]
+---
+
+# 掌握 Claude Code 的 33 个必知设置技巧
+
+在使用 Cursor 和 Claude Code 向生产环境部署了许多应用程序后，我发现 Claude Code 相当底层，需要解锁许多秘籍才能将 Claude Code 从相当不错提升到令人惊叹的水平。
+
+在这份指南中，我将分享 33 个技巧，帮助你从 Claude Code 新手成长为 Sam Altman 级别的专家（好吧，差不多）。这些技巧满载精华，将提升你的生产力并减少耗时的错误。
+
+如果没有这些技巧，你很可能在 Cursor、Windsurf，甚至 GitHub Copilot 中比在 Claude Code 中更有生产力。
+
+如果你喜欢视频学习，这里有完整的 YouTube 教程：
+
+<div className="w-full max-w-4xl mx-auto my-8">
+  <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+    <iframe
+      src="https://www.youtube.com/embed/Z8b6h8cNx-Y"
+      title="掌握 Claude Code 的 33 个必知设置技巧"
+      className="absolute top-0 left-0 w-full h-full rounded-lg"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  </div>
+</div>
+
+我使用 Claude Code 的第一周简直是灾难。
+
+它犯了很多愚蠢的错误，类型错误，重新安装我已经有的包，lint 错误，格式不一致，甚至在我的源代码中直接输出 unicode 和乱码（`/n/n`）。
+
+除此之外，它没有像 Cursor 那样的检查点功能，所以经常我无法回到工作状态，不得不重新开始。
+
+## 你将学到什么
+
+这个综合指南涵盖了从基本键盘快捷键到高级钩子自动化的一切内容。学完后，你将掌握：
+
+1. 基础键盘快捷键和模式
+2. IDE 集成和设置
+3. 提示技巧
+4. 最佳 MCP 服务器
+5. 项目规则和 Claude.md 配置
+6. 钩子自动化
+
+让我们开始吧！🏊‍♂️
+
+## 第一部分：入门和基础设置
+
+这些基础技巧将帮助你快速上手 Claude Code。
+
+### 1. 使用 Shift+Tab 循环切换模式
+
+Claude Code 有三种输入模式，它们从根本上改变了其行为方式。掌握这些模式才能高效工作：
+
+- **编辑模式（默认）**：在进行文件更改前需要你的批准
+- **自动接受模式**（按 1 次 Shift+Tab）：无需询问权限直接写入文件。说实话，对大多数任务来说这是最好的。
+- **计划模式**（按 2 次 Shift+Tab）：创建行动计划而不进行代码更改。非常适合研究。
+
+```bash
+# 快速模式切换
+Shift+Tab -> 自动接受模式
+Shift+Tab -> 计划模式
+Shift+Tab -> 回到编辑模式
+```
+
+### 2. 将 Claude Code 添加到你的 IDE
+
+将 Claude Code 安装为扩展程序将为你提供两个世界的最佳体验：终端的最佳功能和 IDE 的最佳功能。
+
+[查看 Anthropic 文档了解更多信息](https://docs.anthropic.com/en/docs/claude-code/ide-integrations#installation)。
+
+安装后，它将能够连接到 IDE 诊断，提供上下文，并在你喜欢的文本编辑器中直接显示差异。
+
+支持 VS Code、Cursor、Windsurf、JetBrains 等。
+
+### 3. 使用终端设置配置多行提示
+
+多行提示对于复杂指令至关重要。只需设置一次：
+
+```bash
+/terminal-setup # 这将配置 Shift+Enter 用于多行提示
+```
+
+### 4. 连接你的 IDE 以获得自动上下文
+
+当连接到你的 IDE 时，Claude Code 会自动将选定的行包含在其上下文中：
+
+```bash
+/ide # 从 VS Code、Cursor 或 JetBrains 等中选择你的 IDE
+```
+
+### 5. 使用 Command+Escape 快速打开
+
+你可以使用以下快捷键立即打开 Claude Code：
+
+- `CMD`/`CTRL` + `Escape`（Mac/Windows）
+
+### 6. 其他常用快捷键
+
+- `CMD`/`CTRL` + `L` 清屏
+- `ESC` + `ESC` 跳转到上一个
+- `SHIFT` + `TAB` 自动接受编辑 按两次进入计划模式
+- `SHIFT` + `ENTER` 运行 `/terminal-setup` 后换行而不使用斜杠
+- `CMD`/`CTRL` + `R` 详细输出
+
+> **PageAI 提供超过 41+ 规则、命令和钩子。**
+> 
+> **几分钟内获得完整代码库，跳过设置环节。**
+
+## 第二部分：核心功能
+
+这些功能构成了高效使用 Claude Code 的基础。
+
+### 7. 直接处理图像
+
+Claude Code 是多模态的。你可以：
+
+- 直接将截图拖放到 Claude Code 窗口中，或者
+- 将图像复制粘贴到提示输入中
+
+这对于"让它看起来像这样"类型的提示非常完美。
+
+### 8. 通过详细分析跟踪成本
+
+如果你想查看令牌使用情况的详细分解，可以使用：
+
+```bash
+npx ccusage
+# 显示输入/输出令牌的详细分解
+# 跟踪随时间变化的成本
+```
+
+它甚至有一个实时使用视图 `blocks --live`！
+
+**专业提示**：如果你每月花费超过 100 美元，请获取 Claude Max 订阅（100 美元/月）以获得（几乎）无限使用。100 美元/月的无限计划对大多数人来说足够全天使用 Sonnet。
+
+不过你得不到很多 Opus。
+
+### 9. 创建自定义斜杠命令
+
+你可以轻松使用自己的命令扩展 Claude Code：
+
+```bash
+# 在 .claude/commands/ 中创建文件
+# 示例：.claude/commands/release.md
+```
+
+现在你可以在 Claude Code 中使用 `/release`！
+
+### 10. 策略性清除上下文
+
+Anthropic 模型在编码方面相当不错，具有巨大的上下文窗口。但是，如果你在主要任务后不清除上下文，它们往往会感到困惑。
+
+```bash
+/clear
+# 在完成主要任务后使用
+# 防止上下文污染
+# 减少令牌使用
+```
+
+### 11. 崩溃后恢复会话
+
+有时我们意外关闭了 Claude Code 并丢失了工作，或者 IDE 更新了，如果你住在北方：停电了。
+
+你可以从上次停止的地方继续：
+
+```bash
+/resume
+# 显示所有过去的会话
+# 选择任何一个以从停止的地方继续
+# 即使停电后也能工作
+```
+
+### 12. 高效处理长提示
+
+对于带有代码示例和格式的复杂提示：
+
+1. 按 `CMD`/`CTRL` + `N` 打开新缓冲区
+2. 输入带有适当格式的完整提示
+3. 全选（`CMD`/`CTRL` + `A`）
+4. 复制（`CMD`/`CTRL` + `C`）
+5. 粘贴到 Claude Code 提示中
+
+这将所有内容折叠成一个可管理的单行。
+
+## 第三部分：高级提示技巧
+
+这些提示将帮助你从 Claude Code 中获得最大收益。常规提示有效，但有一些关键词会让你获得更好的结果。
+
+### 13. 控制思考预算
+
+Claude Code 根据你的提示分配"思考令牌"：
+
+```bash
+# 基础思考（快速、简单任务）
+"think about this and implement..."
+
+# 更多思考（复杂逻辑）
+"think harder about the architecture..."
+
+# 最大思考（关键决策）
+"ultrathink about the security implications..."
+```
+
+思考在终端中显示为斜体灰色文本。
+
+### 14. 为复杂任务利用子代理
+
+Claude Code 可以生成多个代理来并行化工作：
+
+```bash
+"Use subagents to refactor this codebase"
+# Claude 将自动：
+# - 分析任务复杂性
+# - 生成适当数量的代理
+# - 协调它们的工作
+# - 合并结果
+```
+
+你也可以创建自定义的子代理，查看[这个指南](https://docs.anthropic.com/en/docs/claude-code/sub-agents)。例如，你可以创建一个只写 UI 代码的子代理，另一个只写测试的，还有一个只审查代码的。
+
+### 15. 循环运行任务
+
+由于 Claude Code 擅长工具调用（Anthropic 的模型经过训练以擅长工具调用），它是迭代修复的完美 AI：
+
+```bash
+"Run the build in a loop and fix all errors as they appear"
+# Claude 将：
+# 1. 运行构建
+# 2. 分析错误
+# 3. 修复它们
+# 4. 重复直到清洁
+```
+
+这对于大型重构也很棒，当它需要遍历整个目录并进行跨多个文件的更改时。
+
+> **使用 MCP、钩子和超过 41+ 命令和规则，几分钟内获得完整代码库 🫡**
+
+## 第四部分：必备 MCP 扩展
+
+我对 MCP 服务器并不狂热，但这些一直对我帮助很大。我在所有项目中默认安装它们。
+
+### 16. TaskMaster AI MCP - 复杂项目必备
+
+[TaskMaster AI](https://github.com/eyaltoledano/claude-task-master) 将工作分解为可管理的块并跟踪依赖关系：
+
+```json
+{
+  "mcpServers": {
+    "taskmaster-ai": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+      "env": {}
+    }
+  }
+}
+```
+
+这是减少项目错误的绝对最佳方式。查看我们的[详细 TaskMaster AI 教程](https://pageai.pro/blog/claude-code-taskmaster-ai-tutorial)。
+
+### 17. Playwright MCP - 浏览器自动化
+
+[Playwright MCP](https://github.com/microsoft/playwright-mcp) 为 Claude Code 提供与浏览器交互的能力：
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {}
+    }
+  }
+}
+```
+
+现在 Claude 可以：
+
+- 在你的应用程序中点击
+- 检查控制台错误
+- 截屏
+- 运行端到端测试
+
+### 18. Context7 MCP - 最新文档
+
+你是否曾经与 AI 斗争，试图让它使用框架或库的最新版本？
+
+[Context7 MCP](https://github.com/upstash/context7) 解决了这个问题：
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {}
+    }
+  }
+}
+```
+
+这个 MCP 提供当前文档并防止 Claude 输出过时的模式。
+
+### 19. 使用另一个 AI 审查更改
+
+这是 Anthropic 团队自己推荐的技巧。
+
+使用其他模型、子代理或审查 AI，如 [CodeRabbit](https://www.coderabbit.ai/) 来双重检查 Claude 的工作。
+
+尝试给它们不同的、批判性的个性以获得最佳结果。
+
+## 第五部分：项目设置和规则
+
+配置 Claude Code 以深入理解你的项目。
+
+这不仅使事情变得更快，还消除了大型代码库中模块和库的重复。
+
+### 20. 初始化现有代码库
+
+对于现有项目，自动生成约定：
+
+```bash
+/init
+# 生成包含以下内容的 claude.md：
+# - 检测到的约定
+# - 文件结构
+# - 依赖关系
+# - 模式
+```
+
+### 21. 动态添加记忆/规则
+
+即时添加记忆/规则。
+
+在对话中的任何地方输入：
+
+`# "Always use async/await instead of .then()"`
+
+Claude 将把它添加到 `Claude.md`。
+
+### 22. 为上下文嵌套 Claude.md 文件
+
+你可以创建特定目录的规则，Claude Code 将自动为当前目录选择合适的规则：
+
+```
+project/
+└─ claude.md           # 全局规则
+└─ frontend/
+   └─ claude.md      # 前端特定规则
+└─ backend/
+   └─ claude.md      # 后端特定规则
+```
+
+### 23. 在规则中引用文件
+
+也可以通过文件名引用其他规则。这允许在 AI 和工具之间共享规则并消除规则重复：
+
+```markdown
+## 编码标准
+参见：@.cursor/rules/self-improvement.mdc
+
+## API 文档
+参见：@docs/api.md
+```
+
+> **准备好今天发布了吗？**
+> 
+> **超过 41+ 规则、命令和带有精美设计的完整代码库。**
+
+## 第六部分：每个项目的基础规则
+
+这些规则将为你节省数百小时的调试时间。
+
+此外，它们将提高一致性并添加 Cursor 等已经拥有一段时间的能力，如自动"检查点"和自动修复。
+
+### 24. 自动版本控制（Cursor 检查点替代）
+
+由于 Claude Code 没有像 Cursor 那样的检查点，你最终可能会丢失工作。
+
+使用这个规则，你可以在每个主要任务后添加检查点：
+
+```markdown
+## Git 和版本控制
+
+- 每当完成整个任务时自动添加和提交
+- 使用描述性提交消息，捕获更改的完整范围
+```
+
+### 25. 任务后 IDE 诊断
+
+这可能是你将添加到 Claude Code 的最重要的规则。
+
+对于每个编辑的文件，它将运行 IDE 错误检查（linting、类型错误等）并自动修复它们。这不仅为你节省了一些额外的提示，还使用了你在项目中已经设置的正确配置。
+
+```markdown
+## 极其重要：代码质量检查
+
+**在完成任何任务之前始终运行以下命令：**
+
+自动使用 IDE 的内置诊断工具检查 linting 和类型错误：
+   - 运行 `mcp__ide__getDiagnostics` 检查所有文件的诊断
+   - 在认为任务完成之前修复任何 linting 或类型错误
+   - 对你创建或修改的任何文件都这样做
+
+这是在处理任何与代码相关的任务时绝不能跳过的关键步骤。
+```
+
+### 26. 文档查找规则
+
+这个规则使 Claude Code 查找你正在使用的框架或库的最新文档。
+
+它与上面提到的 Context7 MCP 协同工作：
+
+```markdown
+## 使用 Context7 查找文档
+
+当请求代码示例、设置或配置步骤，或库/API 文档时，使用 Context7 mcp 服务器获取信息。
+```
+
+### 27. 依赖管理
+
+我发现 Claude Code 经常多次安装相同的包，或安装略微过时的包版本。
+
+这个规则防止重复安装：
+
+```markdown
+## Spamoose 技术栈和依赖
+
+**版本：** 1.0.0
+**Node.js 要求：** >=22.0.0
+**最后更新：** 2025年1月
+
+### 核心框架栈
+
+#### Next.js 和 React（最新一代）
+- **Next.js**：`^15.3.2` - App Router，最新功能
+- **React**：`^19.1.0` - 带有并发功能的最新 React 19
+- **React DOM**：`^19.1.0` - 匹配的 React 版本
+- **TypeScript**：`^5.7.3` - 最新稳定的 TypeScript
+```
+
+> **注意**：你应该使用这个提示自动生成这个规则：
+> 
+> `@package.json 分析所有主要依赖项并在 Claude.md 中创建一个记忆，概述应用程序的技术栈和我正在使用的版本，以及对这些版本最佳实践的任何备注。`
+
+### 28. 项目结构文档
+
+Claude Code 经常错过现有模块并创建类似的重复项，通常在错误的地方。
+
+这不仅使它更快，而且更准确：
+
+```markdown
+# 项目结构指南
+
+这个规则解释了项目的文件夹结构。使用它作为导航和理解代码库的参考。
+
+## 根目录
+
+根目录包含配置文件和主要项目文件夹：
+- [package.json](mdc:package.json)：项目依赖和脚本
+- [tsconfig.json](mdc:tsconfig.json)：TypeScript 配置
+- [next.config.js](mdc:next.config.js)：Next.js 配置
+```
+
+> **注意**：你应该使用这个提示自动生成这个规则：
+> 
+> `@src 列出项目中的所有源文件和文件夹，并创建一个新的规则/记忆，概述目录结构和重要文件和文件夹。`
+
+### 29. 自我改进规则
+
+这个规则帮助 Claude 从自己的错误中学习并随时间改进：
+
+```markdown
+## 规则改进触发器
+
+- 现有规则未涵盖的新代码模式
+- 跨文件的重复类似实现
+- 可以防止的常见错误模式
+- 一致使用的新库或工具
+- 代码库中新兴的最佳实践
+
+## 分析过程：
+- 将新代码与现有规则进行比较
+- 识别应该标准化的模式
+- 寻找外部文档的引用
+- 检查一致的错误处理模式
+- 监控测试模式和覆盖率
+```
+
+## 第七部分：钩子高级自动化
+
+[Claude Code 钩子](https://docs.anthropic.com/en/docs/claude-code/hooks)是 Claude 自动化的秘密武器。它们是在 Claude Code 工作流程特定点自动执行的*确定性*命令，为大量自动化打开了大门。
+
+### 可用钩子类型
+
+Claude Code 支持几种覆盖整个代理生命周期的钩子事件：
+
+| 钩子事件 | 何时运行 | 常见用例 |
+|----------|----------|----------|
+| `PreToolUse` | 任何工具执行前 | 验证、环境检查、备份 |
+| `PostToolUse` | 工具完成后 | 格式化、linting、测试、提交 |
+| `UserPromptSubmit` | 用户提交提示时 | 输入验证、上下文注入 |
+| `Notification` | 系统通知时 | 警报、日志记录、监控 |
+| `Stop` | Claude 完成响应时 | 清理、最终检查、通知 |
+| `SubagentStop` | 子代理完成时 | 子代理特定清理 |
+
+### 30. 善用钩子：完成时铃声（像 Cursor）
+
+由于它们如此强大，我显然用它们来...在任务完成时获得通知：
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Funk.aiff"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+讽刺的是，这是我从 Cursor 中最怀念的东西之一。
+
+### 31. 更高级的钩子：使用脚本
+
+钩子也可以是完整的脚本甚至应用程序。
+
+所以同样的铃声示例可以扩展为：
+
+```json
+{
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/play-sound.js notification"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/play-sound.js"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 32. 文件写入时自动格式化
+
+没有什么比进行 1 行更改却让你的格式化程序更改 200 行更令人恼火的了。
+
+这个钩子将只在刚刚编辑的文件上运行格式化程序：
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx prettier --write \"$FILE_PATH\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 33. 始终验证更改
+
+当前一代的 LLM 可能会变懒、假设事情并犯表面错误。
+
+一个解决方法是添加一个钩子，在发送每个提示之前提醒你始终验证更改：
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/pre-tool-use.js"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 34. （奖励）Webhook 通知
+
+钩子不一定需要是脚本。
+
+你可以使用它们触发 webhook，这对于长时间运行的任务很有用。
+
+例如，你可以使用它们获取长时间运行任务的 Discord/Slack 通知：
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -X POST https://discord.com/api/webhooks/YOUR_WEBHOOK -H 'Content-Type: application/json' -d '{\"content\":\"任务完成！\"}'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## 总结
+
+这 33 个技巧将 Claude Code 从一个好的 AI 助手转变为一个优秀的助手。从基础开始，逐渐添加自动化，很快你就能比说"Claude Code"更快地发布代码。
+
+编程愉快！🚀
+
+---
+
+## 要避免的常见陷阱
+
+### 不要从头开始
+
+始终使用已引导的代码库。Claude Code 在初始设置方面有困难。
+
+### 不要忽略上下文限制
+
+定期使用 `/clear` 来维持性能。
+
+### 不要跳过审查
+
+始终审查 Claude 的更改，特别是对于安全敏感的代码。
+
+### 不要忘记提交
+
+与 Cursor 不同，Claude Code 没有自动检查点。频繁提交或使用上面的规则自动进行。
+
+---
+
+想要更多 Claude Code 技巧？查看如何使用你的 [Claude Code TaskMaster AI 教程](https://pageai.pro/blog/claude-code-taskmaster-ai-tutorial)构建完整应用程序！
