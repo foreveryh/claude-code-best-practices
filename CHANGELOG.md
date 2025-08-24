@@ -43,6 +43,24 @@ Each entry should follow this format:
 
 ## Publication History
 
+## [2025-01-24] - Compounding Engineering: Building Self-Improving Development Systems
+
+### Added
+- **[advanced]** New article: "Compounding Engineering: Building Self-Improving Development Systems"
+  - Source: https://every.to/working-overtime/compounding-engineering
+  - Author: Kieran Klaassen
+  - Languages: EN/ZH
+  - Type: Article
+  - Description: Learn how to build development systems that get faster, safer, and better with each iteration. Transform your engineering workflow from short-term gains to permanent improvements through AI-powered workflows.
+  - Files:
+    - EN: `/content/docs/en/advanced/compounding-engineering.mdx`
+    - ZH: `/content/docs/zh/advanced/compounding-engineering.mdx`
+    - Source: `/content/sources/Compounding engineering.md`
+    - Images: `/public/images/compounding-engineering/`
+  - Images Downloaded:
+    - `automated-code-reviewer.jpeg` - Automated code reviewer screenshot
+    - `monitor-setup-warp.png` - Monitor setup in Warp command line interface
+
 ## [2024-08-24] - What Makes Claude Code So Damn Good: A Deep Analysis
 
 ### Added

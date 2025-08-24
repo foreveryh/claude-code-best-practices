@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "复合式工程：构建自我改进的开发系统",
-    description: "学习如何构建随着每次迭代变得更快、更安全、更优秀的开发系统。将你的工程工作流程从短期收益转变为永久改进。",
+    title: "Compounding Engineering: Building Self-Improving Development Systems",
+    description: "Learn how to build development systems that get faster, safer, and better with each iteration. Transform your engineering workflow from short-term gains to permanent improvements.",
     date: "2025-01-24",
     category: "advanced",
-    language: "zh",
-    slug: "zh/advanced/compounding-engineering",
-    url: "/docs/zh/advanced/compounding-engineering"
+    language: "en",
+    slug: "en/advanced/compounding-engineering",
+    url: "/docs/en/advanced/compounding-engineering"
   },];
 
 // 获取首页最近文章的函数
