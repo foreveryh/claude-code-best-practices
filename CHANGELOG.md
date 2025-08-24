@@ -43,6 +43,20 @@ Each entry should follow this format:
 
 ## Publication History
 
+## [2024-08-24] - CCPM: Claude Code Project Manager
+
+### Added
+- **[tools]** New analysis: "CCPM: Claude Code Project Manager"
+  - Source: https://github.com/automazeio/ccpm
+  - Author: Automaze team
+  - Languages: EN/ZH
+  - Type: Analysis
+  - Description: A revolutionary project management system for Claude Code that uses GitHub Issues and Git worktrees for parallel agent execution.
+  - Files:
+    - EN: `/content/docs/en/tools/ccpm-claude-code-project-manager.mdx`
+    - ZH: `/content/docs/zh/tools/ccpm-claude-code-project-manager.mdx`
+    - Source: `/content/sources/ccpm-claude-code-project-manager_20250824.md`
+
 ## [2024-08-24] - Happy: Mobile and Web Client for Claude Code
 
 ### Added

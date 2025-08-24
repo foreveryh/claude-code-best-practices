@@ -1,0 +1,337 @@
+---
+title: "CCPM：Claude Code 项目管理器"
+description: "一个革命性的 Claude Code 项目管理系统，使用 GitHub Issues 和 Git worktrees 实现并行代理执行。将 PRD 转化为已发布的代码，具备完整的可追溯性和前所未有的开发速度。"
+date: "2024-08-24"
+author: "Automaze team"
+source: "https://github.com/automazeio/ccpm"
+category: "tools"
+lang: "zh"
+---
+
+# CCPM：Claude Code 项目管理器
+
+> **⭐ GitHub**: [automazeio/ccpm](https://github.com/automazeio/ccpm) - Claude Code 项目管理系统
+
+CCPM (Claude Code Project Manager) 是一个经过实战验证的系统，通过将混乱的编程会话转化为结构化、可追踪的工作流程，革命性地改变了 AI 辅助开发。停止丢失上下文，停止任务阻塞，停止发布错误，这个专为 Claude Code 设计的综合项目管理框架将彻底改变您的开发方式。
+
+## 🚀 什么是 CCPM？
+
+CCPM 是一个 Claude Code 工作流系统，能够实现：
+
+- **规范驱动开发** - 每一行代码都可以追溯到规范
+- **并行代理执行** - 多个 AI 代理同时工作
+- **GitHub Issues 集成** - 与您现有工具的原生协作
+- **完整可追溯性** - 从 PRD 到生产的完整审计跟踪
+- **上下文保持** - 永远不会在会话之间丢失项目状态
+
+## 🎯 核心理念：杜绝随意编程
+
+> **每一行代码都必须可以追溯到规范。**
+
+CCPM 遵循严格的 5 阶段规范：
+
+1. **🧠 头脑风暴** - 思考得比舒适区更深入
+2. **📝 文档化** - 编写不留任何解释空间的规范
+3. **📐 规划** - 使用明确的技术决策进行架构设计
+4. **⚡ 执行** - 完全按照规范构建
+5. **📊 跟踪** - 在每个步骤保持透明的进度
+
+没有捷径。没有假设。没有遗憾。
+
+## 🔥 有什么不同？
+
+| 传统开发方式 | Claude Code PM 系统 |
+|-------------|-------------------|
+| 会话间丢失上下文 | **持久上下文** 贯穿所有工作 |
+| 串行任务执行 | **并行代理** 处理独立任务 |
+| 基于记忆的"随意编程" | **规范驱动** 具备完整可追溯性 |
+| 进度隐藏在分支中 | **透明审计跟踪** 在 GitHub 中 |
+| 手动任务协调 | **智能优先级排序** 使用 `/pm:next` |
+
+## 🏗️ 系统架构
+
+```
+.claude/
+├── CLAUDE.md          # 持续指令
+├── agents/            # 面向任务的代理
+├── commands/          # 命令定义
+│   ├── context/       # 创建、更新和启动上下文
+│   ├── pm/            # 项目管理命令
+│   └── testing/       # 启动和执行测试
+├── context/           # 项目级上下文文件
+├── epics/             # PM 的本地工作空间
+│   └── [epic-name]/   # Epic 和相关任务
+│       ├── epic.md    # 实施计划
+│       ├── [#].md     # 个别任务文件
+│       └── updates/   # 进行中的更新
+├── prds/              # PRD 文件
+├── rules/             # 参考规则文件
+└── scripts/           # 脚本文件
+```
+
+## 📋 5 阶段工作流程
+
+### 1. 产品规划阶段
+```bash
+/pm:prd-new feature-name
+```
+启动全面的头脑风暴以创建产品需求文档，捕获愿景、用户故事、成功标准和约束条件。
+
+**输出：** `.claude/prds/feature-name.md`
+
+### 2. 实施规划阶段
+```bash
+/pm:prd-parse feature-name
+```
+将 PRD 转换为技术实施计划，包含架构决策、技术方法和依赖映射。
+
+**输出：** `.claude/epics/feature-name/epic.md`
+
+### 3. 任务分解阶段
+```bash
+/pm:epic-decompose feature-name
+```
+将 epic 分解为具体的、可执行的任务，包含验收标准、工作量估算和并行化标志。
+
+**输出：** `.claude/epics/feature-name/[task].md`
+
+### 4. GitHub 同步
+```bash
+/pm:epic-sync feature-name
+# 或者对于确信的工作流程：
+/pm:epic-oneshot feature-name
+```
+将 epic 和任务推送到 GitHub 作为 issues，带有适当的标签和关系。
+
+### 5. 执行阶段
+```bash
+/pm:issue-start 1234  # 启动专业代理
+/pm:issue-sync 1234   # 推送进度更新
+/pm:next             # 获取下一个优先任务
+```
+专业代理实施任务，同时维护进度更新和审计跟踪。
+
+## ⚡ 并行执行革命
+
+### 速度的数学公式
+
+**传统方法：**
+- 包含 3 个 issues 的 Epic
+- 串行执行
+- 单线程开发
+
+**CCPM 系统：**
+- 相同的包含 3 个 issues 的 Epic
+- 每个 issue 分割成约 4 个并行流
+- **12 个代理同时工作**
+
+### Issues 不是原子性的
+
+单个"实现用户认证"issue 变成：
+
+- **代理 1**：数据库表和迁移
+- **代理 2**：服务层和业务逻辑
+- **代理 3**：API 端点和中间件
+- **代理 4**：UI 组件和表单
+- **代理 5**：测试套件和文档
+
+全部在相同的工作树中**同时**运行。
+
+### 上下文优化
+
+**传统单线程方法：**
+- 主对话承载所有实施细节
+- 上下文窗口被模式、API 代码、UI 组件填满
+- 最终达到上下文限制并失去连贯性
+
+**并行代理方法：**
+- 主线程保持清洁和战略性
+- 每个代理在隔离中处理自己的上下文
+- 实施细节永远不会污染主对话
+- 主线程保持监督而不被代码淹没
+
+## 🤝 为什么选择 GitHub Issues？
+
+大多数 Claude Code 工作流程都是孤立运行的——单个开发者在其本地环境中与 AI 工作。CCPM 解锁了真正的协作：
+
+### **真正的团队协作**
+- 多个 Claude 实例可以同时在同一项目上工作
+- 人类开发者通过 issue 评论实时看到 AI 进度
+- 团队成员可以在任何地方加入——上下文始终可见
+- 管理者获得透明度而不中断流程
+
+### **无缝的人机 AI 交接**
+- AI 可以开始任务，人类可以完成（反之亦然）
+- 进度更新对每个人可见，不被困在聊天记录中
+- 代码审查通过 PR 评论自然发生
+- 没有"AI 做了什么？"的会议
+
+### **单一真实来源**
+- 没有单独的数据库或项目管理工具
+- Issue 状态就是项目状态
+- 评论是审计跟踪
+- 标签提供组织
+
+## 🛠️ 关键命令
+
+### 初始设置
+- `/pm:init` - 安装依赖并配置 GitHub
+
+### PRD 管理
+- `/pm:prd-new` - 为新产品需求启动头脑风暴
+- `/pm:prd-parse` - 将 PRD 转换为实施 epic
+- `/pm:prd-list` - 列出所有 PRD
+- `/pm:prd-status` - 显示 PRD 实施状态
+
+### Epic 管理
+- `/pm:epic-decompose` - 将 epic 分解为任务文件
+- `/pm:epic-sync` - 将 epic 和任务推送到 GitHub
+- `/pm:epic-oneshot` - 一个命令中分解和同步
+- `/pm:epic-show` - 显示 epic 及其任务
+
+### Issue 执行
+- `/pm:issue-start` - 使用专业代理开始工作
+- `/pm:issue-sync` - 将更新推送到 GitHub
+- `/pm:issue-status` - 检查 issue 状态
+- `/pm:next` - 显示带有 epic 上下文的下一个优先 issue
+
+### 工作流程命令
+- `/pm:status` - 整体项目仪表板
+- `/pm:standup` - 每日站会报告
+- `/pm:sync` - 与 GitHub 完全双向同步
+
+## 📊 验证结果
+
+使用 CCPM 的团队报告：
+
+- **89% 减少**上下文切换损失的时间
+- **5-8 个并行任务** vs 之前的 1 个
+- **75% 减少**错误率，得益于详细的任务分解
+- **高达 3 倍**更快的功能交付，基于复杂性
+
+## 🚀 快速开始（2 分钟）
+
+### 1. 克隆和设置
+```bash
+cd path/to/your/project/
+git clone https://github.com/automazeio/ccpm.git .
+```
+
+### 2. 初始化系统
+```bash
+/pm:init
+```
+此命令将：
+- 安装 GitHub CLI（如果需要）
+- 通过 GitHub 认证
+- 安装 gh-sub-issue 扩展以实现父子关系
+- 创建所需目录
+- 更新 .gitignore
+
+### 3. 创建 CLAUDE.md
+```bash
+/init include rules from .claude/CLAUDE.md
+```
+
+### 4. 启动系统
+```bash
+/context:create
+```
+
+### 5. 开始您的第一个功能
+```bash
+/pm:prd-new your-feature-name
+```
+
+## 💡 示例工作流程
+
+```bash
+# 开始一个新功能
+/pm:prd-new memory-system
+
+# 审查和完善 PRD...
+
+# 创建实施计划
+/pm:prd-parse memory-system
+
+# 审查 epic...
+
+# 分解为任务并推送到 GitHub
+/pm:epic-oneshot memory-system
+# 创建 issues：#1234 (epic), #1235, #1236 (tasks)
+
+# 开始任务开发
+/pm:issue-start 1235
+# 代理开始工作，维护本地进度
+
+# 将进度同步到 GitHub
+/pm:issue-sync 1235
+# 更新作为 issue 评论发布
+
+# 检查整体状态
+/pm:epic-show memory-system
+```
+
+## 🔧 技术特性
+
+### GitHub 集成
+- 使用 **gh-sub-issue 扩展** 实现适当的父子关系
+- 如果未安装扩展则回退到任务列表
+- Epic issues 自动跟踪子任务完成情况
+- 标签提供组织（`epic:feature`, `task:feature`）
+
+### 文件管理
+- 任务在分解期间以 `001.md`, `002.md` 开始
+- GitHub 同步后，重命名为 `{issue-id}.md`（例如 `1234.md`）
+- 使导航简单：issue #1234 = 文件 `1234.md`
+
+### 设计哲学
+- 有意避免 GitHub Projects API 的复杂性
+- 所有命令首先在本地文件上操作以提高速度
+- 与 GitHub 的同步是明确且受控的
+- Worktrees 为并行工作提供清洁的 git 隔离
+
+## 🎯 谁应该使用 CCPM？
+
+### **独立开发者**
+- 在长时间开发会话中维护上下文
+- 将复杂功能分解为可管理的任务
+- 以专业规范跟踪进度
+
+### **小团队**
+- 协调多个开发者和 AI 代理
+- 保持对 AI 辅助开发的可见性
+- 扩展超越单人 Claude Code 工作流程
+
+### **企业团队**
+- 确保合规性和可追溯性要求
+- 将 AI 开发与现有 GitHub 工作流程集成
+- 为 AI 辅助代码维护专业标准
+
+## 🔮 AI 项目管理的未来
+
+CCPM 代表了从将 AI 视为编程助手到将其视为**开发团队成员**的范式转变。通过提供结构、上下文和协作协议，CCPM 使 AI 代理能够以思维的速度工作，同时保持人类监督和专业标准。
+
+这不仅仅是项目管理——这是**可扩展 AI 辅助开发**的基础，可以从独立项目增长到企业级软件交付。
+
+## 🤝 社区和支持
+
+CCPM 由 [Automaze](https://automaze.io/) 的开发者为开发者开发。
+
+### **获得帮助**
+- **GitHub Issues**：[报告错误或请求功能](https://github.com/automazeio/ccpm/issues)
+- **文档**：包含全面的命令参考
+- **社区**：关注 [@aroussi](https://x.com/aroussi) 获取更新和技巧
+
+### **贡献**
+- **开源**：MIT 许可证，架构清晰
+- **实战验证**：在开发团队的生产环境中使用
+- **可扩展**：模块化命令系统用于定制
+
+---
+
+**准备转换您的 Claude Code 工作流程了吗？** 立即安装 CCPM，体验结构化、并行 AI 辅助开发的力量。
+
+- ⭐ [在 GitHub 上加星](https://github.com/automazeio/ccpm)
+- 🚀 [立即开始](https://github.com/automazeio/ccpm#get-started-now)
+- 🐦 [关注获取更新](https://x.com/aroussi)
