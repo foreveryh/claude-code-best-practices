@@ -46,15 +46,15 @@ Each entry should follow this format:
 ## [2025-08-24] - 33 Claude Code Setup Tips You NEED to Know
 
 ### Added
-- **[advanced]** New article: "33 Claude Code Setup Tips You NEED to Know"
+- **[best-practices]** New article: "33 Claude Code Setup Tips You NEED to Know"
   - Source: https://pageai.pro/blog/31-claude-code-setup-tips
   - Author: PageAI
   - Languages: EN/ZH
   - Type: Article
   - Description: Master Claude Code with 33 essential tips covering shortcuts, prompting techniques, MCP servers, project rules, and automation hooks. Transform from beginner to expert level productivity.
   - Files:
-    - EN: `/content/docs/en/advanced/claude-code-setup-tips.mdx`
-    - ZH: `/content/docs/zh/advanced/claude-code-setup-tips.mdx`
+    - EN: `/content/docs/en/best-practices/claude-code-setup-tips.mdx`
+    - ZH: `/content/docs/zh/best-practices/claude-code-setup-tips.mdx`
     - Source: `/content/sources/claude-code-setup-tips_20250824.md`
     - Images: `/content/assets/claude-code-setup-tips/`
   - YouTube Video: https://www.youtube.com/embed/Z8b6h8cNx-Y (preserved in both versions)
