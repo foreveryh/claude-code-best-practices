@@ -28,6 +28,28 @@ In the project, you can see:
 | `app/docs`                | The documentation layout and pages.                    |
 | `app/api/search/route.ts` | The Route Handler for search.                          |
 
+## Content Management
+
+This project includes a comprehensive content management system:
+
+### Scripts
+
+- `npm run changelog add` - Add new content publication to changelog
+- `npm run changelog stats` - View changelog statistics
+- `npm run recent-posts add <path> <lang>` - Add article to recent posts
+- `npm run recent-posts list` - List current recent posts
+- `npm run update-indexes` - Update content indexes
+
+### Content Production Workflow
+
+1. **Content Acquisition**: Download content using Jina Reader API
+2. **Resource Processing**: Localize images and assets
+3. **Content Optimization**: Clean and format content
+4. **Multi-language Support**: Create EN/ZH versions
+5. **Publishing**: Update changelog and indexes
+
+See `CHANGELOG.md` for publication history and `CHANGELOG_TEMPLATE.md` for entry format.
+
 ### Fumadocs MDX
 
 A `source.config.ts` config file has been included, you can customise different options like frontmatter schema.

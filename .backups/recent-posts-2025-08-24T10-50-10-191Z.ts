@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "Happy：Claude Code 的移动端和网页客户端",
-    description: "一个全面的移动端和网页客户端，为您的手机带来具备端到端加密、语音控制和多会话支持的 Claude Code。让您在任何地方都能使用 Claude Code，无需改变工作流程。",
+    title: "Happy: Mobile and Web Client for Claude Code",
+    description: "A comprehensive mobile and web client that brings Claude Code to your phone with end-to-end encryption, voice control, and multi-session support. Use Claude Code from anywhere with zero workflow disruption.",
     date: "2024-08-24",
     category: "tools",
-    language: "zh",
-    slug: "zh/tools/happy-mobile-claude-code-client",
-    url: "/docs/zh/tools/happy-mobile-claude-code-client"
+    language: "en",
+    slug: "en/tools/happy-mobile-claude-code-client",
+    url: "/docs/en/tools/happy-mobile-claude-code-client"
   },];
 
 // 获取首页最近文章的函数

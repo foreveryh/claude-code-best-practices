@@ -6,6 +6,71 @@ const matter = require('gray-matter');
 
 // 最近文章文件路径
 const RECENT_POSTS_FILE = path.join(process.cwd(), 'lib/recent-posts.ts');
+const BACKUP_DIR = path.join(process.cwd(), '.backups');
+
+// 创建备份
+function createBackup() {
+  if (!fs.existsSync(BACKUP_DIR)) {
+    fs.mkdirSync(BACKUP_DIR, { recursive: true });
+  }
+  
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const backupPath = path.join(BACKUP_DIR, `recent-posts-${timestamp}.ts`);
+  
+  fs.copyFileSync(RECENT_POSTS_FILE, backupPath);
+  console.log(`💾 Backup created: ${backupPath}`);
+  return backupPath;
+}
+
+// 恢复备份
+function restoreFromBackup(backupPath) {
+  if (!fs.existsSync(backupPath)) {
+    console.error(`❌ Backup file not found: ${backupPath}`);
+    return false;
+  }
+  
+  fs.copyFileSync(backupPath, RECENT_POSTS_FILE);
+  console.log(`✅ Restored from backup: ${backupPath}`);
+  return true;
+}
+
+// 列出可用备份
+function listBackups() {
+  if (!fs.existsSync(BACKUP_DIR)) {
+    console.log('📁 No backups directory found');
+    return [];
+  }
+  
+  const backups = fs.readdirSync(BACKUP_DIR)
+    .filter(file => file.startsWith('recent-posts-') && file.endsWith('.ts'))
+    .map(file => {
+      const filePath = path.join(BACKUP_DIR, file);
+      const stats = fs.statSync(filePath);
+      return {
+        name: file,
+        path: filePath,
+        date: stats.mtime,
+        size: stats.size
+      };
+    })
+    .sort((a, b) => b.date - a.date);
+  
+  if (backups.length === 0) {
+    console.log('📁 No backups found');
+    return [];
+  }
+  
+  console.log('\n💾 Available backups:');
+  console.log('=' .repeat(80));
+  backups.forEach((backup, index) => {
+    console.log(`${index + 1}. ${backup.name}`);
+    console.log(`   Date: ${backup.date.toLocaleString()}`);
+    console.log(`   Size: ${backup.size} bytes`);
+    console.log('');
+  });
+  
+  return backups;
+}
 
 // 从 MDX 文件提取文章信息
 function extractArticleInfo(filePath, language) {
@@ -36,7 +101,7 @@ function extractArticleInfo(filePath, language) {
 }
 
 // 添加新文章到最近文章列表
-function addArticleToRecentPosts(articlePath, language) {
+function addArticleToRecentPosts(articlePath, language, dryRun = false) {
   const articleInfo = extractArticleInfo(articlePath, language);
   
   if (!articleInfo) {
@@ -75,7 +140,7 @@ function addArticleToRecentPosts(articlePath, language) {
   // 检查是否已存在相同 slug 的文章
   const existingSlugPattern = new RegExp(`slug: "${articleInfo.slug}"`, 'g');
   if (existingSlugPattern.test(content)) {
-    console.log(`Article with slug "${articleInfo.slug}" already exists`);
+    console.log(`⚠️ Article with slug "${articleInfo.slug}" already exists`);
     return;
   }
   
@@ -85,10 +150,28 @@ function addArticleToRecentPosts(articlePath, language) {
   
   const newContent = beforeArray + '\n' + newArticleEntry + ',' + afterArray;
   
+  if (dryRun) {
+    console.log('\n🔍 DRY RUN - This is what would be added:');
+    console.log('=' .repeat(80));
+    console.log(newArticleEntry);
+    console.log('=' .repeat(80));
+    console.log(`\n📊 Article details:`);
+    console.log(`   Title: ${articleInfo.title}`);
+    console.log(`   Category: ${articleInfo.category}`);
+    console.log(`   Language: ${articleInfo.language}`);
+    console.log(`   Slug: ${articleInfo.slug}`);
+    console.log('\n📝 To actually add this entry, run without --dry flag');
+    return;
+  }
+  
+  // 创建备份
+  const backupPath = createBackup();
+  
   // 写回文件
   fs.writeFileSync(RECENT_POSTS_FILE, newContent, 'utf-8');
   
   console.log(`✅ Added article "${articleInfo.title}" to recent posts`);
+  console.log(`📁 Backup saved to: ${path.basename(backupPath)}`);
 }
 
 // 列出当前的所有最近文章
@@ -133,7 +216,7 @@ function listRecentPosts() {
 }
 
 // 从最近文章列表中移除文章
-function removeArticleFromRecentPosts(slug) {
+function removeArticleFromRecentPosts(slug, dryRun = false) {
   const content = fs.readFileSync(RECENT_POSTS_FILE, 'utf-8');
   
   // 构建要移除的文章的正则表达式
@@ -146,21 +229,32 @@ function removeArticleFromRecentPosts(slug) {
     return;
   }
   
+  if (dryRun) {
+    console.log(`\n🔍 DRY RUN - Would remove article with slug: "${slug}"`);
+    console.log('\n📝 To actually remove this entry, run without --dry flag');
+    return;
+  }
+  
+  // 创建备份
+  const backupPath = createBackup();
+  
   fs.writeFileSync(RECENT_POSTS_FILE, newContent, 'utf-8');
   console.log(`✅ Removed article with slug "${slug}" from recent posts`);
+  console.log(`📁 Backup saved to: ${path.basename(backupPath)}`);
 }
 
 // 主函数
 function main() {
   const command = process.argv[2];
+  const isDryRun = process.argv.includes('--dry') || process.argv.includes('-d');
   
   switch (command) {
     case 'add':
       const articlePath = process.argv[3];
       const language = process.argv[4] || 'en';
       
-      if (!articlePath) {
-        console.error('Usage: node scripts/manage-recent-posts.js add <article-path> [language]');
+      if (!articlePath || (articlePath.startsWith('--') || articlePath.startsWith('-'))) {
+        console.error('Usage: node scripts/manage-recent-posts.js add <article-path> [language] [--dry]');
         process.exit(1);
       }
       
@@ -170,7 +264,7 @@ function main() {
         process.exit(1);
       }
       
-      addArticleToRecentPosts(fullPath, language);
+      addArticleToRecentPosts(fullPath, language, isDryRun);
       break;
       
     case 'list':
@@ -180,19 +274,49 @@ function main() {
     case 'remove':
       const slug = process.argv[3];
       
-      if (!slug) {
-        console.error('Usage: node scripts/manage-recent-posts.js remove <slug>');
+      if (!slug || (slug.startsWith('--') || slug.startsWith('-'))) {
+        console.error('Usage: node scripts/manage-recent-posts.js remove <slug> [--dry]');
         process.exit(1);
       }
       
-      removeArticleFromRecentPosts(slug);
+      removeArticleFromRecentPosts(slug, isDryRun);
+      break;
+      
+    case 'backup':
+      const action = process.argv[3];
+      switch (action) {
+        case 'list':
+          listBackups();
+          break;
+        case 'restore':
+          const backupName = process.argv[4];
+          if (!backupName) {
+            console.error('Usage: node scripts/manage-recent-posts.js backup restore <backup-filename>');
+            process.exit(1);
+          }
+          const backupPath = path.join(BACKUP_DIR, backupName);
+          restoreFromBackup(backupPath);
+          break;
+        case 'create':
+          createBackup();
+          break;
+        default:
+          console.log('Backup commands:');
+          console.log('  node scripts/manage-recent-posts.js backup list');
+          console.log('  node scripts/manage-recent-posts.js backup create');
+          console.log('  node scripts/manage-recent-posts.js backup restore <backup-filename>');
+      }
       break;
       
     default:
       console.log('Usage:');
-      console.log('  node scripts/manage-recent-posts.js add <article-path> [language]');
+      console.log('  node scripts/manage-recent-posts.js add <article-path> [language] [--dry]');
       console.log('  node scripts/manage-recent-posts.js list');
-      console.log('  node scripts/manage-recent-posts.js remove <slug>');
+      console.log('  node scripts/manage-recent-posts.js remove <slug> [--dry]');
+      console.log('  node scripts/manage-recent-posts.js backup <list|create|restore>');
+      console.log('');
+      console.log('Options:');
+      console.log('  --dry, -d    Preview changes without making them');
       break;
   }
 }

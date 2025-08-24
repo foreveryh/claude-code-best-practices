@@ -8,7 +8,11 @@
     "start": "next start",
     "postinstall": "fumadocs-mdx",
     "update-indexes": "node scripts/update-indexes.js",
-    "recent-posts": "node scripts/manage-recent-posts.js"
+    "recent-posts": "node scripts/manage-recent-posts.js",
+    "changelog": "node scripts/changelog.js",
+    "publish-complete": "node scripts/publish-complete.js complete",
+    "publish-dry": "node scripts/publish-complete.js complete --dry",
+    "quick-add": "node scripts/publish-complete.js quick-add"
   },
   "dependencies": {
     "fumadocs-core": "15.6.8",
