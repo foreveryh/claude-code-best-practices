@@ -43,6 +43,20 @@ Each entry should follow this format:
 
 ## Publication History
 
+## [2024-08-24] - What Makes Claude Code So Damn Good: A Deep Analysis
+
+### Added
+- **[advanced]** New analysis: "What Makes Claude Code So Damn Good: A Deep Analysis"
+  - Source: https://minusx.ai/blog/decoding-claude-code/
+  - Author: MinusX team
+  - Languages: EN/ZH
+  - Type: Analysis
+  - Description: An in-depth analysis of what makes Claude Code the most delightful AI coding agent, based on intercepted logs and months of usage.
+  - Files:
+    - EN: `/content/docs/en/advanced/decoding-claude-code-analysis.mdx`
+    - ZH: `/content/docs/zh/advanced/decoding-claude-code-analysis.mdx`
+    - Source: `/content/sources/decoding-claude-code-minusx-analysis_20250824.md`
+
 ## [2024-08-24] - CCPM: Claude Code Project Manager
 
 ### Added

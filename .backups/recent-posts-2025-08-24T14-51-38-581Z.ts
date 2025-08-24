@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "揭秘 Claude Code 为何如此出色：深度分析",
-    description: "基于拦截日志和数月使用经验，深入分析 Claude Code 成为最令人愉悦的 AI 编程代理的原因。学习架构决策、提示工程技术和工具设计原则，应用到您自己的 LLM 代理中。",
+    title: "What Makes Claude Code So Damn Good: A Deep Analysis",
+    description: "An in-depth analysis of what makes Claude Code the most delightful AI coding agent, based on intercepted logs and months of usage. Learn the architectural decisions, prompt engineering techniques, and tool design principles that you can apply to your own LLM agents.",
     date: "2024-08-24",
     category: "advanced",
-    language: "zh",
-    slug: "zh/advanced/decoding-claude-code-analysis",
-    url: "/docs/zh/advanced/decoding-claude-code-analysis"
+    language: "en",
+    slug: "en/advanced/decoding-claude-code-analysis",
+    url: "/docs/en/advanced/decoding-claude-code-analysis"
   },];
 
 // 获取首页最近文章的函数

@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "揭秘 Claude Code 为何如此出色：深度分析",
-    description: "基于拦截日志和数月使用经验，深入分析 Claude Code 成为最令人愉悦的 AI 编程代理的原因。学习架构决策、提示工程技术和工具设计原则，应用到您自己的 LLM 代理中。",
+    title: "CCPM：Claude Code 项目管理器",
+    description: "一个革命性的 Claude Code 项目管理系统，使用 GitHub Issues 和 Git worktrees 实现并行代理执行。将 PRD 转化为已发布的代码，具备完整的可追溯性和前所未有的开发速度。",
     date: "2024-08-24",
-    category: "advanced",
+    category: "tools",
     language: "zh",
-    slug: "zh/advanced/decoding-claude-code-analysis",
-    url: "/docs/zh/advanced/decoding-claude-code-analysis"
+    slug: "zh/tools/ccpm-claude-code-project-manager",
+    url: "/docs/zh/tools/ccpm-claude-code-project-manager"
   },];
 
 // 获取首页最近文章的函数

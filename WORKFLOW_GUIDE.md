@@ -2,6 +2,8 @@
 
 This guide outlines the enhanced workflow for processing links and publishing content with automated tools and safety features.
 
+> **🚨 CRITICAL**: Before starting any content production, review the [Content Production Guidelines](./CONTENT_PRODUCTION_GUIDELINES.md) for mandatory image handling and translation quality standards.
+
 ## 🚀 **New: Master Workflow Commands**
 
 ### **Complete Publication Workflow**
@@ -40,15 +42,35 @@ npm run quick-add \
    curl -s "https://r.jina.ai/YOUR_URL" > content/sources/article_$(date +%Y%m%d).md
    ```
 
-2. **Image Processing**
-   - Identify all external images in the content
-   - Download images to `public/images/article-name/`
-   - Replace external URLs with local paths
+2. **Image Processing** (⚠️ MANDATORY)
+   - **SCAN FIRST**: Identify ALL external images in the content
+   - **DOWNLOAD ALL**: Download images to `public/images/article-name/`
+   - **REPLACE PATHS**: Replace external URLs with local paths
+   - **VERIFY ACCESS**: Test all images are accessible locally
+   - **QUALITY CHECK**: Ensure no images are missing or broken
+   
+   ```bash
+   # Create image directory
+   mkdir -p public/images/article-name
+   
+   # Download each image (example)
+   curl -o public/images/article-name/diagram.png https://source.com/diagram.png
+   ```
 
-3. **Content Creation**
+3. **Content Creation** (🌍 Translation Quality Critical)
    - Create English version: `content/docs/en/category/slug.mdx`
    - Create Chinese translation: `content/docs/zh/category/slug.mdx`
    - Add proper Front Matter with metadata
+   
+   **🎆 Chinese Translation Requirements:**
+   - **FAITHFUL TRANSLATION**: Translate 100% of content (not summary)
+   - **STORYTELLING STYLE**: Engaging, accessible tone for general AI readers
+   - **NATURAL FLOW**: Use natural Chinese sentence structure
+   - **TECHNICAL ACCURACY**: All facts, data, statistics must match exactly
+   - **TERMINOLOGY**: Use standard Chinese terms + English original on first use
+   - **FORMAT PRESERVATION**: Maintain ALL Markdown formatting
+   
+   > See [Content Production Guidelines](./CONTENT_PRODUCTION_GUIDELINES.md) for detailed translation standards
 
 4. **Publication Recording**
    ```bash
@@ -143,16 +165,20 @@ public/
 
 ## ✅ **Enhanced Publication Checklist**
 
+> **🚨 MANDATORY REVIEW**: Complete [Content Production Guidelines](./CONTENT_PRODUCTION_GUIDELINES.md) checklist first
+
 ### **Option 1: Master Workflow (Recommended)**
 - [ ] Source content downloaded to `content/sources/`
-- [ ] Images downloaded and localized
+- [ ] **IMAGE VERIFICATION**: All images identified, downloaded, and localized
+- [ ] **TRANSLATION QUALITY**: Faithful translation (not summary) with natural Chinese flow
 - [ ] English article created with proper Front Matter
-- [ ] Chinese translation created
+- [ ] Chinese translation created following storytelling style requirements
 - [ ] Run: `npm run publish-complete <en-path> <zh-path>`
   - [ ] Files validated automatically
   - [ ] Articles added to recent posts (both languages)
   - [ ] Indexes updated automatically
   - [ ] Recent posts verified
+- [ ] **FINAL VERIFICATION**: All images display, content reads naturally
 - [ ] Changelog updated: `npm run changelog add`
 - [ ] All links tested and working
 
@@ -160,13 +186,15 @@ public/
 After creating content files:
 
 - [ ] Source content downloaded to `content/sources/`
-- [ ] Images downloaded and localized
+- [ ] **COMPLETE IMAGE PROCESSING**: All images downloaded, paths updated, accessibility verified
+- [ ] **FAITHFUL TRANSLATION**: 100% content translated (not summarized) with storytelling style
 - [ ] English article created with proper Front Matter
-- [ ] Chinese translation created
+- [ ] Chinese translation created following quality standards
 - [ ] Changelog updated with publication details
 - [ ] Recent posts updated: `npm run recent-posts add <en-path> en`
 - [ ] Recent posts updated: `npm run recent-posts add <zh-path> zh`
 - [ ] Indexes updated: `npm run update-indexes`
+- [ ] **QUALITY VERIFICATION**: All images display, translation reads naturally
 - [ ] All links tested and working
 - [ ] MDX syntax validated (no rendering errors)
 
