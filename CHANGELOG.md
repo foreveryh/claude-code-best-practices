@@ -43,6 +43,28 @@ Each entry should follow this format:
 
 ## Publication History
 
+## [2025-01-24] - Andrej Karpathy on the Evolution of LLM-Assisted Coding: Philosophy Meets Practice
+
+### Added
+- **[best-practices]** New analysis: "Andrej Karpathy on the Evolution of LLM-Assisted Coding: Philosophy Meets Practice"
+  - Source: https://x.com/karpathy/status/1959703967694545296
+  - Author: Andrej Karpathy & DeepToAI Team
+  - Languages: EN/ZH
+  - Type: Analysis
+  - Description: Deep analysis of AI legend Andrej Karpathy's insights on multi-layered LLM coding workflows, combining high-level philosophy ("道") with practical Claude Code techniques ("术"). Features strategic references to 8+ existing Claude Code articles as supplementary reading.
+  - Files:
+    - EN: `/content/docs/en/best-practices/karpathy-llm-coding-evolution.mdx`
+    - ZH: `/content/docs/zh/best-practices/karpathy-llm-coding-evolution.mdx`
+    - Source: `/content/sources/Andrej Karpathy.md`
+  - Strategic Integration: Article incorporates references to existing Claude Code guides to bridge Karpathy's philosophical insights with practical implementation techniques
+  - Cross-References Included:
+    - 33 Claude Code Setup Tips
+    - Cal Rueb's Best Practices
+    - Builder's Claude Code Guide
+    - Code Simplifier Agent
+    - Field Notes on Shipping Real Code
+    - Community experiences and case studies
+
 ## [2025-08-24] - 33 Claude Code Setup Tips You NEED to Know
 
 ### Added

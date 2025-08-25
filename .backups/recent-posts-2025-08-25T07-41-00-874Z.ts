@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "Andrej Karpathy 谈 LLM 辅助编程的演进：哲学与实践的融合",
-    description: "AI 传奇人物 Andrej Karpathy 对多层次 LLM 编程工作流的深度洞察，结合实用的 Claude Code 技巧和策略，探索最佳 AI 辅助开发方案。",
-    date: "2025-01-24",
-    category: "best-practices",
+    title: "掌握 Claude Code 的 33 个必知设置技巧",
+    description: "通过 33 个基础到高级的技巧全面掌握 Claude Code，涵盖快捷键、提示技巧、MCP 服务器、项目规则和自动化钩子。从新手到专家级生产力的完整指南。",
+    date: "2025-08-11",
+    category: "advanced",
     language: "zh",
-    slug: "zh/best-practices/karpathy-llm-coding-evolution",
-    url: "/docs/zh/best-practices/karpathy-llm-coding-evolution"
+    slug: "zh/advanced/claude-code-setup-tips",
+    url: "/docs/zh/advanced/claude-code-setup-tips"
   },];
 
 // 获取首页最近文章的函数
