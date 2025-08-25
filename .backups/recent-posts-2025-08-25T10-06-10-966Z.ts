@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "在 Claude Code 中创建 Gemini CLI 驱动的子代理：完整教程",
-    description: "学习如何创建一个专门的子代理，利用 Gemini 的 100万 token 上下文窗口进行大规模代码库分析，同时保持在 Claude Code 的工作流程中。",
-    date: "2025-01-25",
-    category: "sub-agents",
+    title: "Andrej Karpathy 谈 LLM 辅助编程的演进：哲学与实践的融合",
+    description: "AI 传奇人物 Andrej Karpathy 对多层次 LLM 编程工作流的深度洞察，结合实用的 Claude Code 技巧和策略，探索最佳 AI 辅助开发方案。",
+    date: "2025-01-24",
+    category: "best-practices",
     language: "zh",
-    slug: "zh/sub-agents/gemini-cli-subagent-tutorial",
-    url: "/docs/zh/sub-agents/gemini-cli-subagent-tutorial"
+    slug: "zh/best-practices/karpathy-llm-coding-evolution",
+    url: "/docs/zh/best-practices/karpathy-llm-coding-evolution"
   },];
 
 // 获取首页最近文章的函数

@@ -43,6 +43,26 @@ Each entry should follow this format:
 
 ## Publication History
 
+## [2025-01-25] - Create a Gemini CLI Powered Subagent in Claude Code: Complete Tutorial
+
+### Added
+- **[sub-agents]** New tutorial: "Create a Gemini CLI Powered Subagent in Claude Code: Complete Tutorial"
+  - Source: https://egghead.io/create-a-gemini-cli-powered-subagent-in-claude-code~adkge
+  - Author: egghead.io & DeepToAI Team
+  - Languages: EN/ZH
+  - Type: Tutorial
+  - Description: Comprehensive bilingual tutorial on creating specialized subagents that leverage Gemini's 1M token context for large-scale codebase analysis within Claude Code workflow. Includes detailed examples for pattern detection, architecture analysis, code quality assessment, and technology stack evaluation.
+  - Files:
+    - EN: `/content/docs/en/sub-agents/gemini-cli-subagent-tutorial.mdx`
+    - ZH: `/content/docs/zh/sub-agents/gemini-cli-subagent-tutorial.mdx`
+    - Source: `/content/sources/gemini-cli-subagent-egghead_20250825.md`
+  - Features:
+    - Complete subagent definition with specialized examples
+    - Comprehensive use case scenarios for different analysis types
+    - Command flag guidelines and best practices
+    - Step-by-step implementation guide
+    - Integration with existing Claude Code workflow
+
 ## [2025-01-24] - Andrej Karpathy on the Evolution of LLM-Assisted Coding: Philosophy Meets Practice
 
 ### Added

@@ -1,0 +1,275 @@
+---
+title: "Create a Gemini CLI Powered Subagent in Claude Code: Complete Tutorial"
+description: "Learn how to create a specialized subagent that leverages Gemini's 1M token context window for large-scale codebase analysis, while staying within Claude Code's workflow."
+date: "2025-01-25"
+author: "egghead.io & DeepToAI Team"
+source: "https://egghead.io/create-a-gemini-cli-powered-subagent-in-claude-code~adkge"
+category: "sub-agents"
+language: "en"
+tags: ["claude-code", "subagent", "gemini-cli", "codebase-analysis", "automation"]
+---
+
+# Create a Gemini CLI Powered Subagent in Claude Code: Complete Tutorial
+
+Building on the powerful subagent system in Claude Code, this tutorial demonstrates how to create a specialized "gemini-analyzer" subagent that acts as an expert wrapper for the Gemini CLI tool. This approach allows you to leverage Gemini's massive 1M token context window for large-scale code analysis while maintaining your workflow entirely within Claude Code.
+
+## Why This Approach Matters
+
+When working with large codebases, you often need to analyze patterns, architectural decisions, or perform comprehensive code reviews that exceed the context limits of your primary AI assistant. This subagent workflow solves that problem by:
+
+- **Cost Efficiency**: Offload expensive analysis tasks to Gemini's specialized pricing
+- **Context Management**: Utilize Gemini's 1M token window for massive codebase analysis
+- **Workflow Continuity**: Stay within Claude Code while leveraging multiple AI tools
+- **Specialization**: Create expert agents for specific tools and tasks
+
+## Prerequisites
+
+Before starting this tutorial, ensure you have:
+
+1. **Claude Code** installed and configured
+2. **Gemini CLI** installed and configured with API access
+3. A codebase you want to analyze (the larger, the better for demonstration)
+4. Basic understanding of Claude Code's subagent system
+
+## Step 1: Understanding the Workflow
+
+The complete workflow demonstrated in this tutorial involves:
+
+1. **Context Provision**: Provide Claude with context about the Gemini CLI tool and subagent system
+2. **Subagent Generation**: Prompt Claude to generate a subagent definition file (.md)
+3. **Iterative Refinement**: Refine the subagent's prompt with detailed examples
+4. **Task Execution**: Invoke the subagent to perform complex analysis tasks
+
+## Step 2: Create the Subagent Definition
+
+Create a new file in your Claude Code subagents directory (typically `.claude/subagents/`) named `gemini-analyzer.md`:
+
+```markdown
+---
+
+name: gemini-analyzer
+
+description: Manages Gemini CLI for large codebase analysis and pattern detection. Use proactively when Claude needs to analyze extensive code patterns, architectural overviews, or search through large codebases efficiently.
+
+tools: Bash, Read, Write
+
+---
+
+
+You are a Gemini CLI manager specialized in delegating complex codebase analysis tasks to the Gemini CLI tool.
+
+
+Your sole responsibility is to:
+
+1. Receive analysis requests from Claude
+
+2. Format appropriate Gemini CLI commands
+
+3. Execute the Gemini CLI with proper parameters
+
+4. Return the results back to Claude
+
+5. NEVER perform the actual analysis yourself - only manage the Gemini CLI
+
+
+When invoked:
+
+1. Understand the analysis request (patterns to find, architectural questions, etc.)
+
+2. Determine the appropriate Gemini CLI flags and parameters:
+
+   - Use `--all-files` for comprehensive codebase analysis
+
+   - Use specific prompts that focus on the requested analysis
+
+   - Consider using `--yolo` mode for non-destructive analysis tasks
+
+3. Execute the Gemini CLI command with the constructed prompt
+
+4. Return the raw output from Gemini CLI to Claude without modification
+
+5. Do NOT attempt to interpret, analyze, or act on the results
+
+
+Example workflow:
+
+- Request: "Find all authentication patterns in the codebase"
+
+- Action: `gemini --all-files -p "Analyze this codebase and identify all authentication patterns, including login flows, token handling, and access control mechanisms. Focus on the implementation details and architectural patterns used."`
+
+- Output: Return Gemini's analysis directly to Claude
+
+
+Key principles:
+
+- You are a CLI wrapper, not an analyst
+
+- Always use the most appropriate Gemini CLI flags for the task
+
+- Return complete, unfiltered results
+
+- Let Claude handle interpretation and follow-up actions
+
+- Focus on efficient command construction and execution
+
+
+## Detailed Examples by Use Case
+
+
+### 1. Pattern Detection
+
+**Request**: "Find all React hooks usage patterns"
+
+**Command**: `gemini --all-files -p "Analyze this codebase and identify all React hooks usage patterns. Show how useState, useEffect, useContext, and custom hooks are being used. Include examples of best practices and potential issues."`
+
+
+**Request**: "Locate all database query patterns"
+
+**Command**: `gemini --all-files -p "Find all database query patterns in this codebase. Include SQL queries, ORM usage, connection handling, and any database-related utilities. Show the different approaches used."`
+
+
+### 2. Architecture Analysis
+
+**Request**: "Provide an architectural overview of the application"
+
+**Command**: `gemini --all-files -p "Analyze the overall architecture of this application. Identify the main components, data flow, directory structure, key patterns, and how different parts of the system interact. Focus on high-level organization and design decisions."`
+
+
+**Request**: "Analyze the component hierarchy and structure"
+
+**Command**: `gemini --all-files -p "Examine the React component hierarchy and structure. Identify reusable components, layout patterns, prop drilling, state management approaches, and component composition patterns used throughout the application."`
+
+
+### 3. Code Quality Analysis
+
+**Request**: "Find potential performance bottlenecks"
+
+**Command**: `gemini --all-files -p "Analyze this codebase for potential performance bottlenecks. Look for expensive operations, inefficient data structures, unnecessary re-renders, large bundle sizes, and optimization opportunities."`
+
+
+**Request**: "Identify security vulnerabilities"
+
+**Command**: `gemini --all-files -p "Scan this codebase for potential security vulnerabilities. Look for authentication issues, input validation problems, XSS vulnerabilities, unsafe data handling, and security best practices violations."`
+
+
+### 4. Technology Stack Analysis
+
+**Request**: "Identify all third-party dependencies and their usage"
+
+**Command**: `gemini --all-files -p "Analyze all third-party dependencies and libraries used in this project. Show how each major dependency is utilized, identify any potential redundancies, outdated packages, or security concerns."`
+
+
+**Request**: "Map out the testing strategy and coverage"
+
+**Command**: `gemini --all-files -p "Examine the testing strategy used in this codebase. Identify test frameworks, testing patterns, test coverage areas, mocking strategies, and areas that might need more testing."`
+
+
+### 5. Feature Analysis
+
+**Request**: "Trace a specific feature implementation"
+
+**Command**: `gemini --all-files -p "Trace the implementation of [specific feature] throughout the codebase. Show all files involved, data flow, API endpoints, UI components, and how the feature integrates with the rest of the system."`
+
+
+**Request**: "Find all API endpoints and their usage"
+
+**Command**: `gemini --all-files -p "Catalog all API endpoints in this application. Include REST routes, GraphQL resolvers, tRPC procedures, their request/response patterns, authentication requirements, and how they're consumed by the frontend."`
+
+
+### 6. Migration and Refactoring Analysis
+
+**Request**: "Identify legacy code patterns that need modernization"
+
+**Command**: `gemini --all-files -p "Identify outdated or legacy code patterns that could be modernized. Look for old React patterns, deprecated APIs, inefficient implementations, and opportunities to use newer language features."`
+
+
+**Request**: "Analyze consistency across similar components"
+
+**Command**: `gemini --all-files -p "Examine similar components or modules for consistency. Identify variations in patterns, naming conventions, implementation approaches, and opportunities for standardization or creating reusable abstractions."`
+
+
+### 7. Documentation and Knowledge Transfer
+
+**Request**: "Generate onboarding documentation insights"
+
+**Command**: `gemini --all-files -p "Analyze this codebase to help create onboarding documentation. Identify key concepts developers need to understand, important files and directories, setup requirements, and the most critical patterns to learn first."`
+
+
+### Command Flag Guidelines:
+
+- Always use `--all-files` for comprehensive analysis
+
+- Add `--yolo` for non-destructive analysis tasks to skip confirmations
+
+- Use `-p` for single prompts or `-i` for interactive sessions
+
+- Consider `--debug` if you need to troubleshoot Gemini CLI issues
+```
+
+## Key Benefits and Best Practices
+
+### Benefits of This Approach
+
+1. **Specialization**: Create expert agents for any CLI tool
+2. **Efficiency**: Leverage the strengths of different AI models for specific tasks
+3. **Automation**: Streamline complex analysis workflows by delegating tasks
+4. **Context Management**: Keep your main AI conversation focused while the subagent handles tool-specific interactions
+
+### Best Practices
+
+1. **Clear Separation of Concerns**: The subagent should only manage the CLI tool, not interpret results
+2. **Comprehensive Examples**: Include detailed examples for various use cases
+3. **Consistent Command Structure**: Use standardized flags and parameters
+4. **Raw Output Return**: Always return unfiltered results from the CLI tool
+5. **Iterative Refinement**: Continuously improve the subagent based on usage patterns
+
+## Troubleshooting Common Issues
+
+### Gemini CLI Not Found
+Ensure the Gemini CLI is properly installed and available in your PATH:
+```bash
+which gemini
+gemini --version
+```
+
+### Authentication Errors
+Verify your Gemini API credentials are properly configured:
+```bash
+gemini auth status
+```
+
+### Large Output Handling
+For extremely large outputs, consider using file redirection:
+```bash
+gemini --all-files -p "your prompt" > analysis_output.txt
+```
+
+## Advanced Customization
+
+### Adding Custom Analysis Types
+You can extend the subagent with domain-specific analysis patterns:
+
+```markdown
+### 8. Custom Domain Analysis
+**Request**: "Analyze e-commerce specific patterns"
+**Command**: `gemini --all-files -p "Focus on e-commerce specific patterns: cart functionality, payment processing, inventory management, user authentication for purchases, and order tracking systems."`
+```
+
+### Integration with Other Tools
+Consider creating similar subagents for other analysis tools:
+- **ast-grep-analyzer**: For AST-based code search
+- **semgrep-analyzer**: For security and bug detection
+- **eslint-analyzer**: For code quality analysis
+
+## Conclusion
+
+This Gemini CLI subagent provides a powerful way to leverage Gemini's massive context window and specialized analysis capabilities while maintaining your development workflow within Claude Code. The key to success is creating a clear separation of concerns where the subagent acts purely as a CLI wrapper, allowing Claude Code to handle the interpretation and follow-up actions.
+
+By following this tutorial, you've created a reusable, specialized tool that can significantly enhance your codebase analysis capabilities, especially when working with large, complex projects that exceed standard context limits.
+
+---
+
+**Related Reading:**
+- [Claude Code Subagent Documentation](/docs/en/sub-agents)
+- [Best Practices for Large Codebase Analysis](/docs/en/best-practices)
+- [Advanced Claude Code Workflows](/docs/en/advanced)
