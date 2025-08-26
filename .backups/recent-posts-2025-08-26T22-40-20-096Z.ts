@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "99.9% AI 驱动开发：全面实施指南",
-    description: "通过系统化实践、先进工具和经过验证的架构模式，学习如何实现近乎完全的 AI 开发自动化，从而实现快速、高质量的代码交付。",
+    title: "99.9% AI-Driven Development: A Comprehensive Implementation Guide",
+    description: "Learn how to achieve near-complete AI automation in software development through systematic practices, advanced tooling, and proven architectural patterns that enable rapid, high-quality code delivery.",
     date: "2025-01-27",
     category: "best-practices",
-    language: "zh",
-    slug: "zh/best-practices/99-percent-ai-development-comprehensive-guide",
-    url: "/docs/zh/best-practices/99-percent-ai-development-comprehensive-guide"
+    language: "en",
+    slug: "en/best-practices/99-percent-ai-development-comprehensive-guide",
+    url: "/docs/en/best-practices/99-percent-ai-development-comprehensive-guide"
   },];
 
 // 获取首页最近文章的函数
