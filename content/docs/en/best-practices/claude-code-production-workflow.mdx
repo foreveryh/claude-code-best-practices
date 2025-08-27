@@ -1,0 +1,347 @@
+---
+title: "From Random Conversations to Reproducible Production: A Claude Code Advanced Workflow Guide"
+description: "Transform chaotic AI-assisted development into a structured, document-first, diff-driven workflow that delivers predictable results through systematic planning and execution."
+date: "2025-08-27"
+author: "LotusDecoder & DeepToAI Team"
+source: "https://x.com/LotusDecoder/status/1958791207590797619"
+category: "best-practices"
+language: "en"
+tags: ["claude-code", "workflow", "production", "documentation", "diff-driven", "planning"]
+---
+
+# From Random Conversations to Reproducible Production: A Claude Code Advanced Workflow Guide
+
+*A comprehensive guide that transforms "multi-round casual code editing" into a "document-first, diff-driven, one-shot execution" methodology.*
+
+## Executive Summary
+
+This guide presents a battle-tested approach to making AI-assisted development predictable and professional. Instead of endless back-and-forth conversations in the editor, we establish an executable PLAN.md that clearly defines objectives, boundaries, steps, and acceptance criteria, then have Claude Code execute according to the documentation. When failures occur, we cold-start a new round rather than "patching up" within the same conversation thread.
+
+When we implemented this methodology across our team, three immediate changes occurred:
+
+- **Rollbacks became painless** because everything is delivered as unified diffs
+- **Code reviews became effortless** because we only need to compare patches against the PLAN and Definition of Done (DoD)
+- **Model uncertainty was contained** within file structures and processes, rather than scattered across chat histories
+
+⸻
+
+## A Real Task: Walking Through the Complete Pipeline
+
+Let's demonstrate the workflow with an actual task: adding an authentication middleware layer to API v2. Unlike the old habit of asking the model "how to do it," we first lay the tracks:
+
+- Repository root contains a `CLAUDE_CODE_LOG/` directory
+- Each attempt round gets a unique `timestamp__task-name` folder
+- Each round contains six essential files: `PLAN.md`, `PROMPT_USED.md`, `0001.patch`, `RUN_LOG.md`, `COMMIT_SHA.txt`, and `EVAL_REPORT.md`
+- Claude Code is only allowed to output unified diffs and is constrained by file whitelists
+- After failures, we archive and cold-start the next round (new timestamp directory) rather than continuing the same conversation
+
+On the first run, Claude provides a patch; we `git apply --3way`, run tests, and the DoD fails—so we archive the actual prompt, patch, logs, and commit fingerprint, document the failure reason, and start round two. After repeating this process several times, you'll see both success rate and speed improve: the model performs within "narrow rails," maintaining freedom without losing control.
+
+⸻
+
+## Core Methodology: The Four Guiding Principles
+
+### 1. Document-First
+Write a PLAN.md for any task before having the model execute it.
+
+### 2. Diff-Driven
+Only accept unified diffs; prohibit full-file rewrites or "repository scanning."
+
+### 3. Scope Convergence
+Implement file whitelists + directory blacklists + maximum change line limits.
+
+### 4. Verifiable
+Use Definition of Done (DoD) with accompanying tests/scripts to determine success/failure, with full traceability.
+
+⸻
+
+## 1. Repository Structure and Naming Conventions
+
+```
+project-root/
+  .claude/
+    templates/PLAN.template.md
+    rules/                       # Code standards/error codes/security guidelines
+    repo_map.md                  # Key directories/entry points/data flow
+  CLAUDE_CODE_LOG/
+    20250827_083000__add-auth-mw/   # timestamp__task-kebab
+      PLAN.md
+      PROMPT_USED.md
+      0001.patch
+      RUN_LOG.md
+      COMMIT_SHA.txt
+      EVAL_REPORT.md
+```
+
+**Naming Conventions:**
+- Timestamp: `YYYYMMDD_HHMMSS`
+- Task name: kebab-case, no spaces
+- Branch: `feature/<task>-<timestamp>`
+- Failure tags: `cc-fail-<task>-<timestamp>`
+- **Important**: Don't move source code into archives—only archive documentation/patches/logs/fingerprints to avoid breaking paths and build chains
+
+⸻
+
+## 2. Consolidating the "7-Layer Prompt Stack" into PLAN.md
+
+Tool/Language/Project/Persona/Component/Task/Query—all seven layers documented so Claude gains stable context by reading the file.
+
+```markdown
+# Task Title
+Auth middleware for API v2
+
+## 0. Metadata
+- Timestamp: 2025-08-27 08:30
+- Branch: feature/auth-mw-20250827-0830
+- Issue: #123
+
+## 1) Tool Conventions
+- Using Claude Code / Cursor (Claude)
+- **Output only unified diff (patch)**
+- **Only allow modification of**: server/middleware/auth.ts, server/routes/*.ts, tests/auth.test.ts
+
+## 2) Language Conventions
+- Node 20 + TypeScript strict
+- ESLint/Prettier enforced, explicit types
+
+## 3) Project Context
+- Directory/data flow see .claude/repo_map.md
+- Forbidden to change: infra/, migrations/, .env*
+- Dependencies: jsonwebtoken@^9
+
+## 4) Persona
+- Senior backend + test engineer: MVP first, then add tests and documentation
+
+## 5) Component Scope
+- API v2 middleware layer; contract: Authorization: Bearer <JWT>
+
+## 6) Task & DoD
+- Validate JWT, inject req.user; distinguish 401/403
+- **DoD**:
+  - `npm test` all green
+  - `GET /v2/ping` returns 200
+  - Change lines < 300 and only in whitelisted files
+
+## 7) Query / Action
+- If uncertain, first ask ≤3 clarification questions
+- Then output **unified diff**
+- Finally attach ≤120 character change summary
+
+## Risks & Rollback
+- Risk: Route ordering causing middleware not to take effect
+- Rollback: revert current patch; interface unchanged
+
+## Evaluation
+- Run: `npm i && npm test`
+- Record: output written to `RUN_LOG.md`
+
+## Debrief (fill after execution)
+- Success/failure; reason classification; next round hypothesis and corrections
+```
+
+⸻
+
+## 3. Minimal Prompt for Execution
+
+```
+Read ./CLAUDE_CODE_LOG/20250827_083000__add-auth-mw/PLAN.md
+Execute strictly according to "whitelist/DoD/steps":
+1) If uncertain, first provide ≤3 clarification questions
+2) Then output only unified diff patch
+3) Attach ≤120 character change summary
+```
+
+⸻
+
+## 4. "Read-and-Do" 10-Minute Workflow Script
+
+```bash
+# 1) Start round
+TS=$(date +"%Y%m%d_%H%M%S"); TASK=add-auth-mw
+ROUND="CLAUDE_CODE_LOG/${TS}__${TASK}"
+mkdir -p "$ROUND" && git checkout -b "feature/${TASK}-${TS}"
+
+# 2) Generate PLAN draft
+cp .claude/templates/PLAN.template.md "$ROUND/PLAN.md"
+echo -e "\n\nBranch: feature/${TASK}-${TS}\nTimestamp: ${TS}" >> "$ROUND/PLAN.md"
+
+# 3) Have Claude output patch → paste and save as:
+cat > "$ROUND/0001.patch"
+
+# 4) Apply and verify with traceability
+git rev-parse HEAD > "$ROUND/COMMIT_SHA.txt"
+git apply "$ROUND/0001.patch" --3way
+npm i && npm test | tee "$ROUND/RUN_LOG.md"
+
+# 5) Commit or archive
+git add -A && git commit -m "cc: ${TASK} @ ${TS}"
+```
+
+⸻
+
+## 5. Four Common Task Types: Prompt Recipes
+
+### Implementation Tasks
+```
+Read PLAN.md
+If uncertain, propose ≤3 clarification points
+Implement minimally within whitelist files only, output unified diff
+```
+
+### Refactoring Tasks
+```
+Goal: Don't change external behavior, only improve internal structure
+Preserve all exported APIs and tests unchanged
+Provide diff in steps (small first, then larger), each step should pass tests independently
+```
+
+### Bug Fix Tasks
+```
+First provide "reproduction unit test" minimal patch (red)
+Then provide fix patch (green)
+Send two diffs separately
+```
+
+### Documentation/Script Tasks
+```
+Only make limited changes to README/scripts
+Provide local verification commands, output written to RUN_LOG.md
+```
+
+⸻
+
+## 6. Change Scope and Safety Guardrails
+
+**Essential Protections:**
+- **Whitelist**: Only list files/directories allowed for modification
+- **Blacklist**: infra/, migrations/, .env*, deployment scripts, and other sensitive areas
+- **Change limits**: e.g., single round ≤300 lines; must stop and ask when hitting ceiling
+- **Style consistency**: ESLint/Prettier enforced; TS explicit types
+- **Patch-only**: Prohibit full-file rewrites and cross-repository refactoring
+- **Dependency locking**: Preserve lockfile; new/upgraded dependencies must be explicitly declared in PLAN
+
+⸻
+
+## 7. Cold-Start Iteration vs. Long-Chat "Patching"
+
+**Failure Determination** = DoD not achieved (not "feels wrong")
+
+**After Failure:**
+1. Archive the six-piece set
+2. Create new timestamp directory for round two PLAN
+3. Write "failure reason → correction hypothesis → change points" into notes
+4. Whitelist/blacklist and DoD principles remain unchanged (changes require explicit reasoning)
+5. Run short prompt again: clarify first, then provide diff
+6. Continue until "one-shot success"
+
+⸻
+
+## 8. Quality Metrics and Dashboard
+
+Record in each round's `EVAL_REPORT.md`:
+- **First-pass rate** (round-1 pass %)
+- **Change line count** (median/distribution)
+- **Clarification question count** (correlation with failure rate)
+- **Rollback rate** (revert count)
+- **Failure reason classification**: unclear requirements/missing context/interface conflicts/improper test assertions/out-of-scope changes/dependency issues...
+
+Use these metrics to reverse-engineer templates and rules: Need finer whitelists? Harder DoD? Missing key entry points in repo_map?
+
+⸻
+
+## 9. Team-Level Asset Development (Playbook)
+
+Create `CLAUDE_CODE_PLAYBOOK/` in root directory:
+- **PLAN.template.md**: Unified skeleton mapping seven-layer prompts
+- **PROMPT.recipes.md**: Four patterns for implementation/refactoring/bugs/documentation
+- **BOUNDS.checklist.md**: Whitelist/blacklist examples, line count limits
+- **EVAL.metrics.md**: Metric definitions and collection methods
+- **RISK.cases.md**: Real pitfalls and rollback strategies
+
+For next similar task, only change three things: objective, whitelist, DoD. Everything else is reusable.
+
+⸻
+
+## 10. CI/Review Integration
+
+**CI Mandatory Validation:**
+```bash
+git apply --check CLAUDE_CODE_LOG/**/0001.patch
+npm test / pytest -q / go test ./...
+```
+
+**PR Template with PLAN.md and EVAL_REPORT.md:**
+1. Are task objectives/DoD clear?
+2. Is diff within whitelist/under limits?
+3. Do tests and scripts cover critical paths?
+
+⸻
+
+## 11. Anti-Patterns Warning
+
+**Red Flags (immediate stop):**
+- **Back-and-forth modifications in same long conversation**: context drift, instruction dilution, rising hallucinations
+- **Having model "scan entire repository for entry points"**: high risk + low certainty
+- **One-time massive changes**: difficult rollback, difficult troubleshooting
+- **No DoD**: inconsistent acceptance criteria, non-reproducible
+- **Moving source code into archives**: breaks paths/build chains, creates lasting problems
+
+⸻
+
+## Template: Ready-to-Use PLAN.template.md
+
+```markdown
+# Task Title (≤60 characters)
+
+## 1. Task Objective / DoD (must be verifiable)
+- Acceptance commands:
+  - `npm i && npm test`
+  - `curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/v2/ping == 200`
+- Change boundaries:
+  - Only allow: <list files or globs>
+  - Forbidden: infra/, migrations/, .env*
+  - Single round changes ≤300 lines (stop and ask if exceeding)
+
+## 2. Execution Steps (MVP)
+1) <minimal implementation point>
+2) <integration/registration location>
+3) <add unit tests or scripts>
+4) Run local tests and record logs
+
+## 3. Notes
+- **Output only unified diff (patch)**; new files use `--- /dev/null`
+- Keep exported APIs unchanged (explicit notice if changing)
+- ESLint/Prettier; TS explicit types
+
+## 4. Additional Information
+- Dependencies: <name@ver>
+- Contract: <protocol/headers/error codes>
+
+## 5. Risks & Rollback
+- Risk: <potential failure points>
+- Rollback: revert current patch, interface unchanged
+
+## 6. Execution Agreement (for Claude)
+- If uncertain, first provide ≤3 clarification questions
+- Then output patch + ≤120 character summary
+
+## 7. Round Summary (fill after execution)
+- Success/failure:
+- Failure reason classification:
+- Next round correction plan:
+```
+
+⸻
+
+## Conclusion: Making Models "Rule-Following Pair Programmers"
+
+This article deliberately combines narrative with numbered checklists: the first half tells you "why this path is more stable," while the second half fills in every "step B" to immediately executable level. Experience posts gave us direction, while processes, templates, scripts, and metrics turn direction into reproducible productivity.
+
+Starting now, try fitting your next small requirement into this pipeline. Let Claude Code perform within narrow but clear rails—clarify first, then deliver, only patches, strict acceptance. You'll quickly feel: the codebase remains under your command, while the model finally becomes that disciplined, reliable partner.
+
+**Key Takeaways:**
+- Transform AI conversations from chaotic to systematic
+- Use documentation to drive development instead of improvisation
+- Implement verifiable success criteria with full traceability
+- Contain model uncertainty within structured processes
+- Build team-wide reproducible workflows for AI-assisted development

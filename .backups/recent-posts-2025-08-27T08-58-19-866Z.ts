@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "把随机对话变成可复现的产线：Claude Code 高阶实战指南",
-    description: "将混乱的 AI 辅助开发转化为结构化的文档先行、差异驱动工作流，通过系统化规划和执行实现可预测的结果。",
-    date: "2025-08-27",
+    title: "99.9% AI 驱动开发：全面实施指南",
+    description: "通过系统化实践、先进工具和经过验证的架构模式，学习如何实现近乎完全的 AI 开发自动化，从而实现快速、高质量的代码交付。",
+    date: "2025-01-27",
     category: "best-practices",
     language: "zh",
-    slug: "zh/best-practices/claude-code-production-workflow",
-    url: "/docs/zh/best-practices/claude-code-production-workflow"
+    slug: "zh/best-practices/99-percent-ai-development-comprehensive-guide",
+    url: "/docs/zh/best-practices/99-percent-ai-development-comprehensive-guide"
   },];
 
 // 获取首页最近文章的函数

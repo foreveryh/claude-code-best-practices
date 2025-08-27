@@ -43,6 +43,33 @@ Each entry should follow this format:
 
 ## Publication History
 
+## [2025-08-27] - From Random Conversations to Reproducible Production: A Claude Code Advanced Workflow Guide
+
+### Added
+- **[best-practices]** New comprehensive workflow guide: "From Random Conversations to Reproducible Production: A Claude Code Advanced Workflow Guide"
+  - Source: https://x.com/LotusDecoder/status/1958791207590797619
+  - Author: LotusDecoder & DeepToAI Team
+  - Languages: EN/ZH
+  - Type: Production Workflow Guide
+  - Description: A comprehensive guide that transforms chaotic AI-assisted development into a structured, document-first, diff-driven workflow. Features systematic planning, execution tracking, and team-wide reproducible processes for professional AI-assisted development.
+  - Files:
+    - EN: `/content/docs/en/best-practices/claude-code-production-workflow.mdx`
+    - ZH: `/content/docs/zh/best-practices/claude-code-production-workflow.mdx`
+    - Source: `/content/sources/莲花哥.md`
+  - Features:
+    - Four core principles: Document-first, Diff-driven, Scope convergence, Verifiable
+    - Complete repository structure and naming conventions
+    - Seven-layer prompt stack integration
+    - Ready-to-use templates and scripts
+    - Quality metrics and team-level asset development
+    - CI/review integration patterns
+    - Anti-pattern warnings and best practices
+  - Implementation Tools:
+    - PLAN.template.md for systematic task planning
+    - Automated workflow scripts for execution
+    - Quality metrics dashboard for continuous improvement
+    - Team playbook for organization-wide adoption
+
 ## [2025-01-27] - 99.9% AI-Driven Development: A Comprehensive Implementation Guide
 
 ### Added
