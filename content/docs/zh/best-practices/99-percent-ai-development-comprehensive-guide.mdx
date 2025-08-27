@@ -43,7 +43,7 @@ tags: ["ai开发", "自动化", "claude-code", "copilot", "cicd", "架构设计"
 
 > **"所有代码都必须通过非常严格的 CI/CD 流水线，包括多种静态检查工具、格式化工具、安全检测器和全面测试。"**
 
-**🔗 相关最佳实践：** [复合工程 - 信任流程，验证输出](/docs/zh/best-practices/compounding-engineering-framework#principle-5-trust-process-verify-output)
+**🔗 相关最佳实践：** [复合工程框架](/docs/zh/advanced/compounding-engineering)
 
 **增强实施策略：**
 
@@ -75,7 +75,7 @@ graph TD
 
 > **"代码库已高度模块化，每个组件都通过明确定义的接口访问。"**
 
-**🔗 相关最佳实践：** [CCPM 子代理专业化](/docs/zh/advanced/ccpm-claude-code-project-manager#sub-agent-specialization)
+**🔗 相关最佳实践：** [CCPM Claude Code 项目管理器](/docs/zh/tools/ccpm-claude-code-project-manager)
 
 **高级模块化策略：**
 
@@ -105,7 +105,7 @@ class StripePaymentProcessor implements PaymentProcessor {
 
 > **"接口和实现完全分离。"**
 
-**🔗 相关最佳实践：** [保持上下文精简但个性化](/docs/zh/best-practices/compounding-engineering-framework#principle-4-context-lean)
+**🔗 相关最佳实践：** [复合工程框架](/docs/zh/advanced/compounding-engineering)
 
 **策略分离的好处：**
 
@@ -120,7 +120,7 @@ class StripePaymentProcessor implements PaymentProcessor {
 
 > **"每个组件都有自己的一套文档。"**
 
-**🔗 相关最佳实践：** [知识编码工作流](/docs/zh/best-practices/compounding-engineering-framework#knowledge-codification)
+**🔗 相关最佳实践：** [复合工程框架](/docs/zh/advanced/compounding-engineering)
 
 **AI 开发的文档标准：**
 
@@ -157,7 +157,7 @@ class StripePaymentProcessor implements PaymentProcessor {
 
 > **"测试、文档、头文件和实现，全部放在同一个位置。"**
 
-**🔗 相关最佳实践：** [自定义命令系统](/docs/zh/best-practices/compounding-engineering-framework#custom-command-system)
+**🔗 相关最佳实践：** [Claude Code 最佳实践](/docs/zh/best-practices/claude-code-best-practices)
 
 **同位置结构：**
 
@@ -185,7 +185,7 @@ components/
 
 > **"每个组件都保持在 5000 行代码以下（包括文档）。"**
 
-**🔗 相关最佳实践：** [并行执行挑战](/docs/zh/best-practices/compounding-engineering-framework#parallel-execution-challenges)
+**🔗 相关最佳实践：** [复合工程框架](/docs/zh/advanced/compounding-engineering)
 
 **大小管理策略：**
 
@@ -208,7 +208,7 @@ find components/ -name "*.ts" -o -name "*.md" | \
 
 > **"GitHub 问题写得非常详细，都会标注相关代码和问题背景。"**
 
-**🔗 相关最佳实践：** [人机协作协议](/docs/zh/advanced/ccpm-claude-code-project-manager#human-ai-collaboration-protocol)
+**🔗 相关最佳实践：** [CCPM Claude Code 项目管理器](/docs/zh/tools/ccpm-claude-code-project-manager)
 
 **AI 开发的问题模板：**
 
@@ -240,7 +240,7 @@ find components/ -name "*.ts" -o -name "*.md" | \
 
 > **"提示词分层管理（7 层）：工具层 → 语言层 → 项目层 → 角色层 → 组件层 → 任务层 → 查询层。"**
 
-**🔗 相关最佳实践：** [提示工程架构](/docs/zh/advanced/claude-code-analysis#prompt-engineering)
+**🔗 相关最佳实践：** [解码 Claude Code 分析](/docs/zh/advanced/decoding-claude-code-analysis)
 
 **分层提示系统：**
 
@@ -345,7 +345,7 @@ graph TD
 
 ## 🔮 未来演进：代理化审查系统
 
-**🔗 相关最佳实践：** [子代理专业化](/docs/zh/advanced/ccpm-claude-code-project-manager#sub-agent-specialization)
+**🔗 相关最佳实践：** [CCPM Claude Code 项目管理器](/docs/zh/tools/ccpm-claude-code-project-manager)
 
 随着 Claude Code 现已纳入企业版计划，下一步演进涉及代理化审查系统：
 
@@ -403,10 +403,13 @@ graph LR
 
 ## 📚 相关资源
 
-- **[复合工程框架](/docs/zh/best-practices/compounding-engineering-framework)** - AI-人类协作的核心原则
-- **[CCPM Claude Code 项目管理器](/docs/zh/advanced/ccpm-claude-code-project-manager)** - 与 AI 代理的高级项目管理
-- **[Claude Code 分析](/docs/zh/advanced/claude-code-analysis)** - AI 工具架构深度解析
-- **[子代理集合](/docs/zh/sub-agents/sub-agents-collections)** - 专业化 AI 代理实现
+- **[复合工程框架](/docs/zh/advanced/compounding-engineering)** - AI-人类协作的核心原则
+- **[CCPM Claude Code 项目管理器](/docs/zh/tools/ccpm-claude-code-project-manager)** - 与 AI 代理的高级项目管理
+- **[解码 Claude Code 分析](/docs/zh/advanced/decoding-claude-code-analysis)** - AI 工具架构深度解析
+- **[Claude Code 最佳实践](/docs/zh/best-practices/claude-code-best-practices)** - AI 辅助开发的全面最佳实践
+- **[我如何使用 Claude Code](/docs/zh/best-practices/how-i-use-claude-code)** - 实际工作流示例
+- **[33 个 Claude Code 设置技巧](/docs/zh/best-practices/claude-code-setup-tips)** - 基本设置和优化指南
+- **[Gemini CLI 子代理教程](/docs/zh/sub-agents/gemini-cli-subagent-tutorial)** - 创建专业化 AI 代理
 
 ⸻
 
