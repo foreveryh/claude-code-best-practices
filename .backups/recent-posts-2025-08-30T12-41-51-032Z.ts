@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "Claude Code 用法全面拆解！26 项核心功能 + 实战技巧（建议收藏！）",
-    description: "Claude Code 简直强到离谱！这段时间系统梳理了 26 个关键功能，从基础指令到上下文压缩、从代码辅助到 GitHub 自动化，很多用法都超出了 AI 写代码的传统理解。",
+    title: "Claude Code Complete Guide: 26 Core Features + Practical Tips (Must Collect!)",
+    description: "Claude Code is incredibly powerful! This comprehensive guide systematically breaks down 26 key features, from basic commands to context compression, from code assistance to GitHub automation, many uses go beyond traditional understanding of AI coding.",
     date: "2025-01-20",
     category: "best-practices",
-    language: "zh",
-    slug: "zh/best-practices/claude-code-comprehensive-guide",
-    url: "/docs/zh/best-practices/claude-code-comprehensive-guide"
+    language: "en",
+    slug: "en/best-practices/claude-code-comprehensive-guide",
+    url: "/docs/en/best-practices/claude-code-comprehensive-guide"
   },];
 
 // 获取首页最近文章的函数
