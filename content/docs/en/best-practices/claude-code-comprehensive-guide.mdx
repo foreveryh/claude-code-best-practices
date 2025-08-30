@@ -1,456 +1,507 @@
 ---
-title: "Claude Code Complete Guide: 26 Core Features + Practical Tips"
-description: "Complete Claude Code usage guide covering 26 core features, from basic operations to advanced practical techniques, building efficient AI-assisted development workflows. Essential for developers!"
+title: "Claude Code Complete Guide: 26 Core Features + Practical Tips (Must Collect!)"
+description: "Claude Code is incredibly powerful! This comprehensive guide systematically breaks down 26 key features, from basic commands to context compression, from code assistance to GitHub automation, many uses go beyond traditional understanding of AI coding."
 date: "2025-01-20"
 author: "DeepToAI Team"
 category: "best-practices"
 language: "en"
-tags: ["claude-code", "vscode", "ai-programming", "development-tools", "practical-tips", "workflow", "best-practices"]
+tags: ["claude-code", "ai-programming", "development-tools", "practical-tips", "workflow", "best-practices"]
 ---
 
-# Claude Code Complete Guide: 26 Core Features + Practical Tips
+# Claude Code Complete Guide: 26 Core Features + Practical Tips (Must Collect!)
 
-*Master Claude Code: Complete practical guide from beginner to expert*
+**Claude Code is incredibly powerful!!!**
 
-Claude Code, the AI programming assistant by Anthropic, has become an essential tool for developers to boost productivity. This article provides an in-depth breakdown of Claude Code's 26 core features, combined with real-world experience and advanced usage techniques.
+I've been playing with Claude Code for some time, and it gets more addictive the more I use it. Not only is its programming capability extremely powerful, but it also brings a new paradigm for human-machine interaction. The longer I use it, the more I realize that it's far more than just an AI that writes code.
 
-⸻
+Jie Yi took the opportunity to systematically organize **26 key features** of Claude Code in development scenarios, from basic commands to context compression, from code assistance to GitHub automation, many uses **go beyond traditional understanding of AI coding**.
 
-## 🚀 Quick Start: Master the Basics
+This article is both a comprehensive overview and a practical summary. Recommend collecting and slowly digesting.
 
-### 1. VSCode Plugin Installation & Configuration
+**🔗 Extended Reading:** [Claude Code Production Workflow Guide](/docs/en/best-practices/claude-code-production-workflow) | [99.9% AI-Driven Development](/docs/en/best-practices/99-percent-ai-development-comprehensive-guide)
 
-First, install the Claude Code plugin in VSCode.
+The full content includes:
 
-![VSCode Plugin Installation](/images/claude-code-comprehensive-guide/vs-code-plugin.jpg)
+*   **Basic Operations**: Common commands, CLAUDE.md, image processing, installing IDE plugins, Safe YOLO mode
+*   **Interaction & Session Management**: Clear chat context, shortcut operations, interrupt operations, resume historical sessions, context compression, custom commands
+*   **Prompting & Thinking Strategies**: XML tag structured prompts, pre-activation, forced deep thinking, requirement analysis
+*   **Software Development Practices**: Task decomposition, understanding project context, Linux command assistance
+*   **Cost & Model Management**: Model switching, monitoring token costs, using ccusage consumption monitoring
+*   **Advanced Features**: Running parallel Claude Code sessions using Git worktrees, MCP, Claude Code GitHub Action, using Claude as Unix-like programs
 
-**Installation Steps:**
-1. Open VSCode
-2. Go to Extensions marketplace (Ctrl/Cmd + Shift + X)
-3. Search for "Claude Code"
-4. Click install and restart VSCode
-5. Log in with your Anthropic account
+## **I. Basic Operations**
 
-**🔗 Advanced Configuration Reference:** [33 Claude Code Setup Tips](/docs/en/best-practices/claude-code-setup-tips)
+### **Install VS Code or Cursor Plugin**
 
-### 2. First Conversation: Begin Your AI Programming Journey
+Since Claude Code runs in the terminal, editing files is not very convenient, so you can install Claude Code plugins in IDEs (VS Code, Cursor, JetBrains, etc.), and after installation, you can quickly launch Claude Code. This enables collaborative work between the IDE and Claude Code.
 
-After installation, you can start conversing with Claude Code through:
-- Keyboard shortcut: `Ctrl/Cmd + Shift + P`, then type "Claude"
-- Sidebar: Click the Claude Code icon
-- Context menu: Right-click in files or code to select relevant options
+![VS Code Plugin Installation](/images/claude-code-comprehensive-guide/vs-code-plugin.jpg)
 
-**Pro Tip:** For first-time use, try a simple code generation task like "write a Hello World program" to familiarize yourself with the interaction flow.
+**🔗 Extended Reading:** [33 Claude Code Setup Tips](/docs/en/best-practices/claude-code-setup-tips)
 
-### 3. Basic Conversation Modes
+### **Common Commands**
 
-Claude Code supports multiple conversation modes:
-- **Code Generation**: Describe requirements to generate corresponding code
-- **Code Explanation**: Select code and ask about functionality and logic
-- **Code Optimization**: Request improvements to existing code performance or readability
-- **Problem Diagnosis**: Help locate and fix bugs
+The following are the most important commands in daily Claude Code usage, recommend mastering them all:
 
-**🔗 Systematic Workflow Reference:** [Claude Code Production Workflow Guide](/docs/en/best-practices/claude-code-production-workflow)
+| Command | Function | Example |
+|---------|----------|---------|
+| claude | Start interactive mode | claude |
+| claude "task" | Run one-time task | claude "fix the build error" |
+| claude -p "query" | Run one-time query, then exit | claude -p "explain this function" |
+| claude -c | Continue recent conversation | claude -c |
+| claude -r | Resume previous conversation | claude -r |
+| claude commit | Create Git commit | claude commit |
+| /clear | Clear conversation history | > /clear |
+| /help | Show available commands | > /help |
+| exit or Ctrl+C | Exit Claude Code | > exit |
 
-⸻
+### **CLAUDE.md File Management**
 
-## 📝 Core Editing Features: Boost Development Efficiency
+The Claude.md file is similar to Cursor's Rules file, specifying how AI generates code. You can specify code style, development environment, repository specifications, etc. in it.
 
-### 4. Intelligent Code Completion
+Claude.md example:
 
-Claude Code provides context-aware code completion that's smarter than traditional IntelliSense:
-- Provides precise suggestions based on project context
-- Supports multi-language intelligent completion
-- Understands business logic, offering semantic suggestions
+```markdown
+# Bash Commands  
+- `npm run build`: Build project  
+- `npm run typecheck`: Run type checking  
 
-### 5. Code Refactoring & Optimization
+# Code Style  
+- Use ES module syntax (`import/export`), not CommonJS (`require`)  
+- Use destructuring imports whenever possible (e.g.: `import { foo } from 'bar'`)  
 
-Select code segments that need refactoring, and Claude Code can:
-- Extract functions and variables
-- Optimize algorithm performance
-- Improve code structure
-- Unify coding style
+# Workflow  
+- After completing a series of code changes, must perform type checking  
+- For performance reasons, prioritize running individual tests over the entire test suite
+```
 
-**Real-world Example:** Refactoring complex nested loops into clearer functional programming style.
+You can create multiple `CLAUDE.md` files in project root and subdirectories to provide personalized configuration for each context.
 
-### 6. Multi-file Editing Coordination
+| File Path | Purpose |
+|-----------|---------|
+| Project Root / CLAUDE.md | Team-shared project-level configuration, committed to Git for all members |
+| Project Root / CLAUDE.local.md | Personal local override configuration, usually added to .gitignore to avoid affecting others |
+| Parent Directory / CLAUDE.md | Upper-level configuration automatically inherited in Monorepo structure (recursive upward search) |
+| Subdirectory / CLAUDE.md | Independent configuration for specific submodules/features (loaded with priority over parent configuration) |
+| ~/.claude/CLAUDE.md | User global default configuration, applicable to baseline settings for all Claude sessions |
 
-Claude Code understands project structure and coordinates modifications across multiple files:
-- Automatically updates references in related files
-- Maintains interface consistency
-- Handles dependency relationships
-
-**🔗 Multi-file Coordination Best Practices:** [CCPM Claude Code Project Manager](/docs/en/tools/ccpm-claude-code-project-manager)
-
-### 7. Code Generation Templates
-
-Use Claude Code to create reusable code templates:
-- React component templates
-- API interface templates
-- Test case templates
-- Configuration file templates
-
-⸻
-
-## 🔍 Advanced Analysis Features: Deep Code Understanding
-
-### 8. Code Explanation & Documentation Generation
-
-Claude Code can:
-- Generate detailed code comments
-- Create technical documentation
-- Explain complex algorithm logic
-- Generate API documentation
-
-### 9. Dependency Relationship Analysis
-
-Analyze dependencies in your project:
-- Find unused dependencies
-- Identify circular dependencies
-- Suggest dependency optimization solutions
-
-### 10. Performance Analysis Suggestions
-
-Claude Code can identify performance bottlenecks:
-- Time complexity analysis
-- Memory usage optimization
-- Database query optimization
-- Caching strategy suggestions
-
-⸻
-
-## 🛠️ Engineering Practices: Professional Development Tools
-
-### 11. Test Case Generation
-
-Automatically generate high-quality test cases:
-- Unit tests
-- Integration tests
-- End-to-end tests
-- Boundary condition tests
-
-### 12. Error Handling Optimization
-
-Improve code robustness:
-- Add exception handling
-- Parameter validation
-- Boundary checking
-- Graceful degradation
-
-### 13. Code Review Assistant
-
-During code review process:
-- Discover potential issues
-- Suggest improvement solutions
-- Check coding standards
-- Security analysis
-
-**🔗 Code Review Best Practices:** [99.9% AI-Driven Development Guide](/docs/en/best-practices/99-percent-ai-development-comprehensive-guide)
-
-### 14. Automation Script Generation
-
-Generate various automation scripts:
-- Build scripts
-- Deployment scripts
-- Data migration scripts
-- Monitoring scripts
-
-⸻
-
-## 🎯 Real-world Scenarios: Solving Actual Problems
-
-### 15. API Interface Development
-
-Rapidly develop RESTful APIs:
-- Route design
-- Data validation
-- Error handling
-- Documentation generation
-
-### 16. Database Operation Optimization
-
-Improve database operation efficiency:
-- SQL query optimization
-- Index suggestions
-- Transaction handling
-- Connection pool configuration
-
-### 17. Frontend Component Development
-
-Accelerate frontend component development:
-- React/Vue components
-- Style optimization
-- State management
-- Performance optimization
-
-### 18. Algorithm Implementation
-
-Implement complex algorithms:
-- Sorting algorithms
-- Search algorithms
-- Graph algorithms
-- Dynamic programming
-
-⸻
-
-## 🎨 Interface Interaction: Enhance User Experience
-
-### 19. Claude MD Dynamic Addition
+You can also input `#` in conversations to dynamically add content to CLAUDE.md
 
 ![Claude MD Dynamic Addition](/images/claude-code-comprehensive-guide/claude-md-dynamic-add.jpg)
 
-Claude Code supports dynamically adding files and context to conversations, helping AI better understand project structure:
-- Drag files to the chat box
-- Dynamically add project files
-- Real-time context updates
+**🔗 Extended Reading:** [CCPM Claude Code Project Manager](/docs/en/tools/ccpm-claude-code-project-manager)
 
-**Pro Tip:** When discussing specific features, timely adding relevant files can make Claude provide more precise suggestions.
+### **Image Processing**
 
-### 20. Placeholder Image Handling
+Claude Code supports pasting images, allowing Claude to complete tasks based on images, such as: "Design a webpage based on the image" or "Analyze error screenshot causes".
+
+Uploaded images won't be displayed directly, but will be replaced with `[Image #id]` placeholders.
 
 ![Placeholder Images](/images/claude-code-comprehensive-guide/image-placeholder.jpg)
 
-In frontend development, Claude Code can:
-- Generate placeholder image code
-- Optimize image loading logic
-- Implement lazy loading functionality
-- Handle image error states
+### **Safe YOLO Mode**
 
-### 21. Clear Context Function
+For safety, Claude Code by default requests your consent when executing some commands. To achieve more convenient automation, you can set Safe YOLO mode.
+
+When starting Claude, execute the following command:
+
+`claude --dangerously-skip-permissions`
+
+After executing this, Claude will **automatically skip all permission confirmations**, no need for manual approval. This is very convenient for repetitive tasks.
+
+## **II. Interaction & Session Management**
+
+### **Clear Chat Context**
+
+Use **`/clear`** to clear chat context, avoiding accumulated excessive historical information affecting efficiency.
 
 ![Clear Context](/images/claude-code-comprehensive-guide/clear-context.jpg)
 
-Properly use the clear context function:
-- Clear historical context before starting new tasks
-- Avoid context confusion
-- Improve response accuracy
-- Save token usage
+**🔗 Extended Reading:** [Compounding Engineering Framework](/docs/en/advanced/compounding-engineering)
 
-**🔗 Context Management Strategy:** [Compounding Engineering Framework](/docs/en/advanced/compounding-engineering)
+### **Shortcut Operations**
 
-⸻
+*   `/` View commands
+*   Arrow keys browse history
+*   `Tab` completion
+*   `Option+Enter` line break
+*   `Ctrl+C` exit, etc.
 
-## ⚙️ Advanced Operation Tips: Expert-level Usage
+### **Interrupt Operations**
 
-### 22. Interrupt Operation Handling
+When entering wrong commands, press `ESC` key to immediately stop AI's current task.
 
-![Interrupt Operation](/images/claude-code-comprehensive-guide/interrupt-operation.jpg)
+![Interrupt Operations](/images/claude-code-comprehensive-guide/interrupt-operation.jpg)
 
-When Claude Code generates overly long code or goes in the wrong direction:
-- Timely interrupt the generation process
-- Readjust requirement descriptions
-- Implement step by step
-- Avoid wasting tokens
+### **Resume Historical Sessions**
 
-**Real-world Experience:** When you notice the generation is heading in the wrong direction, interrupting immediately is more efficient than waiting for completion and starting over.
+At startup, execute `claude -c` to continue the last conversation
 
-### 23. Resume Historical Conversations
+Execute `claude -r` to select and continue historical conversations. If you've already opened a conversation, you can also input `/resume` to switch to other sessions.
 
 ![Resume History](/images/claude-code-comprehensive-guide/resume-history.jpg)
 
-Make full use of historical conversation features:
-- Review previous solutions
-- Continue unfinished tasks
-- Learn from historical best practices
-- Avoid duplicate work
+### **Context Compression**
 
-### 24. Compact Context
+Claude Code provides `/compact`, which **compresses conversation history**, keeping only context summaries to reduce token usage.
 
 ![Compact Context](/images/claude-code-comprehensive-guide/compact-context.jpg)
 
-When context becomes too complex:
-- Extract core information
-- Remove irrelevant content
-- Reorganize conversation structure
-- Keep focus clear
+This way Claude won't get stuck or drift off topic due to overly cluttered context.
 
-**Context Management Principles:**
-- Maintain relevance
-- Control information volume
-- Highlight key points
-- Regular cleanup
+### **Custom Commands**
 
-⸻
+```markdown
+- User-level commands: `~/.claude/commands/`, prefix `/user:`.
+- Project-level commands: `.claude/commands/`, prefix `/project:`.
+- Example: After creating `optimize.md` file, input `/project:optimize` to automatically execute "analyze performance and suggest optimizations".
+```
 
-## 📊 Monitoring & Optimization: Data-driven Improvement
+If you have frequently used workflows, you can set them up as custom commands. Custom commands come in two types:
 
-### 25. Cost Monitoring
+*   **User-level commands**: Placed in `~/.claude/commands/` directory, suitable for commands common to all projects. Triggered by inputting `/user:command-name`.
+*   **Project-level commands**: Placed in `.claude/commands/` directory under project root, suitable for project-specific commands. Triggered by `/project:command-name`.
+
+**Example:**
+
+Suppose you create an `optimize.md` file in `.claude/commands/` folder with the content:
+
+```markdown
+Please analyze and fix this GitHub Issue: $ARGUMENTS.
+
+Follow these steps:
+
+1. Use `gh issue view` command to view Issue details
+2. Understand Issue description
+3. Search for relevant files in the codebase
+4. Implement necessary changes to resolve the Issue
+5. Write and run tests to verify the fix
+6. Ensure code passes style checks and type checking
+7. Create descriptive commit message
+8. Push code and create PR
+
+Remember all GitHub-related operations use GitHub CLI tool (`gh`).
+```
+
+After saving, you can execute `/project:fix-github-issue 1234` in Claude Code to let Claude automatically fix the specified GitHub issue. Where 1234 is the Issue ID, and ARGUMENTS in the command will be automatically replaced with 1234.
+
+You can also encapsulate other requirements as commands, such as:
+
+*   `/user:write-tests` → Generate test cases
+*   `/project:lint` → Format code according to team standards
+*   `/user:explain` → Explain complex code in plain language
+
+## **III. Prompting & Thinking Strategies**
+
+### **XML Tag Structured Prompts**
+
+Claude is quite sensitive to structured language. Using XML-like block formats can significantly improve prompt clarity and controllability. Recommended structure:
+
+```xml
+<instruction>
+The main task or goal you want Claude to execute
+</instruction>
+
+<context>
+Background information for the task, such as involved frameworks, business logic, team standards, etc.
+</context>
+
+<code_example>
+Reference code snippets, interface specifications, or existing implementations
+</code_example>
+```
+
+This approach helps Claude more accurately distinguish between "**what you want it to do**" and "**what auxiliary information you've provided**", avoiding treating background as goals to execute.
+
+### **Pre-activation: Learn First, Then Act**
+
+Claude can learn, the key is making it **understand context first** before taking action.
+
+For example:
+
+If you want it to refactor a backend module, don't immediately say "refactor this code", but first let it read the entire module, analyze directory structure, summarize existing functionality, then enter the coding phase.
+
+Step-by-step approach:
+
+1.  Ask Claude to read specific folders (e.g., `/src/services/user/`) and output a summary;
+2.  After ensuring it understands, give specific tasks, such as "migrate feature A to module B and optimize logic".
+
+This pre-activation guidance is more reliable than directly throwing tasks at it.
+
+### **Forced Deep Thinking**
+
+From a prompting perspective, Claude has deep thinking mode, but it's not enabled by default. You can trigger it to enter **serious thinking** state by adding keywords.
+
+Common keywords:
+
+*   `think harder`
+*   `ultrathink`
+*   `step-by-step reasoning`
+
+After adding these keywords, although response time is slightly longer, model output quality will significantly improve.
+
+```text
+I need to implement a new authentication system using OAuth2 for our API. Think deeply about the best approach for implementing this in our codebase. 
+
+think about potential security vulnerabilities in this approach 
+
+think harder about edge cases we should handle 
+```
+
+### **Provide Clear Requirement Documents**
+
+Claude is not a copy of your brain. If your instructions are vague or incomplete, it can only guess, and the results are usually inaccurate.
+
+Correct approach:
+
+*   Take time to clearly write out the functionality you want it to complete;
+*   Specify involved interfaces, interaction methods, boundary conditions;
+*   If you can draw diagrams (flowcharts, data flow), even better.
+
+The clearer you write, the more accurately Claude can execute; if you're vague, it can only get the gist.
+
+## **IV. Software Development Practices**
+
+### **Task Decomposition**
+
+*   **Small tasks**: Send clear requirements at once, Claude can complete quickly, suitable for scenarios like "rewrite comments", "format current file".
+*   **Complex tasks**: Recommend manual step breakdown, for example:
+
+*   Step 1: Create API interface
+*   Step 2: Add field validation
+*   Step 3: Write test cases
+*   Step 4: Write documentation or PR description
+    Decomposition helps Claude focus on context, avoiding token limits or logic confusion.
+
+### **Understanding Project Context**
+
+Before letting Claude modify code, it's best to first let it analyze project structure. Common approaches include:
+
+*   Paste database schema, let Claude familiarize with table structure and field types
+*   Show error handling logic, authentication logic, directory structure and other core framework content
+*   Use CLAUDE.md to specify style standards and dependency frameworks (such as whether to use DRF, whether to customize exception handling, etc.)
+
+The clearer Claude's understanding, the more the generated code fits the project's current state.
+
+### **Linux Command Assistance**
+
+You can directly use everyday language to have Claude help write complex Linux commands. Typical examples:
+
+*   List the top 3 Java files with the most lines in the current directory
+*   Find Markdown files modified within the last 7 days
+*   Batch rename files matching specific rules
+*   Count the number of functions in each Python file and sort
+
+Claude will output corresponding Bash commands and explain their meaning, suitable for script generation, automation processing, or command learning.
+
+## **V. Cost & Model Management**
+
+### **Model Switching**
+
+`/model` switches between `Claude Sonnet 4` (default, cost-effective) and `Claude Opus` (Max user exclusive, more powerful).
+
+### **Monitor Token Costs**
+
+Use `/cost` to view consumption, including total spending, total usage time, model usage information, etc.
 
 ![Cost Monitoring](/images/claude-code-comprehensive-guide/cost-monitoring.jpg)
 
-Reasonably control Claude Code usage costs:
-- Monitor token usage
-- Optimize prompt efficiency
-- Avoid repetitive inquiries
-- Batch process similar tasks
+### **Using ccusage Consumption Monitoring**
 
-**Cost Optimization Tips:**
-- Use precise problem descriptions
-- Avoid overly detailed context
-- Combine related questions in one inquiry
-- Reuse answers from historical conversations
+The `/cost` function is quite limited, only showing current session consumption. Recommend using `ccusage` for more detailed monitoring.
 
-### 26. Usage Analysis
+Installation: `sudo npm install -g ccusage`
 
 ![Usage Monitoring](/images/claude-code-comprehensive-guide/ccusage-monitoring.jpg)
 
-Analyze and optimize usage patterns:
-- Identify high-frequency usage scenarios
-- Discover efficiency bottlenecks
-- Optimize workflow processes
-- Improve overall efficiency
+Other common ccusage commands:
 
-**🔗 Usage Analysis Best Practices:** [How I Use Claude Code](/docs/en/best-practices/how-i-use-claude-code)
+```bash
+# Basic usage  
+ccusage          # Show daily report (default)  
+ccusage daily    # Daily token usage and costs  
+ccusage monthly  # Monthly summary report  
+ccusage session  # Usage statistics by session  
+ccusage blocks   # 5-hour billing window data  
 
-⸻
+# Real-time monitoring  
+ccusage blocks --live  # Real-time usage dashboard  
 
-## 🚀 Advanced Practice: CI/CD Integration
+# Filtering & options  
+ccusage daily --since 20250525 --until 20250530  # Specify date range  
+ccusage daily --json      # Output JSON format  
+ccusage daily --breakdown # Break down costs by model
+```
+
+## **VI. Advanced Features**
+
+### **Running Parallel Claude Code Sessions Using Git Worktrees**
+
+When using Claude Code, if you want to handle multiple tasks and branches simultaneously while keeping each instance completely isolated, Git worktrees is a very practical solution.
+
+Git worktree allows you to check out different branches of the same Git repository into separate directories. Each worktree has its own working directory and isolated file state, but shares the same Git history.
+
+Official documentation: **[https://git-scm.com/docs/git-worktree](https://git-scm.com/docs/git-worktree)**
+
+**Step 1: Create New Worktree**
+
+If you want to create a new branch and start a new working copy:
+
+```bash
+git worktree add ../project-feature-a -b feature-a
+```
+
+If you already have an existing branch:
+
+```bash
+git worktree add ../project-bugfix bugfix-123
+```
+
+This creates an independent directory outside the project (such as `../project-feature-a`) containing the complete working directory for that branch.
+
+**Step 2: Run Claude Code in Each Worktree**
+
+Enter the new worktree:
+
+```bash
+cd ../project-feature-a
+claude
+```
+
+Open another worktree:
+
+```bash
+cd ../project-bugfix
+claude
+```
+
+Each session runs in its own independent code environment, Claude Code instances don't interfere with each other.
+
+**Step 3: Manage Worktrees**
+
+List all current worktrees:
+
+```bash
+git worktree list
+```
+
+Delete a worktree:
+
+```bash
+git worktree remove ../project-feature-a
+```
+
+Note: Deleting worktree doesn't delete Git branches, only cleans up directories.
+
+Considerations:
+
+*   Each worktree is equivalent to an independent Claude Code sandbox, suitable for parallel processing of multiple tasks (such as bug fixes, feature development, refactoring).
+*   Changes in one worktree won't affect another worktree.
+*   All worktrees share the same Git history and remote settings, convenient for unified pushing.
+*   Use meaningful directory names (such as `project-auth`, `project-api-v2`) to help quickly distinguish tasks.
+*   After creating each new worktree, must initialize development environment, for example:
+
+*   **JavaScript projects**: npm install  
+*   **Python projects**: python -m venv .venv  
+    source .venv/bin/activate  
+    pip install -r requirements.txt  
+
+### **MCP**
+
+You can integrate MCP (such as Postgres), web pages, image processing, etc. in Claude Code, enabling Claude to directly operate external systems.
+
+**Adding MCP example:**
+
+```bash
+claude mcp add <name> <command> [args...]
+# Example
+claude mcp add pg-server /path/to/postgres-mcp --connection-string "postgresql://user:pass@localhost:5432/mydb"
+```
+
+**Managing MCP:**
+
+```bash
+claude mcp list             # View configured services
+claude mcp get <name>       # View service details
+claude mcp remove <name>    # Remove service
+```
+
+### **Claude Code GitHub Action**
+
+Claude Code GitHub Actions is a set of AI-driven GitHub automation tools designed to seamlessly integrate Claude's code generation and collaboration capabilities into your development workflow.
 
 ![GitHub Action Integration](/images/claude-code-comprehensive-guide/github-action.jpg)
 
-### GitHub Actions Integration
+**Installation**: Execute `/install-github-app` in Claude Code and follow the setup process.
 
-Integrate Claude Code into CI/CD workflows:
-- Automated code review
-- Generate test cases
-- Optimize deployment scripts
-- Automated documentation updates
+After installation, you can `@claude` in PRs or issues to have it complete specified tasks:
 
-**Integration Configuration Example:**
-```yaml
-name: Claude Code Review
-on: [pull_request]
-jobs:
-  review:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Claude Code Analysis
-        run: |
-          # Integrate Claude Code API for code analysis
-          # Generate review reports
+**Automatically generate PR through issue:**
+
+```text
+@claude implement this feature based on the issue description
 ```
 
-**🔗 Complete CI/CD Integration Guide:** [Claude Code Production Workflow](/docs/en/best-practices/claude-code-production-workflow)
+**Request code suggestions:**
 
-⸻
+```text
+@claude how should I implement user authentication for this endpoint?
+```
 
-## 💡 Advanced Extensions: Enterprise Applications
+**Fix bugs:**
 
-### Team Collaboration Mode
+```text
+@claude fix the TypeError in the user dashboard component
+```
 
-**🔗 Related Resources:** [CCPM Claude Code Project Manager](/docs/en/tools/ccpm-claude-code-project-manager)
+**🔗 Extended Reading:** [Claude Code Production Workflow](/docs/en/best-practices/claude-code-production-workflow)
 
-Build team-level Claude Code usage standards:
-- Unified prompt templates
-- Code style consistency
-- Knowledge base sharing
-- Standardized collaboration processes
+### **Using Claude as Unix-like Programs**
 
-### Enterprise Security Practices
+Claude is not just an interactive AI, it can also work like a regular Unix command-line tool, integrating into your development process.
 
-Using Claude Code in enterprise environments:
-- Sensitive information protection
-- Code review processes
-- Compliance checking
-- Security policy development
+For example, you can use pipes `|` to input content to Claude:
 
-### Scale Deployment Strategy
+```bash
+cat build-error.txt | claude -p 'concisely explain the root cause of this build error' > output.txt
+```
 
-**🔗 Reference Guide:** [99.9% AI-Driven Development](/docs/en/best-practices/99-percent-ai-development-comprehensive-guide)
+Besides plain text, you can also specify output formats:
 
-Large-scale team deployment of Claude Code:
-- Training plan development
-- Best practices sharing
-- Effect monitoring and evaluation
-- Continuous optimization improvement
+**Text format (default):**
 
-⸻
+```bash
+cat data.txt | claude -p 'summarize this data' --output-format text > summary.txt
+```
 
-## 🎯 Practical Recommendations: From Beginner to Expert
+*   Only outputs plain text content.
+*   Suitable for daily conversations, summaries, explanations, etc.
 
-### Beginner Roadmap
+**JSON format:**
 
-1. **Week 1: Master Basic Features**
-   - Install and configure plugin
-   - Learn basic conversations
-   - Try simple code generation
+```bash
+cat code.py | claude -p 'analyze this code for bugs' --output-format json > analysis.json
+```
 
-2. **Week 2: Proficient Editing Features**
-   - Master code completion
-   - Learn refactoring techniques
-   - Practice multi-file editing
+*   Outputs as JSON array, including Claude's response, metadata (such as token costs, runtime, etc.).
+*   Suitable for embedding results into automated processes or frontend display.
 
-3. **Week 3: Apply Analysis Features**
-   - Code explanation practice
-   - Dependency analysis in action
-   - Performance optimization suggestions
+**Streaming JSON (stream-json)**
 
-4. **Week 4: Engineering Practices**
-   - Test case generation
-   - Error handling optimization
-   - Code review applications
+```bash
+cat log.txt | claude -p 'parse this log file for errors' --output-format stream-json
+```
 
-### Advanced User Enhancement
+*   Real-time line-by-line JSON message output, each line is an independent JSON object.
+*   Better suited for processing large files, long outputs, or real-time monitoring scenarios.
+*   Note: The entire output is not a complete JSON array, needs line-by-line processing.
 
-**🔗 Advanced Techniques Reference:** [Compounding Engineering Framework](/docs/en/advanced/compounding-engineering)
+You can even add Claude to build scripts as a code review tool.
 
-1. **Workflow Optimization**
-   - Establish personal usage templates
-   - Optimize prompt efficiency
-   - Integrate development environment
-
-2. **Team Collaboration**
-   - Share best practices
-   - Establish code standards
-   - Optimize collaboration processes
-
-3. **Enterprise Applications**
-   - Security policy development
-   - Scale deployment
-   - Effect evaluation system
-
-⸻
-
-## 📚 Related Resources & Extended Reading
-
-### Core Tools & Frameworks
-- **[CCPM Claude Code Project Manager](/docs/en/tools/ccpm-claude-code-project-manager)** - Advanced project management and AI agent collaboration
-- **[Compounding Engineering Framework](/docs/en/advanced/compounding-engineering)** - Core principles for AI-human collaboration
-- **[Decoding Claude Code Analysis](/docs/en/advanced/decoding-claude-code-analysis)** - Deep dive into AI tool architecture
-
-### Best Practices Guides
-- **[Claude Code Production Workflow](/docs/en/best-practices/claude-code-production-workflow)** - Document-driven systematic development process
-- **[99.9% AI-Driven Development](/docs/en/best-practices/99-percent-ai-development-comprehensive-guide)** - Enterprise-level AI development practices
-- **[33 Claude Code Setup Tips](/docs/en/best-practices/claude-code-setup-tips)** - Configuration optimization and efficiency improvement
-
-### Professional Skill Development
-- **[How I Use Claude Code](/docs/en/best-practices/how-i-use-claude-code)** - Personal workflow sharing
-- **[Gemini CLI Sub-agent Tutorial](/docs/en/sub-agents/gemini-cli-subagent-tutorial)** - Creating specialized AI agents
-
-⸻
-
-## 🎖️ Summary: Master the Future of AI Programming
-
-Claude Code is not just a code generation tool, but an important partner for developers to improve efficiency and optimize workflows. By mastering these 26 core features, you can achieve:
-
-### Core Benefits
-- **300%+ Efficiency Boost**: Automate repetitive work
-- **Improved Code Quality**: AI-assisted best practices
-- **Accelerated Learning**: Rapid growth from AI suggestions
-- **Enhanced Innovation**: Focus on creativity and architectural design
-
-### Keys to Success
-1. **Progressive Learning**: Start with basic features, gradually master advanced capabilities
-2. **Practice-oriented**: Apply and validate techniques in real projects
-3. **Continuous Learning**: Keep up with rapid AI tool development
-4. **Team Collaboration**: Share experiences, establish team best practices
-
-### Future Outlook
-As AI technology continues to evolve, tools like Claude Code will become increasingly intelligent and powerful. Mastering the correct usage of these tools will help you maintain competitive advantages in AI-era software development.
-
-**Remember:** AI is your programming partner, not a replacement. The best results come from the perfect combination of human creativity and AI capabilities.
-
-⸻
-
-*🔖 Recommend bookmarking this article and practicing these techniques one by one in actual development. If you have questions or want to share usage experiences, welcome to participate in community discussions!*
+```json
+{
+  "scripts": {
+    "lint:claude": "claude -p 'you are a linter. please look at the changes vs. main and report any issues related to typos. report the filename and line number on one line, and a description of the issue on the second line. do not return any other text.'"
+  }
+}
+```
