@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "Fed Up and Built My First Sub Agent: UI Visual Validator",
-    description: "Tired of Claude Code's self-deceptive UI modification validations, I developed this strict visual verification agent that defaults to failure, only trusts screenshots, specifically treats all claims of successful fixes.",
+    title: "忍无可忍写了人生中第一个 Sub Agent：UI Visual Validator",
+    description: "面对 Claude Code 在 UI 修改验证上的自欺欺人问题，我开发了这个严格的视觉验证代理——默认失败，只认截图，专治各种我觉得我改好了的情况。",
     date: "2025-08-30",
     category: "sub-agents",
-    language: "en",
-    slug: "en/sub-agents/ui-visual-validator-agent",
-    url: "/docs/en/sub-agents/ui-visual-validator-agent"
+    language: "zh",
+    slug: "zh/sub-agents/ui-visual-validator-agent",
+    url: "/docs/zh/sub-agents/ui-visual-validator-agent"
   },];
 
 // 获取首页最近文章的函数
