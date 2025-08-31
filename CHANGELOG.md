@@ -43,6 +43,31 @@ Each entry should follow this format:
 
 ## Publication History
 
+## [2025-09-01] - My Current AI Dev Workflow
+
+### Added
+- **[best-practices]** New article: "My Current AI Dev Workflow"
+  - Source: https://steipete.me/posts/2025/optimal-ai-development-workflow
+  - Author: Peter Steinberger
+  - Languages: EN/ZH
+  - Type: Article
+  - Description: Peter Steinberger's optimized AI development workflow using Ghostty + Claude Code + minimal tooling for maximum productivity. Features insights on tool selection, context management, testing strategies, and productivity comparisons.
+  - Files:
+    - EN: `/content/docs/en/best-practices/optimal-ai-development-workflow.mdx`
+    - ZH: `/content/docs/zh/best-practices/optimal-ai-development-workflow.mdx`
+    - Source: `/content/sources/optimal-ai-development-workflow_20250901.md`
+    - Images: `/public/images/optimal-ai-development-workflow/`
+  - Key Insights:
+    - Ghostty terminal superiority over VS Code terminal
+    - Multi-agent workflow optimization (1-2 for refactoring, ~4 for cleanup/tests/UI)
+    - Context management strategies and session tracking
+    - CLI-based service selection for agent compatibility
+    - Rate limiting concerns and alternatives assessment
+  - Images Downloaded:
+    - `hero.png` - Featured article image
+
+---
+
 ## [2025-08-27] - From Random Conversations to Reproducible Production: A Claude Code Advanced Workflow Guide
 
 ### Added

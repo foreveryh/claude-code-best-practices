@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "我当前的 AI 开发工作流",
-    description: "Peter Steinberger 使用 Ghostty、Claude Code 和极简工具链优化的 AI 开发工作流，实现最大生产力",
+    title: "My Current AI Dev Workflow",
+    description: "Peter Steinberger's optimized AI development workflow using Ghostty, Claude Code, and minimal tooling for maximum productivity",
     date: "2025-08-25",
     category: "general",
-    language: "zh",
-    slug: "zh/best-practices/optimal-ai-development-workflow",
-    url: "/docs/zh/best-practices/optimal-ai-development-workflow"
+    language: "en",
+    slug: "en/best-practices/optimal-ai-development-workflow",
+    url: "/docs/en/best-practices/optimal-ai-development-workflow"
   },];
 
 // 获取首页最近文章的函数

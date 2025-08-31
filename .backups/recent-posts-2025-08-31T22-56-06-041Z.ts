@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "我当前的 AI 开发工作流",
-    description: "Peter Steinberger 使用 Ghostty、Claude Code 和极简工具链优化的 AI 开发工作流，实现最大生产力",
-    date: "2025-08-25",
-    category: "general",
-    language: "zh",
-    slug: "zh/best-practices/optimal-ai-development-workflow",
-    url: "/docs/zh/best-practices/optimal-ai-development-workflow"
+    title: "Fed Up and Built My First Sub Agent: UI Visual Validator",
+    description: "Tired of Claude Code's self-deceptive UI modification validations, I developed this strict visual verification agent that defaults to failure, only trusts screenshots, specifically treats all claims of successful fixes.",
+    date: "2025-08-30",
+    category: "sub-agents",
+    language: "en",
+    slug: "en/sub-agents/ui-visual-validator-agent",
+    url: "/docs/en/sub-agents/ui-visual-validator-agent"
   },];
 
 // 获取首页最近文章的函数

@@ -43,10 +43,23 @@
 
 ---
 
+### 3. My Current AI Dev Workflow
+
+- **原文标题**：My Current AI Dev Workflow
+- **原文URL**：https://steipete.me/posts/2025/optimal-ai-development-workflow
+- **抓取日期**：2025-09-01
+- **主题分类**：最佳实践
+- **相关文档页面**：`/docs/en/best-practices/optimal-ai-development-workflow`、`/docs/zh/best-practices/optimal-ai-development-workflow`
+- **简短描述**：Peter Steinberger 分享的最新 AI 开发工作流，使用 Ghostty + Claude Code + 极简工具实现最大生产力
+- **发布状态**：✅ 已发布（中英文双语版本）
+- **原文文件**：`optimal-ai-development-workflow_20250901.md`
+
+---
+
 ## 统计信息
 
-- **总计原文数量**：2
-- **已发布文档数量**：2
+- **总计原文数量**：3
+- **已发布文档数量**：3
 - **待发布文档数量**：0
 
-*最后更新：2025-01-15*
+*最后更新：2025-09-01*
