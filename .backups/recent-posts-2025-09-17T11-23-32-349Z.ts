@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "掌握 Vibe Coding：AI 驱动开发的完整指南",
-    description: "为软件开发者提供的完整战略框架，最大化 AI 工具价值。学习基础思维模式、项目规划、实施工作流程和专业 AI 辅助开发的高级技巧。",
+    title: "Mastering AI-Driven Development with Vibe Coding",
+    description: "Complete strategic framework for software developers to maximize AI tools value. Learn foundational mindset, project planning, implementation workflow, and advanced techniques for professional AI-assisted development.",
     date: "2025-01-17",
     category: "best-practices",
-    language: "zh",
-    slug: "zh/best-practices/yc-vibe-coding-mastering-ai-driven-development",
-    url: "/docs/zh/best-practices/yc-vibe-coding-mastering-ai-driven-development"
+    language: "en",
+    slug: "en/best-practices/yc-vibe-coding-mastering-ai-driven-development",
+    url: "/docs/en/best-practices/yc-vibe-coding-mastering-ai-driven-development"
   },];
 
 // 获取首页最近文章的函数
