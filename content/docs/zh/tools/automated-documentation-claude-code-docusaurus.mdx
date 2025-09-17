@@ -39,7 +39,7 @@ npx create-docusaurus@latest my-docs classic
 npx claude-code-templates@latest --agent=documentation/docusaurus-expert --yes
 ```
 
-你可以在这个链接查看代理的更多详细信息：[https://www.aitmpl.com/component/agent/docusaurus-expert](https://www.aitmpl.com/component/agent/docusaurus-expert)
+你可以在这个链接查看代理的更多详细信息：https://www.aitmpl.com/component/agent/docusaurus-expert
 
 接下来，请 Claude Code 使用这个代理来清理目录中所有默认的 Docusaurus 文件，并创建一个添加你项目文档的计划。
 
@@ -212,9 +212,9 @@ jobs:
     body: |
       基于拉取请求更改的自动文档更新。
       **更改的文件：**
-      ```
-      ${{ steps.changed.outputs.files }}
-      ```
+      &#96;&#96;&#96;
+      &#36;&#123;&#123; steps.changed.outputs.files &#125;&#125;
+      &#96;&#96;&#96;
     branch: docs/auto-${{ github.sha }}
     base: main  # 自定义：匹配你的默认分支
     # 自定义：添加你的团队或特定审查者
@@ -327,9 +327,9 @@ jobs:
             基于拉取请求更改的自动文档更新。
             
             **更改的文件：**
-            ```
-            ${{ steps.changed.outputs.files }}
-            ```
+            &#96;&#96;&#96;
+            &#36;&#123;&#123; steps.changed.outputs.files &#125;&#125;
+            &#96;&#96;&#96;
             
             此 PR 由 Docusaurus Expert Agent 根据原始拉取请求中的代码更改自动生成。
           branch: docs/auto-${{ github.sha }}
