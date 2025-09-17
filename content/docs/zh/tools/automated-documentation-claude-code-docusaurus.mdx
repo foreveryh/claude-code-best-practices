@@ -1,0 +1,440 @@
+---
+title: "使用 Claude Code 自动化文档：构建基于 Docusaurus Agent 的自更新文档系统"
+description: "学习如何使用 Claude Code 和 Docusaurus 构建自动化文档系统。设置文档代理分析代码变更，自动更新项目文档，并与 CI/CD 工作流程集成。"
+date: "2025-09-17"
+author: "Daniel Avila"
+source: "https://medium.com/@dan.avila7/automated-documentation-with-claude-code-building-self-updating-docs-using-docusaurus-agent-2c85d3ec0e19"
+category: "tools"
+language: "zh"
+tags: ["claude-code", "docusaurus", "文档自动化", "ci-cd", "github-actions", "代理工具"]
+---
+
+# 使用 Claude Code 自动化文档：构建基于 Docusaurus Agent 的自更新文档系统
+
+在软件开发的世界里，文档往往是最容易被忽视却又最重要的环节。开发者常常因为忙于编写代码而忘记更新文档，导致文档与实际代码严重脱节。今天，我将向你展示一个革命性的解决方案：如何使用 Claude Code 和 Docusaurus 构建一个能够自动分析代码变更并更新项目文档的智能系统。
+
+我们将深入探讨 Docusaurus 的设置、代理安装、自动化工作流程，以及与 CI/CD 的集成，让你的文档能够与代码库保持完美同步。
+
+## 初始设置：搭建你的文档基础
+
+想象一下，你的项目拥有一个永远保持最新状态的文档系统。这个梦想从创建 Docusaurus 站点开始：
+
+```bash
+npx create-docusaurus@latest my-docs classic
+```
+
+按照 CLI 的提示完成 Docusaurus 的安装。是否选择 TypeScript？这完全取决于你的喜好，不用纠结。
+
+运行 `npm start` 然后打开 localhost...瞧！你现在拥有了一个准备就绪的文档站点，可以开始定制并编写你的项目信息。
+
+你可以在这个链接查看 Docusaurus 的详细文档：https://docusaurus.io/
+
+> 在我的案例中，我将文档部署到了子域名 docs.aitmpl.com，但你也可以选择路由形式如 /docs。选择权在你手中。
+
+## 让 Docusaurus-Expert Agent 开始工作！
+
+现在是时候让智能代理登场了。使用这个命令添加代理：
+
+```bash
+npx claude-code-templates@latest --agent=documentation/docusaurus-expert --yes
+```
+
+你可以在这个链接查看代理的更多详细信息：https://www.aitmpl.com/component/agent/docusaurus-expert
+
+接下来，请 Claude Code 使用这个代理来清理目录中所有默认的 Docusaurus 文件，并创建一个添加你项目文档的计划。
+
+添加新功能后，只需简单地提示：
+
+```
+"使用 docusuarus-expert 代理清理 @docs/ 中的所有默认 Docusaurus 文件，并生成添加我的项目文档的计划"
+```
+
+这个代理会分析你的 Git 暂存更改，识别需要文档更新的内容，并自动修改相应的 Markdown 文件。
+
+## CI/CD 集成：让自动化成为现实
+
+这个工作流程与自动化部署无缝集成。以下是设置持续文档更新的方法：
+
+### 1. 安装 Claude GitHub App（快速方法）
+
+```bash
+# 在你的 Claude Code 终端中
+/install-github-app
+```
+
+使用你的 GitHub 账户进行身份验证，然后安装 Claude 应用。你可以授权所有仓库，或者只选择你想要运行 Claude Code 流水线的仓库。
+
+应用在 GitHub 上安装并授权后，返回控制台完成安装。
+
+Claude Code 会询问你是否要为 PR 审查安装它，或者在 GitHub 上用 @claude 标记它。根据你的需要选择这些功能。
+
+### 创建专门的文档工作流程
+
+这个流水线会审查特定分支上的更改，当检测到修改时，它将使用 Docusaurus-Expert Agent。Claude Code 利用这个代理的上下文来审查更改，并发送一个包含它认为应该添加到 Docusaurus 的文档的 PR。流水线是通用的，所以用你的具体规格定制它以获得更好的结果。
+
+## 分步流水线详解
+
+### 第一步：触发器配置
+
+工作流程在拉取请求时触发，以在合并到主分支之前捕获文档需求。
+
+> **关键提醒**：你必须排除你的 Docusaurus 文档文件夹，以防止 Claude Code 持续创建新的文档更新 PR 而造成无限循环。
+
+```yaml
+on:
+  pull_request:
+    branches:
+      - main  # 自定义：更改为你的默认分支
+    paths:
+      # 自定义：添加应该触发文档更新的文件类型
+      - '**.js'
+      - '**.ts'
+      - '**.jsx'
+      - '**.tsx'
+      - '**.py'
+      - '**.java'
+      # 自定义：根据需要添加更多文件扩展名
+      
+      # 自定义：排除不应触发文档的路径
+      - '!.github/**'
+      - '!**/node_modules/**'
+      - '!**/dist/**'
+      - '!**/build/**'
+      - '!docs/**'  # 关键：将 'docs' 替换为你的 Docusaurus 文件夹路径
+                    # 这防止无限循环 - 没有这个排除规则，
+                    # Claude Code 将创建无休止的文档更新 PR
+                    # 常见路径：!docu/**, !documentation/**, !website/docs/**
+```
+
+### 第二步：运行器设置
+
+设置具有适当权限的运行器并安装文档代理。
+
+```yaml
+jobs:
+  auto-document:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write  # claude-code-action 必需
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 需要完整历史记录进行适当的差异比较
+      
+      - name: 设置 Claude 配置
+        run: |
+          mkdir -p .claude/agents
+          # 如果代理不存在则安装
+          if [ ! -f ".claude/agents/docusaurus-expert.md" ]; then
+            npx claude-code-templates@latest \
+              --agent documentation/docusaurus-expert \
+              --yes \
+              --directory .
+          fi
+```
+
+### 第三步：变更检测
+
+识别拉取请求中更改的文件以提供上下文。
+
+```yaml
+- name: 获取更改的文件
+  id: changed
+  run: |
+    # 获取基础分支
+    git fetch origin ${{ github.event.pull_request.base.ref }}:${{ github.event.pull_request.base.ref }}
+    
+    # 获取更改的文件并保存到输出
+    CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.ref }}...HEAD | tr '\n' ' ')
+    echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+```
+
+### 第四步：文档更新
+
+使用项目特定的上下文和要求执行代理。
+
+```yaml
+- name: 更新文档
+  uses: anthropics/claude-code-action@v1
+  with:
+    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+    prompt: |
+      阅读并遵循 .claude/agents/docusaurus-expert.md 中的说明
+      
+      此拉取请求中更改的文件：
+      ${{ steps.changed.outputs.files }}
+      
+      ## 要求
+      1. 查找 Docusaurus 文档（检查：docs/、docu/、documentation/、website/docs/）
+      2. 更新任何更改功能的文档
+      3. 为新功能添加新文档
+      4. 如果函数签名更改，更新 API 参考
+      5. 确保所有代码示例与当前实现匹配
+      
+      ## 项目特定规则
+      # 自定义：为你的项目更新这些规则
+      - 文档语言：英语
+      - 代码示例应包含 TypeScript 类型（如适用）
+      - 遵循现有文档结构和样式
+      - 为新功能更新 getting-started.md
+      - 适当时创建功能特定的文档文件
+      
+      ## 当前应用上下文
+      # 自定义：用你的项目上下文替换
+      这是一个具有以下功能的 React Todo 应用：
+      - 带字符限制的待办事项创建、编辑、删除
+      - 优先级系统（高/中/低带颜色指示器）
+      - 分享功能到 X/Twitter（单个和批量）
+      - 移动/平板/桌面响应式设计
+      - 深色/浅色主题切换
+      - 待办事项创建日期显示
+      - 任务完成跟踪和统计
+      - 应用标题中的待办事项计数徽章
+      
+      专注于记录上面修改文件中发现的更改。
+    # 自定义：根据需要调整最大轮次和其他设置
+    claude_args: "--max-turns 15 --dangerously-skip-permissions"
+```
+
+### 第五步：拉取请求创建
+
+创建包含文档更新的单独拉取请求。
+
+```yaml
+- name: 创建拉取请求
+  uses: peter-evans/create-pull-request@v6
+  with:
+    token: ${{ secrets.GITHUB_TOKEN }}
+    commit-message: "docs: 通过 docusaurus-expert 代理更新"
+    title: "📚 文档更新"  # 自定义：更改标题格式
+    body: |
+      基于拉取请求更改的自动文档更新。
+      **更改的文件：**
+      ```
+      ${{ steps.changed.outputs.files }}
+      ```
+    branch: docs/auto-${{ github.sha }}
+    base: main  # 自定义：匹配你的默认分支
+    # 自定义：添加你的团队或特定审查者
+    # team-reviewers: documentation-team
+```
+
+## 完整的流水线配置
+
+以下是你可以根据需要定制的完整流水线配置：
+
+```yaml
+# .github/workflows/docusaurus-auto-docs.yml
+name: Docusaurus 文档自动化
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      # 自定义：添加应该触发文档更新的路径
+      - '**.js'
+      - '**.ts'
+      - '**.jsx'
+      - '**.tsx'
+      - '**.py'
+      - '**.java'
+      # 自定义：排除路径
+      - '!.github/**'
+      - '!**/node_modules/**'
+      - '!**/dist/**'
+      - '!**/build/**'
+      - '!docs/**'
+
+jobs:
+  auto-document:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 确保 .claude 目录存在
+      - name: 设置 Claude 配置
+        run: |
+          mkdir -p .claude/agents
+          # 如果代理不存在则安装
+          if [ ! -f ".claude/agents/docusaurus-expert.md" ]; then
+            npx claude-code-templates@latest \
+              --agent documentation/docusaurus-expert \
+              --yes \
+              --directory .
+          fi
+
+      # 获取更改的文件作为上下文
+      - name: 获取更改的文件
+        id: changed
+        run: |
+          # 获取基础分支
+          git fetch origin ${{ github.event.pull_request.base.ref }}:${{ github.event.pull_request.base.ref }}
+          
+          # 获取更改的文件并保存到输出
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.ref }}...HEAD | tr '\n' ' ')
+          echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          
+          # 调试：显示哪些文件发生了更改
+          echo "更改的文件：$CHANGED_FILES"
+
+      # 仅在实际有更改文件需要记录时运行
+      - name: 更新文档
+        if: steps.changed.outputs.files != ''
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            阅读并遵循 .claude/agents/docusaurus-expert.md 中的说明
+            
+            此拉取请求中更改的文件：
+            ${{ steps.changed.outputs.files }}
+            
+            ## 要求
+            1. 查找 Docusaurus 文档（检查：docs/、docu/、documentation/、website/docs/）
+            2. 更新任何更改功能的文档
+            3. 为新功能添加新文档
+            4. 如果函数签名更改，更新 API 参考
+            5. 确保所有代码示例与当前实现匹配
+            
+            ## 项目特定规则
+            # 自定义：为你的项目更新这些规则
+            - 文档语言：中文
+            - 代码示例应包含 TypeScript 类型（如适用）
+            - 遵循现有文档结构和样式
+            - 为新功能更新入门指南
+            - 适当时创建功能特定的文档文件
+            
+            专注于记录上面修改文件中发现的更改。
+          claude_args: "--max-turns 15 --dangerously-skip-permissions"
+
+      # 创建包含文档更新的拉取请求
+      - name: 创建拉取请求
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "docs: 通过 docusaurus-expert 代理更新"
+          title: "📚 文档更新"
+          body: |
+            基于拉取请求更改的自动文档更新。
+            
+            **更改的文件：**
+            ```
+            ${{ steps.changed.outputs.files }}
+            ```
+            
+            此 PR 由 Docusaurus Expert Agent 根据原始拉取请求中的代码更改自动生成。
+          branch: docs/auto-${{ github.sha }}
+          base: main
+          # 自定义：如需要，添加团队审查者
+          # team-reviewers: |
+          #   documentation-team
+```
+
+## 核心优势
+
+这个自动化文档系统为你的团队带来了显著的价值：
+
+1. **自动化文档维护**：再也不会因为代码更改而忘记更新文档
+2. **一致的质量标准**：代理遵循项目特定的文档标准
+3. **CI/CD 无缝集成**：与现有开发工作流程完美融合
+4. **上下文感知**：分析实际代码更改以生成相关文档
+5. **高度可定制**：完全可定制的提示和规则满足你的特定项目需求
+
+## 最佳实践
+
+1. **排除文档文件夹**：始终排除你的文档文件夹以防止触发工作流程，避免无限循环
+2. **定制文件扩展名**：只监控实际需要文档的文件类型
+3. **项目特定上下文**：为代理提供详细的项目上下文以获得更好的结果
+4. **审查流程**：为自动生成的文档 PR 设置适当的审查者
+5. **充分测试**：在部署到生产环境之前彻底测试工作流程
+
+## 高级配置技巧
+
+### 自定义代理指令
+
+你可以通过修改 `.claude/agents/docusaurus-expert.md` 文件来创建自定义代理指令：
+
+```markdown
+# Docusaurus 专家代理
+
+你是 Docusaurus 文档和技术写作的专家。
+
+## 你的角色
+- 分析代码更改并生成相应的文档
+- 遵循项目特定的样式指南
+- 确保所有示例都有效且最新
+
+## 文档标准
+- 使用清晰、简洁的语言
+- 包含实用示例
+- 添加具有适当语法高亮的代码片段
+- 交叉引用相关文档
+```
+
+### 多种文档格式支持
+
+系统可以扩展以支持多种文档格式：
+
+```yaml
+# 支持不同的文档格式
+- name: 更新文档
+  run: |
+    case "$DOC_FORMAT" in
+      "docusaurus")
+        npx claude-code-templates --agent documentation/docusaurus-expert
+        ;;
+      "vitepress")
+        npx claude-code-templates --agent documentation/vitepress-expert
+        ;;
+      "mkdocs")
+        npx claude-code-templates --agent documentation/mkdocs-expert
+        ;;
+    esac
+```
+
+## 故障排除
+
+### 常见问题
+
+1. **无限循环预防**：始终排除你的文档目录
+2. **API 速率限制**：考虑在 API 调用之间实施延迟
+3. **大型仓库**：使用选择性文件监控来减少处理时间
+4. **权限问题**：确保适当的 GitHub 令牌权限
+
+### 调试技巧
+
+```yaml
+- name: 调试更改的文件
+  run: |
+    echo "基础分支：${{ github.event.pull_request.base.ref }}"
+    echo "头分支：${{ github.event.pull_request.head.ref }}"
+    echo "更改的文件：${{ steps.changed.outputs.files }}"
+```
+
+## 结论：拥抱文档自动化的未来
+
+这个自动化文档系统彻底改变了团队维护项目文档的方式。通过利用 Claude Code 的代理系统与 Docusaurus 的结合，你可以确保文档始终保持最新和全面，无需手动干预。
+
+成功的关键在于针对你的特定项目需求进行适当的配置和定制。从基本设置开始，逐步完善提示和规则以匹配你的文档标准。
+
+记住：好的文档不仅仅是拥有它——更重要的是保持它的准确性和时效性。这个自动化系统帮助确保两者兼得。
+
+## 下一步行动计划
+
+1. **设置基本的 Docusaurus 站点**：按照安装指南进行操作
+2. **安装 Docusaurus Expert 代理**：使用提供的命令
+3. **配置 GitHub Actions 工作流程**：使用你的项目特定设置
+4. **测试工作流程**：进行小的更改以验证其正常工作
+5. **定制代理提示**：匹配你的文档风格
+6. **监控和完善**：根据生成文档的质量调整系统
+
+有了这个设置，你的文档将自动与代码库保持同步，确保你的团队和用户始终能够访问到最新、准确的信息。这不仅仅是一个技术解决方案，更是一个让开发者能够专注于创造而非维护的智能助手。

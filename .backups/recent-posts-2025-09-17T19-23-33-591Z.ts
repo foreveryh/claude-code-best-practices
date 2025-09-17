@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "使用 Claude Code 自动化文档：构建基于 Docusaurus Agent 的自更新文档系统",
-    description: "学习如何使用 Claude Code 和 Docusaurus 构建自动化文档系统。设置文档代理分析代码变更，自动更新项目文档，并与 CI/CD 工作流程集成。",
-    date: "2025-09-17",
-    category: "tools",
+    title: "掌握 Vibe Coding：AI 驱动开发的完整指南",
+    description: "为软件开发者提供的完整战略框架，最大化 AI 工具价值。学习基础思维模式、项目规划、实施工作流程和专业 AI 辅助开发的高级技巧。",
+    date: "2025-01-17",
+    category: "best-practices",
     language: "zh",
-    slug: "zh/tools/automated-documentation-claude-code-docusaurus",
-    url: "/docs/zh/tools/automated-documentation-claude-code-docusaurus"
+    slug: "zh/best-practices/yc-vibe-coding-mastering-ai-driven-development",
+    url: "/docs/zh/best-practices/yc-vibe-coding-mastering-ai-driven-development"
   },];
 
 // 获取首页最近文章的函数
