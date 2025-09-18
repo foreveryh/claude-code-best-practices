@@ -43,6 +43,27 @@ Each entry should follow this format:
 
 ## Publication History
 
+## [2025-01-17] - GitHub Spec Kit: Build High-Quality Software Faster with Spec-Driven Development
+
+### Added
+- **[tools]** New tool guide: "GitHub Spec Kit: Build High-Quality Software Faster with Spec-Driven Development"
+  - Source: https://github.com/github/spec-kit
+  - Author: GitHub Team
+  - Languages: EN/ZH
+  - Type: Tool Guide
+  - Description: Discover GitHub's Spec Kit - a revolutionary toolkit that transforms software development through Spec-Driven Development. Learn how to build production-ready applications faster by focusing on specifications first, then generating implementations.
+  - Files:
+    - EN: `/content/docs/en/tools/github-spec-kit.mdx`
+    - ZH: `/content/docs/zh/tools/github-spec-kit.mdx`
+    - Source: https://github.com/github/spec-kit/blob/main/spec-driven.md
+  - Features:
+    - Complete SDD methodology explanation
+    - CLI installation and setup guide
+    - Development phases (0-1, Creative Exploration, Iterative Enhancement)
+    - Enterprise integration capabilities
+    - YouTube video tutorial embedded
+  - Video: https://www.youtube.com/watch?v=a9eR1xsfvHg
+
 ## [2025-09-01] - My Current AI Dev Workflow
 
 ### Added
