@@ -43,6 +43,24 @@ Each entry should follow this format:
 
 ## Publication History
 
+## [2025-09-27] - Happy: Mobile and Web Client for Claude Code - Remote Coding & AI Assistant
+
+### Changed
+- **[tools]** Updated article: "Happy: Mobile and Web Client for Claude Code - Remote Coding & AI Assistant"
+  - Source: https://github.com/slopus/happy
+  - Author: slopus team
+  - Languages: EN/ZH
+  - Type: Tool Guide Update
+  - Description: Enhanced the existing Happy article to emphasize remote coding capabilities and daily AI assistant use cases with Sub Agents and MCP tools integration. Updated to reflect current GitHub stars (2.1K) and added specific use cases for remote development and automation.
+  - Files:
+    - EN: `/content/docs/en/tools/happy-mobile-claude-code-client.mdx`
+    - ZH: `/content/docs/zh/tools/happy-mobile-claude-code-client.mdx`
+  - Key Updates:
+    - Highlighted remote access capabilities for home computers running Claude Code/Codex
+    - Emphasized use as daily AI assistant with Sub Agents integration
+    - Added specific use cases for email aggregation, AI news tracking, and social media automation
+    - Updated date and GitHub star count
+
 ## [2025-01-17] - GitHub Spec Kit: Build High-Quality Software Faster with Spec-Driven Development
 
 ### Added
