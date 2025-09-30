@@ -41,7 +41,7 @@ export const baseOptions: BaseLayoutProps = {
     },
     {
       text: 'CCM Switch',
-      url: 'https://github.com/foreveryh/claude-cloud-switch',
+      url: 'https://github.com/foreveryh/claude-code-switch',
       external: true,
     },
     {
