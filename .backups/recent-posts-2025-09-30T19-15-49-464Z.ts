@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "AI 代理的有效上下文工程",
-    description: "上下文工程的全面指南——从提示工程到管理可用于 LLM 的整体状态，以构建可控、高效的代理。学习优化上下文窗口、管理注意力预算和设计高效代理架构的策略。",
+    title: "Effective Context Engineering for AI Agents",
+    description: "A comprehensive guide to context engineering - the evolution from prompt engineering to managing the holistic state available to LLMs for building steerable, effective agents. Learn strategies for optimizing context windows, managing attention budgets, and designing efficient agent architectures.",
     date: "Tue Sep 30 2025 02:00:00 GMT+0200 (Central European Summer Time)",
     category: "best-practices",
-    language: "zh",
-    slug: "zh/best-practices/effective-context-engineering-for-ai-agents",
-    url: "/docs/zh/best-practices/effective-context-engineering-for-ai-agents"
+    language: "en",
+    slug: "en/best-practices/effective-context-engineering-for-ai-agents",
+    url: "/docs/en/best-practices/effective-context-engineering-for-ai-agents"
   },];
 
 // 获取首页最近文章的函数

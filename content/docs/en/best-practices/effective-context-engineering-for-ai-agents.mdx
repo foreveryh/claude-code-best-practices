@@ -1,0 +1,572 @@
+---
+title: "Effective Context Engineering for AI Agents"
+description: "A comprehensive guide to context engineering - the evolution from prompt engineering to managing the holistic state available to LLMs for building steerable, effective agents. Learn strategies for optimizing context windows, managing attention budgets, and designing efficient agent architectures."
+date: 2025-09-30
+category: best-practices
+tags: [context-engineering, ai-agents, prompt-engineering, llm, anthropic, claude, context-window, attention-budget]
+lang: en
+featured: true
+author: Anthropic Engineering Team
+source: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+---
+
+# Effective Context Engineering for AI Agents
+
+After a few years of prompt engineering being the focus of attention in applied AI, a new term has come to prominence: **context engineering**. Building with language models is becoming less about finding the right words and phrases for your prompts, and more about answering the broader question of "what configuration of context is most likely to generate our model's desired behavior?"
+
+Context refers to the set of tokens included when sampling from a large-language model (LLM). The engineering problem at hand is optimizing the utility of those tokens against the inherent constraints of LLMs in order to consistently achieve a desired outcome. Effectively wrangling LLMs often requires thinking in context — in other words: considering the holistic state available to the LLM at any given time and what potential behaviors that state might yield.
+
+In this post, we'll explore the emerging art of context engineering and offer a refined mental model for building steerable, effective agents.
+
+## Context Engineering vs. Prompt Engineering
+
+At Anthropic, we view context engineering as the natural progression of prompt engineering. Prompt engineering refers to methods for writing and organizing LLM instructions for optimal outcomes. Context engineering refers to the set of strategies for curating and maintaining the optimal set of tokens (information) during LLM inference, including all the other information that may land there outside of the prompts.
+
+In the early days of engineering with LLMs, prompting was the biggest component of AI engineering work, as the majority of use cases outside of everyday chat interactions required prompts optimized for one-shot classification or text generation tasks. As the term implies, the primary focus of prompt engineering is how to write effective prompts, particularly system prompts. However, as we move towards engineering more capable agents that operate over multiple turns of inference and longer time horizons, we need strategies for managing the entire context state (system instructions, tools, Model Context Protocol (MCP), external data, message history, etc).
+
+An agent running in a loop generates more and more data that could be relevant for the next turn of inference, and this information must be cyclically refined. Context engineering is the art and science of curating what will go into the limited context window from that constantly evolving universe of possible information.
+
+### Context Engineering in Claude Code
+
+For developers using Claude Code, context engineering becomes even more critical as it directly impacts the effectiveness of AI-assisted coding. Claude Code is designed as a low-level, unopinionated tool that provides close to raw model access without forcing specific workflows. This flexibility requires developers to actively manage context to achieve optimal results.
+
+Unlike traditional prompt engineering where you might write a single prompt and get a response, Claude Code operates in a continuous session where context accumulates over time. Each interaction, file read, tool usage, and code modification contributes to the growing context that Claude uses to understand and respond to your requests.
+
+![Prompt engineering vs. context engineering](/images/effective-context-engineering/prompt-vs-context-engineering.png)
+
+*In contrast to the discrete task of writing a prompt, context engineering is iterative and the curation phase happens each time we decide what to pass to the model.*
+
+## Why Context Engineering is Important to Building Capable Agents
+
+Despite their speed and ability to manage larger and larger volumes of data, we've observed that LLMs, like humans, lose focus or experience confusion at a certain point. Studies on needle-in-a-haystack style benchmarking have uncovered the concept of **context rot**: as the number of tokens in the context window increases, the model's ability to accurately recall information from that context decreases.
+
+While some models exhibit more gentle degradation than others, this characteristic emerges across all models. Context, therefore, must be treated as a finite resource with diminishing marginal returns. Like humans, who have limited working memory capacity, LLMs have an "attention budget" that they draw on when parsing large volumes of context. Every new token introduced depletes this budget by some amount, increasing the need to carefully curate the tokens available to the LLM.
+
+This attention scarcity stems from architectural constraints of LLMs. LLMs are based on the transformer architecture, which enables every token to attend to every other token across the entire context. This results in n² pairwise relationships for n tokens.
+
+As its context length increases, a model's ability to capture these pairwise relationships gets stretched thin, creating a natural tension between context size and attention focus. Additionally, models develop their attention patterns from training data distributions where shorter sequences are typically more common than longer ones. This means models have less experience with, and fewer specialized parameters for, context-wide dependencies.
+
+Techniques like position encoding interpolation allow models to handle longer sequences by adapting them to the originally trained smaller context, though with some degradation in token position understanding. These factors create a performance gradient rather than a hard cliff: models remain highly capable at longer contexts but may show reduced precision for information retrieval and long-range reasoning compared to their performance on shorter contexts.
+
+These realities mean that thoughtful context engineering is essential for building capable agents.
+
+## The Anatomy of Effective Context
+
+Given that LLMs are constrained by a finite attention budget, good context engineering means finding the smallest possible set of high-signal tokens that maximize the likelihood of some desired outcome. Implementing this practice is much easier said than done, but in the following section, we outline what this guiding principle means in practice across the different components of context.
+
+## Context Engineering for Claude Code Users
+
+For developers using Claude Code for AI-assisted programming, context engineering takes on specific importance and practical applications. Claude Code users can leverage context engineering principles to optimize their AI coding workflows, improve code quality, and reduce token consumption.
+
+### Leveraging CLAUDE.md Files for Context Management
+
+One of the most powerful context engineering tools in Claude Code is the `CLAUDE.md` file system. These special files are automatically pulled into context when starting a conversation, making them ideal for documenting project-specific information that Claude needs to know.
+
+Effective CLAUDE.md files should include:
+
+1. **Common Commands**: Document frequently used bash commands to save Claude from having to ask or guess
+2. **Code Style Guidelines**: Specify coding conventions, import preferences, and formatting standards
+3. **Project Structure Information**: Explain the repository layout, key directories, and important files
+4. **Development Environment Setup**: Detail required tools, version requirements, and setup instructions
+5. **Workflow Conventions**: Document team practices for branching, testing, and deployment
+
+Unlike generic system prompts, CLAUDE.md files should be project-specific and team-shared. They become part of the persistent context that Claude uses across all interactions with your codebase.
+
+**CLAUDE.md File Locations and Hierarchy:**
+
+Claude Code supports multiple CLAUDE.md files that are automatically loaded based on your current directory:
+
+- **Project Root (`CLAUDE.md`)**: Team-shared project-level configuration, committed to Git for all members
+- **Project Root (`CLAUDE.local.md`)**: Personal local override configuration, usually added to `.gitignore` to avoid affecting others
+- **Parent Directory (`CLAUDE.md`)**: Upper-level configuration automatically inherited in Monorepo structure (recursive upward search)
+- **Subdirectory (`CLAUDE.md`)**: Independent configuration for specific submodules/features (loaded with priority over parent configuration)
+- **User Global (`~/.claude/CLAUDE.md`)**: User global default configuration, applicable to baseline settings for all Claude sessions
+
+**Best Practices for CLAUDE.md Files:**
+
+- Keep files concise and human-readable (typically under 50 lines)
+- Use bullet points and clear headings for easy scanning
+- Regularly review and update as project evolves
+- Include version-specific information for projects with multiple active branches
+- Document deprecated practices to prevent Claude from suggesting outdated approaches
+
+### Strategic File Mentions and Context Loading
+
+Claude Code allows you to explicitly tell Claude to read specific files using natural language instructions like "read logging.py" or "look at the authentication module." This gives you fine-grained control over what context Claude loads at any given time.
+
+Effective strategies include:
+
+- **Pre-loading Key Files**: Before starting complex tasks, have Claude read the most relevant files to establish context
+- **Progressive Context Loading**: Load files incrementally as needed rather than overwhelming Claude with too much information upfront
+- **Context Refresh**: Periodically ask Claude to re-read files if they've been modified during the session
+- **Selective File Loading**: Use tab-completion to quickly reference files or folders anywhere in your repository, helping Claude find or update the right resources
+
+**Advanced File Loading Techniques:**
+
+1. **Directory Analysis**: Ask Claude to "analyze the structure of the src/services/user/ directory" before implementing changes
+2. **Cross-File References**: When working on related components, load multiple files to maintain consistency
+3. **Historical Context**: For bug fixes, load both current implementation and related test files
+4. **Dependency Mapping**: Load dependency files to understand how changes might affect other parts of the system
+
+### Managing Message History in Long Sessions
+
+Claude Code sessions can accumulate extensive message history over time, leading to context bloat and potential performance degradation. Effective context engineering requires actively managing this history.
+
+Strategies for Claude Code users:
+
+1. **Use the `/compact` Command**: Periodically compress conversation history to preserve key information while reducing token count. This built-in feature compresses conversation history, keeping only context summaries to reduce token usage while preserving essential information.
+2. **Clear Irrelevant History**: Use `/clear` to remove completed tasks from context when they're no longer relevant. During long sessions, Claude's context window can fill with irrelevant conversation, file contents, and commands. This can reduce performance and sometimes distract Claude.
+3. **Break Large Tasks**: Divide complex projects into smaller, focused sessions to maintain context clarity. For large tasks with multiple steps or requiring exhaustive solutions—like code migrations, fixing numerous lint errors, or running complex build scripts—improve performance by having Claude use a Markdown file (or even a GitHub issue!) as a checklist and working scratchpad.
+4. **Session Segmentation**: For multi-day projects, consider starting fresh sessions rather than carrying forward old context that may no longer be relevant
+
+### Tool Selection and Context Efficiency
+
+Claude Code's tool ecosystem (MCP servers, custom commands, bash tools) directly impacts context efficiency. Each tool interaction adds to the context window, so thoughtful tool selection is crucial.
+
+Best practices:
+
+- **Minimize Tool Chatter**: Configure tool allowlists to reduce permission prompts for trusted operations. You can customize the allowlist to permit additional tools that you know are safe, or to allow potentially unsafe tools that are easy to undo (e.g., file editing, `git commit`).
+- **Use Custom Slash Commands**: Create reusable command templates that provide Claude with structured context for common tasks. Custom commands come in two types: User-level commands (placed in `~/.claude/commands/` directory) and Project-level commands (placed in `.claude/commands/` directory under project root).
+- **Leverage MCP Servers**: Use Model Context Protocol servers to provide Claude with structured access to external systems without flooding the context window
+- **Tool Allowlist Management**: Use the `/permissions` command after starting Claude Code to add or remove tools from the allowlist. For example, you can add `Edit` to always allow file edits, `Bash(git commit:*)` to allow git commits, or `mcp__puppeteer__puppeteer_navigate` to allow navigating with the Puppeteer MCP server.
+
+### Context-Driven Task Planning
+
+Effective context engineering in Claude Code involves strategic task planning that considers context limitations and optimal loading patterns:
+
+1. **Pre-activation Approach**: Before asking Claude to implement a solution, first let it read and understand the relevant context. For example, if refactoring a backend module, first ask Claude to read the entire module, analyze directory structure, and summarize existing functionality before entering the coding phase.
+2. **Document-First Workflow**: Write a PLAN.md for any task before having the model execute it. This approach consolidates the "7-Layer Prompt Stack" (Tool/Language/Project/Persona/Component/Task/Query) into a single document that Claude can reference for stable context.
+3. **Scope Convergence**: Implement file whitelists + directory blacklists + maximum change line limits to contain model uncertainty within defined boundaries rather than scattered across chat histories.
+4. **Diff-Driven Development**: Only accept unified diffs; prohibit full-file rewrites or "repository scanning." This approach makes rollbacks painless because everything is delivered as unified diffs.
+
+### Context Window Optimization Techniques
+
+Claude Code provides several built-in mechanisms for optimizing context window usage:
+
+1. **The `/compact` Command**: Compresses conversation history, keeping only context summaries to reduce token usage while preserving essential information
+2. **The `/clear` Command**: Completely clear conversation history when starting new, unrelated tasks
+3. **Session Segmentation**: Breaking large projects into multiple focused sessions rather than one long-running session
+4. **Selective File Loading**: Loading only the most relevant files for immediate tasks rather than the entire codebase
+5. **Checklists and Scratchpads**: For large tasks, use Markdown files as checklists and working scratchpads to externalize context that doesn't need to remain in the conversation history
+
+![Calibrating the system prompt in the process of context engineering.](/images/effective-context-engineering/system-prompt-calibration.png)
+
+*At one end of the spectrum, we see brittle if-else hardcoded prompts, and at the other end we see prompts that are overly general or falsely assume shared context.*
+
+### System Prompts
+
+We recommend organizing prompts into distinct sections (like `<background_information>`, `<instructions>`, `## Tool guidance`, `## Output description`, etc) and using techniques like XML tagging or Markdown headers to delineate these sections, although the exact formatting of prompts is likely becoming less important as models become more capable.
+
+Regardless of how you decide to structure your system prompt, you should be striving for the minimal set of information that fully outlines your expected behavior. (Note that minimal does not necessarily mean short; you still need to give the agent sufficient information up front to ensure it adheres to the desired behavior.) It's best to start by testing a minimal prompt with the best model available to see how it performs on your task, and then add clear instructions and examples to improve performance based on failure modes found during initial testing.
+
+### Tools
+
+Tools allow agents to operate with their environment and pull in new, additional context as they work. Because tools define the contract between agents and their information/action space, it's extremely important that tools promote efficiency, both by returning information that is token efficient and by encouraging efficient agent behaviors.
+
+In [Writing tools for AI agents – with AI agents](/engineering/writing-tools-for-agents), we discussed building tools that are well understood by LLMs and have minimal overlap in functionality. Similar to the functions of a well-designed codebase, tools should be self-contained, robust to error, and extremely clear with respect to their intended use. Input parameters should similarly be descriptive, unambiguous, and play to the inherent strengths of the model.
+
+One of the most common failure modes we see is bloated tool sets that cover too much functionality or lead to ambiguous decision points about which tool to use. If a human engineer can't definitively say which tool should be used in a given situation, an AI agent can't be expected to do better. As we'll discuss later, curating a minimal viable set of tools for the agent can also lead to more reliable maintenance and pruning of context over long interactions.
+
+### Examples
+
+Providing examples, otherwise known as few-shot prompting, is a well known best practice that we continue to strongly advise. However, teams will often stuff a laundry list of edge cases into a prompt in an attempt to articulate every possible rule the LLM should follow for a particular task. We do not recommend this. Instead, we recommend working to curate a set of diverse, canonical examples that effectively portray the expected behavior of the agent. For an LLM, examples are the "pictures" worth a thousand words.
+
+### Message History
+
+Message history is a critical component of context for agents operating over multiple turns. However, simply appending all previous messages to the context window is rarely optimal. Effective context engineering requires thoughtful curation of message history, considering factors such as:
+
+- **Relevance**: Which previous interactions are still relevant to the current task?
+- **Recency**: How recent does information need to be to remain useful?
+- **Compression**: Can previous interactions be summarized to preserve key information while reducing token count?
+
+Our overall guidance across the different components of context (system prompts, tools, examples, message history, etc) is to be thoughtful and keep your context informative, yet tight. Now let's dive into dynamically retrieving context at runtime.
+
+## Context Retrieval and Agentic Search
+
+In [Building effective AI agents](/engineering/building-effective-agents), we highlighted the differences between LLM-based workflows and agents. Since we wrote that post, we've gravitated towards a simple definition for agents: LLMs autonomously using tools in a loop.
+
+Working alongside our customers, we've seen the field converging on this simple paradigm. As the underlying models become more capable, the level of autonomy of agents can scale: smarter models allow agents to independently navigate nuanced problem spaces and recover from errors.
+
+We're now seeing a shift in how engineers think about designing context for agents. Today, many AI-native applications employ some form of embedding-based pre-inference time retrieval to surface important context for the agent to reason over. As the field transitions to more agentic approaches, we increasingly see teams augmenting these retrieval systems with "just in time" context strategies.
+
+Beyond storage efficiency, the metadata of these references provides a mechanism to efficiently track and manage the provenance of information that influences agent behavior. This can be particularly valuable for debugging, auditing, and ensuring compliance in regulated environments.
+
+### Dynamic Context Retrieval in Claude Code
+
+Claude Code users can implement dynamic context retrieval strategies through thoughtful interaction patterns. Rather than loading all possible project files upfront, effective Claude Code workflows involve progressive context loading based on task requirements.
+
+Key strategies for Claude Code users:
+
+1. **Strategic File Reading**: Instead of asking Claude to "read the entire codebase," selectively load files based on immediate task needs
+2. **Search-Based Discovery**: Use natural language queries like "find all files that handle user authentication" to let Claude discover relevant files
+3. **Context Refresh**: Periodically ask Claude to re-read files that may have changed during development
+4. **URL-Based Context Loading**: Paste specific URLs alongside your prompts for Claude to fetch and read. To avoid permission prompts for the same domains (e.g., docs.foo.com), use `/permissions` to add domains to your allowlist.
+5. **Data Integration**: Pass data into Claude through multiple methods: copy and paste directly into your prompt (most common approach), pipe into Claude Code (e.g., `cat foo.txt | claude`), tell Claude to pull data via bash commands, MCP tools, or custom slash commands, or ask Claude to read files or fetch URLs (works for images too).
+
+Claude Code's ability to agentically explore the file system makes it particularly well-suited for dynamic context retrieval. Users can ask Claude to "search for files related to payment processing" and Claude will actively explore the codebase to identify and load relevant files.
+
+**Advanced Context Retrieval Patterns:**
+
+1. **Multi-Source Context Loading**: Combine file reading, URL fetching, and data piping in a single workflow. For example, pipe in a log file, then tell Claude to use a tool to pull in additional context to debug the logs.
+2. **Progressive Discovery**: Start with high-level queries and progressively drill down into specifics. For example, first ask "what authentication methods does this project support?" then follow up with "show me the implementation of JWT authentication."
+3. **Cross-Reference Loading**: When working on interconnected components, load related files to maintain consistency. For example, when modifying an API endpoint, also load the corresponding service layer and data access components.
+4. **Historical Context Retrieval**: For bug fixes, load both the current implementation and historical context such as related commits or issue descriptions.
+
+**Context Retrieval Best Practices:**
+
+- **Be Specific**: Claude can infer intent, but it can't read minds. Specificity leads to better alignment with expectations. Instead of "add tests for foo.py," specify "write a new test case for foo.py, covering the edge case where the user is logged out. Avoid mocks."
+- **Provide Reference Points**: When working with design mocks as reference points for UI development, or visual charts for analysis and debugging, provide images to Claude. This is particularly useful for visual tasks.
+- **Use Checklists**: For complex tasks, have Claude create and maintain a checklist of items to address, which serves as both a context management tool and progress tracker.
+- **Externalize Context**: For large tasks, use external files (Markdown documents, GitHub issues) as working scratchpads to keep the main conversation focused on high-level direction.
+
+### Dynamic Context Retrieval
+
+Rather than loading all possible context upfront, effective agents employ dynamic retrieval strategies that fetch relevant information as needed. This approach offers several advantages:
+
+1. **Token Efficiency**: Only relevant information consumes context window space
+2. **Freshness**: Information can be retrieved in real-time, ensuring up-to-date context
+3. **Scalability**: Agents can access vast knowledge bases without being constrained by context window limits
+4. **Relevance**: Retrieved information can be tailored to the specific task at hand
+
+Key strategies for dynamic context retrieval include:
+
+- **Semantic Search**: Using embeddings to find contextually relevant information
+- **Metadata Filtering**: Narrowing retrieval scope based on document properties (date, source, type, etc.)
+- **Hybrid Retrieval**: Combining multiple retrieval methods for improved results
+- **Recursive Retrieval**: Using the agent's own analysis to guide subsequent retrieval operations
+
+### Context Window Management
+
+As agents operate over longer time horizons, managing the context window becomes increasingly critical. Effective strategies include:
+
+1. **Summarization**: Condensing previous interactions while preserving key information
+2. **Forgetting Mechanisms**: Systematically removing outdated or irrelevant information
+3. **Hierarchical Context**: Organizing context into layers of importance
+4. **Attention Guidance**: Using explicit instructions to direct the model's focus
+
+### Context Window Management in Claude Code
+
+Claude Code provides specific tools and commands for managing context window limitations:
+
+1. **The `/compact` Command**: This built-in feature compresses conversation history, keeping only context summaries to reduce token usage while preserving essential information. During long sessions, Claude's context window can fill with irrelevant conversation, file contents, and commands. This can reduce performance and sometimes distract Claude. Use the `/compact` command frequently between tasks to reset the context window.
+2. **The `/clear` Command**: Completely clear conversation history when starting new, unrelated tasks. This eliminates accumulated context that may no longer be relevant and gives Claude a fresh start for new tasks.
+3. **Session Segmentation**: Breaking large projects into multiple focused sessions rather than one long-running session. For multi-day projects, consider starting fresh sessions rather than carrying forward old context that may no longer be relevant.
+4. **Selective File Loading**: Loading only the most relevant files for immediate tasks rather than the entire codebase. Instead of asking Claude to "read the entire codebase," selectively load files based on immediate task needs.
+5. **Checklists and Scratchpads**: For large tasks with multiple steps or requiring exhaustive solutions—like code migrations, fixing numerous lint errors, or running complex build scripts—improve performance by having Claude use a Markdown file (or even a GitHub issue!) as a checklist and working scratchpad.
+
+**Advanced Context Window Management Techniques:**
+
+1. **Task-Based Context Boundaries**: Define clear boundaries for each task and use `/clear` when transitioning between tasks to prevent context bleed.
+2. **Context Archiving**: For complex multi-phase projects, archive context at natural breakpoints by documenting key decisions and starting fresh sessions for new phases.
+3. **Hierarchical Context Loading**: Load context in layers, starting with high-level architectural information, then drilling down to specific implementation details as needed.
+4. **External Context Storage**: Use external documents (PLAN.md, GitHub issues, Markdown files) to store detailed specifications and reference information, keeping the main conversation focused on high-level direction and immediate implementation concerns.
+5. **Periodic Context Audits**: Regularly review what context is being maintained and remove information that is no longer relevant to the current task.
+
+For long-running development sessions, we recommend using `/compact` periodically to maintain performance while preserving the most important context. When switching to completely different tasks, using `/clear` can help Claude focus on the new requirements without distraction from previous work. During long sessions, Claude's context window can fill with irrelevant conversation, file contents, and commands. This can reduce performance and sometimes distract Claude. Use the `/clear` command frequently between tasks to reset the context window.
+
+## Best Practices for Context Engineering
+
+Based on our experience working with customers and building agents ourselves, we've identified several key best practices for effective context engineering:
+
+### 1. Start with Minimal Context
+
+Begin with the absolute minimum context needed for your agent to understand its task. This approach has several benefits:
+
+- **Easier Debugging**: Less context means fewer variables to consider when troubleshooting
+- **Better Understanding**: Forces you to truly understand what information is essential
+- **Improved Performance**: Reduces the risk of context rot and attention dilution
+- **Faster Iteration**: Smaller contexts enable quicker experimentation cycles
+
+For Claude Code users, this means starting with a clear task description rather than loading all project files upfront. Let Claude ask for specific files as needed.
+
+**Claude Code Specific Strategies:**
+
+- **Pre-activation Approach**: Before asking Claude to implement a solution, first let it read and understand the relevant context. For example, if refactoring a backend module, first ask Claude to read the entire module, analyze directory structure, and summarize existing functionality before entering the coding phase.
+- **Task Decomposition**: Break complex tasks into smaller, manageable pieces. For complex tasks, recommend manual step breakdown (Step 1: Create API interface, Step 2: Add field validation, Step 3: Write test cases, Step 4: Write documentation or PR description). Decomposition helps Claude focus on context, avoiding token limits or logic confusion.
+- **Clear Instructions**: Claude Code's success rate improves significantly with more specific instructions, especially on first attempts. Giving clear directions upfront reduces the need for course corrections later.
+
+### 2. Design for Observability
+
+Make it easy to understand what context your agent is operating with at any given time:
+
+- **Context Logging**: Track what information is included in each inference call
+- **Attention Visualization**: Use tools to understand where the model is focusing its attention
+- **Provenance Tracking**: Maintain clear records of where context information originates
+
+Claude Code users can leverage conversation history and file loading logs to understand what context Claude is using.
+
+**Claude Code Specific Strategies:**
+
+- **Session Documentation**: Maintain records of what files were loaded, what commands were executed, and what decisions were made during each session
+- **Cost Monitoring**: Use `/cost` to view consumption, including total spending, total usage time, model usage information, etc. For more detailed monitoring, use `ccusage` for daily reports, monthly summaries, and session statistics.
+- **Change Tracking**: Keep records of what changes were made in each session to enable effective rollbacks when needed
+
+### 3. Implement Context Compression
+
+Develop strategies for compressing context while preserving essential information:
+
+- **Progressive Summarization**: Create increasingly concise summaries of interaction history
+- **Key Point Extraction**: Identify and preserve only the most critical information
+- **Schema-Based Compression**: Use structured formats to efficiently represent information
+
+Claude Code's `/compact` command provides built-in context compression capabilities.
+
+**Claude Code Specific Strategies:**
+
+- **Regular Compaction**: Use `/compact` periodically during long sessions to maintain performance while preserving essential context
+- **Selective Retention**: When compacting, focus on retaining key decisions, critical file references, and important implementation details
+- **External Documentation**: Move detailed specifications and reference materials to external documents to reduce context window pressure
+
+### 4. Plan for Context Evolution
+
+Design your context management strategy with change in mind:
+
+- **Version Control**: Track how context strategies evolve over time
+- **A/B Testing**: Compare different context configurations systematically
+- **Rollback Mechanisms**: Enable quick reversion to previous context configurations
+
+In Claude Code, this means using version-controlled CLAUDE.md files and being intentional about session management.
+
+**Claude Code Specific Strategies:**
+
+- **Document-First Workflow**: Write a PLAN.md for any task before having the model execute it. This approach consolidates context into a single reference document.
+- **Repository Structure**: Maintain a `CLAUDE_CODE_LOG/` directory with timestamped folders for each task attempt, containing PLAN.md, PROMPT_USED.md, patches, logs, and evaluation reports
+- **Cold Starts**: After failures, archive the actual prompt, patch, logs, and commit fingerprint, document the failure reason, and start a new round (new timestamp directory) rather than continuing the same conversation
+
+### 5. Monitor Context Effectiveness
+
+Continuously evaluate how well your context engineering is working:
+
+- **Task Success Rates**: Track how context changes impact agent performance
+- **Token Utilization**: Monitor how efficiently context window space is being used
+- **Error Analysis**: Examine failures to identify context-related issues
+
+Claude Code users can monitor token usage through built-in metrics and observe performance changes when using context management commands like `/compact`.
+
+**Claude Code Specific Strategies:**
+
+- **Quality Gates**: Implement comprehensive quality gates with multiple static linters, formatters, sanitizers, and extensive testing. All code should pass a very thorough CI/CD pipeline.
+- **Performance Metrics**: Track productivity metrics such as lines of code added/removed, commits to main, PRs merged, and GitHub issues resolved
+- **Failure Analysis**: Document and analyze failures to identify patterns and improve context management strategies
+- **Course Correction**: Use tools like interrupting Claude during any phase (press Escape), jumping back in history (double-tap Escape), and asking Claude to undo changes to improve results
+
+## The Future of Context Engineering
+
+As AI systems become more capable and ubiquitous, context engineering will likely evolve in several directions:
+
+### Larger Context Windows
+
+While context engineering will remain important even as context windows grow larger, the strategies will shift from strict limitation management to more sophisticated organization and prioritization.
+
+### Automated Context Management
+
+We expect to see increasing automation in context curation, with AI systems becoming better at managing their own context without explicit human intervention.
+
+### Multi-Modal Context
+
+As AI systems incorporate more modalities (images, audio, video), context engineering will need to account for heterogeneous information types and their interactions.
+
+### Personalized Context
+
+Context engineering will increasingly involve tailoring information presentation to individual models' preferences and capabilities, moving beyond one-size-fits-all approaches.
+
+## Conclusion
+
+Context engineering represents a fundamental shift in how we think about building with large language models. Rather than focusing solely on crafting the perfect prompt, we must now consider the holistic information environment in which our models operate.
+
+Effective context engineering requires balancing multiple competing concerns: providing sufficient information for task completion while avoiding information overload, maintaining context freshness while preserving important historical information, and ensuring efficient token usage while maximizing model effectiveness.
+
+For Claude Code users, mastering context engineering means learning to balance the power of having an AI assistant with direct access to your codebase against the constraints of context window limitations and attention budgets. By strategically managing what information Claude loads, when it loads it, and how long it stays in context, developers can achieve more reliable, efficient, and effective AI-assisted coding experiences.
+
+### Getting Started with Context Engineering in Claude Code
+
+1. **Start Small**: Begin with focused tasks and minimal context, gradually expanding as needed. Start with clear task descriptions rather than loading all project files upfront.
+2. **Use CLAUDE.md Files**: Document project-specific information that Claude needs to know. Create a hierarchy of CLAUDE.md files at different levels (project root, subdirectories, user global) to provide appropriate context at each level.
+3. **Leverage Built-in Tools**: Use `/compact` and `/clear` to manage context window usage. Use `/compact` periodically during long sessions and `/clear` when switching between unrelated tasks.
+4. **Implement Strategic Loading**: Load files progressively as needed rather than all at once. Use tab-completion to quickly reference files and provide specific instructions about what Claude should read and understand.
+5. **Monitor Performance**: Pay attention to token usage and task completion rates. Use `/cost` and `ccusage` to monitor consumption and identify optimization opportunities.
+6. **Plan for Evolution**: Use document-first workflows with PLAN.md files and maintain structured logs of your development sessions. Archive context when starting new approaches rather than continuing failed attempts.
+7. **Iterate and Improve**: Continuously refine your context management strategies based on results. Document failures and analyze them to improve future context engineering approaches.
+
+### Advanced Context Engineering Patterns
+
+As you become more proficient with context engineering in Claude Code, consider implementing these advanced patterns:
+
+1. **Multi-Session Context Management**: Use git worktrees to run multiple Claude Code sessions simultaneously on different parts of your project, each focused on its own independent task. This approach allows you to work on multiple features or fixes in parallel without interference. For example, you can create one worktree for a new feature, another for bug fixes, and a third for refactoring.
+
+2. **External Context Systems**: Integrate external knowledge management systems with Claude Code through MCP servers and custom slash commands to provide structured access to organizational knowledge. This includes connecting to database query systems, API documentation servers, project management tools, and more, allowing Claude to access external information without consuming large context windows.
+
+3. **Automated Context Optimization**: Develop scripts and workflows that automatically manage context loading, compaction, and clearing based on task patterns and historical performance data. This can include intelligent preloading based on file access patterns, automatic selection of appropriate context strategies based on task types, and optimization of context configurations based on historical success rates.
+
+4. **Context Versioning**: Implement version control for your context management strategies, tracking how different approaches to context engineering impact task success rates and efficiency. This includes version control for CLAUDE.md files, version management for custom commands and hooks, and change tracking for entire context configurations.
+
+### Context Engineering in Practice: Real-World Case Studies
+
+Let's understand the practical application of context engineering through some real-world cases:
+
+#### Case 1: Large Codebase Refactoring
+
+When dealing with a large React component containing 18,000 lines of code, traditional AI tools often struggle. However, with carefully designed context engineering strategies, Claude Code was able to successfully complete this task:
+
+1. **Pre-load Key Files**: First have Claude read the component's dependency files, related tests, and documentation
+2. **Layered Processing**: Break down the refactoring into small, manageable steps, processing only one part of the component at a time
+3. **Context Refresh**: Reload modified files after each step to ensure Claude has the latest information
+4. **Progressive Validation**: Run tests after each small step to ensure functional integrity
+
+This approach not only successfully completed the refactoring but also avoided the errors and rollbacks common with traditional methods.
+
+#### Case 2: API Contract Management
+
+When handling API contract changes, context engineering is crucial for preventing breaking changes:
+
+```
+# AIDEV-NOTE: API Contract Boundary - v2.3.1
+# ANY changes require version bump and migration plan
+# See: docs/api-versioning.md
+
+@router.get("/users/{user_id}/feed")
+async def get_user_feed(user_id: UUID) -> FeedResponse:
+    # Claude: the response shape here is sacred
+    # Changes break real apps in production
+```
+
+By using anchor comments and explicit boundary definitions, teams can ensure Claude doesn't accidentally break existing API contracts.
+
+#### Case 3: Test-Driven Development
+
+In the vibe coding era, tests remain sacred. An effective strategy is:
+
+1. **Human-Written Tests**: Tests encode human intent and business logic, which AI cannot replace
+2. **AI Implementation**: Let Claude implement functionality based on human-written tests
+3. **Iterative Improvement**: When tests fail, let Claude analyze the failure reasons and make fixes
+4. **Verification Confirmation**: Final review by humans of test coverage and edge case handling
+
+This approach combines AI efficiency with human expertise, producing higher quality results.
+
+### Context Engineering Tools and Techniques
+
+#### 1. Custom Slash Commands
+
+Creating reusable command templates can significantly improve efficiency:
+
+```
+# .claude/commands/test.md
+Please create comprehensive tests for: $ARGUMENTS
+
+Test requirements:
+- Use Jest and React Testing Library
+- Place tests in __tests__ directory
+- Mock Firebase/Firestore dependencies
+- Test all major functionality
+- Include edge cases and error scenarios
+```
+
+Using `/test MyButton` can quickly generate tests for specific components.
+
+#### 2. Hooks System
+
+Claude Code's hooks system allows executing custom commands at various lifecycle events:
+
+```
+{
+  "hooks": [
+    {
+      "matcher": "Edit|Write",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "prettier --write \"$CLAUDE_FILE_PATHS\""
+        }
+      ]
+    }
+  ]
+}
+```
+
+This ensures code remains consistently formatted before being written to the filesystem.
+
+#### 3. Subagent Pattern
+
+Using subagents can effectively manage context for complex tasks:
+
+```
+> Create a deep research task to figure out how to migrate a website from tailwind 3 to 4 and then present me with a short summary of the results
+
+⏺ I'll create a research task to investigate migrating from Tailwind CSS v3 to v4, focusing on the specific context of your Tailwind UI codebase.
+
+⏺ Task(Tailwind v3 to v4 migration research)
+  ⎿  Done (4 tool uses · 29.9k tokens · 5m 47.6s)
+
+⏺ Summary
+
+  Migrating from Tailwind CSS v3 to v4 involves significant changes but comes with major performance improvements (3.5x faster builds) and a better developer experience.
+```
+
+### Context Engineering Best Practices Summary
+
+Based on real-world usage experience, here are the key best practices for context engineering:
+
+1. **Document First**: Always start with clear documentation rather than jumping directly into coding
+2. **Progressive Loading**: Load context incrementally as needed rather than all at once
+3. **Regular Compaction**: Use the `/compact` command regularly to compress context and maintain performance
+4. **Clear Boundaries**: Define clear operational boundaries for AI to prevent accidental changes
+5. **Human Oversight**: Maintain human oversight at critical decision points, especially in areas involving business logic and security
+6. **Version Control**: Version control context configurations and important decisions
+7. **Performance Monitoring**: Continuously monitor token usage and task success rates to optimize strategies
+
+### Future Outlook
+
+As AI systems become more capable and ubiquitous, context engineering will continue to evolve:
+
+#### Larger Context Windows
+
+While context engineering will remain important even as context windows grow larger, the strategies will shift from strict limitation management to more sophisticated organization and prioritization.
+
+#### Automated Context Management
+
+We expect to see increasing automation in context curation, with AI systems becoming better at managing their own context without explicit human intervention.
+
+#### Multi-Modal Context
+
+As AI systems incorporate more modalities (images, audio, video), context engineering will need to account for heterogeneous information types and their interactions.
+
+#### Personalized Context
+
+Context engineering will increasingly involve tailoring information presentation to individual models' preferences and capabilities, moving beyond one-size-fits-all approaches.
+
+## Conclusion
+
+Context engineering represents a fundamental shift in how we think about building with large language models. Rather than focusing solely on crafting the perfect prompt, we must now consider the holistic information environment in which our models operate.
+
+Effective context engineering requires balancing multiple competing concerns: providing sufficient information for task completion while avoiding information overload, maintaining context freshness while preserving important historical information, and ensuring efficient token usage while maximizing model effectiveness.
+
+For Claude Code users, mastering context engineering means learning to balance the power of having an AI assistant with direct access to your codebase against the constraints of context window limitations and attention budgets. By strategically managing what information Claude loads, when it loads it, and how long it stays in context, developers can achieve more reliable, efficient, and effective AI-assisted coding experiences.
+
+### Getting Started with Context Engineering in Claude Code
+
+1. **Start Small**: Begin with focused tasks and minimal context, gradually expanding as needed. Start with clear task descriptions rather than loading all project files upfront.
+2. **Use CLAUDE.md Files**: Document project-specific information that Claude needs to know. Create a hierarchy of CLAUDE.md files at different levels (project root, subdirectories, user global) to provide appropriate context at each level.
+3. **Leverage Built-in Tools**: Use `/compact` and `/clear` to manage context window usage. Use `/compact` periodically during long sessions and `/clear` when switching between unrelated tasks.
+4. **Implement Strategic Loading**: Load files progressively as needed rather than all at once. Use tab-completion to quickly reference files and provide specific instructions about what Claude should read and understand.
+5. **Monitor Performance**: Pay attention to token usage and task completion rates. Use `/cost` and `ccusage` to monitor consumption and identify optimization opportunities.
+6. **Plan for Evolution**: Use document-first workflows with PLAN.md files and maintain structured logs of your development sessions. Archive context when starting new approaches rather than continuing failed attempts.
+7. **Iterate and Improve**: Continuously refine your context management strategies based on results. Document failures and analyze them to improve future context engineering approaches.
+
+### Advanced Context Engineering Patterns
+
+As you become more proficient with context engineering in Claude Code, consider implementing these advanced patterns:
+
+1. **Multi-Session Context Management**: Use git worktrees to run multiple Claude Code sessions simultaneously on different parts of your project, each focused on its own independent task.
+2. **External Context Systems**: Integrate external knowledge management systems with Claude Code through MCP servers and custom slash commands to provide structured access to organizational knowledge.
+3. **Automated Context Optimization**: Develop scripts and workflows that automatically manage context loading, compaction, and clearing based on task patterns and historical performance data.
+4. **Context Versioning**: Implement version control for your context management strategies, tracking how different approaches to context engineering impact task success rates and efficiency.
+
+As the field continues to evolve, we encourage practitioners to approach context engineering with the same rigor and creativity they bring to other aspects of AI system design. The agents we build today will be more capable, more reliable, and more aligned with human intentions when we give careful consideration to the context in which they operate.
+
+By treating context as a first-class concern in our engineering practice, we can unlock the full potential of AI agents while avoiding the pitfalls that come with naive approaches to context management.
+
+*For more information on building with Claude Code, see our [Claude Code Best Practices](/docs/en/best-practices/claude-code-best-practices), [Claude Code Complete Guide](/docs/en/best-practices/claude-code-comprehensive-guide), and [Claude Code Production Workflow Guide](/docs/en/best-practices/claude-code-production-workflow).*
+
+---
+
+*This article is based on insights from Anthropic's engineering team and their experience building and deploying AI agents in real-world applications. For more information on building with Claude, visit our [developer documentation](https://www.anthropic.com/docs).*

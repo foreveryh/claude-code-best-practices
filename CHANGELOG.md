@@ -43,6 +43,51 @@ Each entry should follow this format:
 
 ## Publication History
 
+## [2025-09-30] - Effective Context Engineering for AI Agents
+
+### Changed
+- **[best-practices]** Enhanced article: "Effective Context Engineering for AI Agents"
+  - Author: Anthropic Engineering Team
+  - Languages: EN/ZH
+  - Type: Guide Enhancement
+  - Description: Significantly expanded the context engineering article with comprehensive practices for Claude Code users, showing how to apply context engineering principles to AI-assisted coding workflows with specific techniques and strategies.
+  - Files:
+    - EN: `/content/docs/en/best-practices/effective-context-engineering-for-ai-agents.mdx`
+    - ZH: `/content/docs/zh/best-practices/effective-context-engineering-for-ai-agents.mdx`
+  - Key Enhancements:
+    - Added comprehensive Claude Code specific context management strategies
+    - Integrated detailed CLAUDE.md file hierarchy and best practices
+    - Included advanced dynamic context retrieval techniques for Claude Code
+    - Added context window optimization with /compact, /clear, and session management
+    - Provided Claude Code specific best practices for task planning and execution
+    - Integrated production workflow patterns from document-first approaches
+    - Added advanced context engineering patterns and multi-session management
+    - Enhanced with additional practical干货 (concrete, actionable content) from best practices documentation
+    - Integrated specific command usage, file management strategies, and advanced patterns
+    - Added more detailed technical examples and specific implementation guidance
+    - Included real-world case studies and practical examples from industry experience
+    - Added advanced tools and techniques including custom commands, hooks, and subagents
+    - Provided comprehensive best practices summary and future outlook
+
+### Added
+- **[best-practices]** New article: "Effective Context Engineering for AI Agents"
+  - Source: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+  - Author: Anthropic Engineering Team
+  - Languages: EN/ZH
+  - Type: Guide
+  - Description: A comprehensive guide to context engineering - the evolution from prompt engineering to managing the holistic state available to LLMs for building steerable, effective agents. Learn strategies for optimizing context windows, managing attention budgets, and designing efficient agent architectures.
+  - Files:
+    - EN: `/content/docs/en/best-practices/effective-context-engineering-for-ai-agents.mdx`
+    - ZH: `/content/docs/zh/best-practices/effective-context-engineering-for-ai-agents.mdx`
+  - Key Topics:
+    - Context engineering vs. prompt engineering
+    - Attention budget management and context rot
+    - System prompt design and organization
+    - Tool efficiency and minimal viable tool sets
+    - Dynamic context retrieval and agentic search
+    - Context window management strategies
+    - Best practices for context engineering
+
 ## [2025-09-27] - Happy: Mobile and Web Client for Claude Code - Remote Coding & AI Assistant
 
 ### Changed

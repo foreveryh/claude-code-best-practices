@@ -30,17 +30,22 @@ export const baseOptions: BaseLayoutProps = {
       url: '/docs',
     },
     {
+      text: 'Claude.md',
+      url: 'https://claude.md',
+      external: true,
+    },
+    {
       text: 'Cookbook',
       url: 'https://github.com/foreveryh/claude-code-cookbook',
       external: true,
     },
     {
-      text: 'Official Docs',
-      url: 'https://claude.ai/code',
+      text: 'CCM Switch',
+      url: 'https://github.com/foreveryh/claude-cloud-switch',
       external: true,
     },
     {
-      text: 'Build with Claude',
+      text: 'ClaudeCode 101',
       url: 'https://www.anthropic.com/learn/build-with-claude',
       external: true,
     },

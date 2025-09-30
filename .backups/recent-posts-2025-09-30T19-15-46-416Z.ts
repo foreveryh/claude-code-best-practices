@@ -3,13 +3,13 @@ import { ChangelogEntry } from './changelog';
 // 首页最近文章的结构化数组
 export const RECENT_POSTS: ChangelogEntry[] = [
   {
-    title: "AI 代理的有效上下文工程",
-    description: "上下文工程的全面指南——从提示工程到管理可用于 LLM 的整体状态，以构建可控、高效的代理。学习优化上下文窗口、管理注意力预算和设计高效代理架构的策略。",
-    date: "Tue Sep 30 2025 02:00:00 GMT+0200 (Central European Summer Time)",
-    category: "best-practices",
+    title: "使用 Claude Code 自动化文档：构建基于 Docusaurus Agent 的自更新文档系统",
+    description: "学习如何使用 Claude Code 和 Docusaurus 构建自动化文档系统。设置文档代理分析代码变更，自动更新项目文档，并与 CI/CD 工作流程集成。",
+    date: "2025-09-17",
+    category: "tools",
     language: "zh",
-    slug: "zh/best-practices/effective-context-engineering-for-ai-agents",
-    url: "/docs/zh/best-practices/effective-context-engineering-for-ai-agents"
+    slug: "zh/tools/automated-documentation-claude-code-docusaurus",
+    url: "/docs/zh/tools/automated-documentation-claude-code-docusaurus"
   },];
 
 // 获取首页最近文章的函数
