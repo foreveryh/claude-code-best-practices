@@ -1,0 +1,113 @@
+---
+title: "实现 5 倍生产力的主工程师工作流"
+description: "探索顶尖工程师使用的系统化提示工程工作流，实现 5 倍更高的吞吐量。学习如何从零开始规划工程项目，包括结构化探索、澄清问题、文件树图和详细变更计划。"
+date: "2025-10-04"
+author: "DeepToAI 团队"
+category: "best-practices"
+language: "zh"
+tags: ["提示工程", "生产力", "工程工作流", "AI 辅助开发", "规划"]
+---
+
+# 实现 5 倍生产力的主工程师工作流
+
+我们的一位工程师的吞吐量比我在过去公司合作过的任何人都高出 5 倍。他的部分秘诀在于他对 AI 工作流的精心调校。这是他用来从零开始规划工程项目的主要提示：
+
+## 原始提示词
+
+```prompt
+## 1. Explore the Codebase
+
+* List relevant directories to show project structure.
+* Review http://AGENTS[.]md, http://CLAUDE[.]md, and files under `docs/` for context and conventions.
+* Check existing code for examples of similar implementations.
+
+## 2. Ask Clarifying Questions
+
+If anything is ambiguous, ask questions before finalizing the plan.
+Examples:
+
+* "Which module should the new helper live in?"
+* "Should this endpoint return JSON or HTML?"
+
+## 3. File Tree of Changes
+
+At the top of the plan, show a tree diagram of affected files.
+Use markers for status:
+
+* UPDATE = update
+* NEW = new file
+* DELETE = deletion
+
+Example:
+```
+/src
+ ├── services
+ │    ├── UPDATE user.service.ts
+ │    └── NEW payment.service.ts
+ ├── utils
+ │    └── DELETE legacy-helpers.ts
+ └── UPDATE index.ts
+```
+
+## 4. File-by-File Change Plan
+
+For each file:
+
+* Show full path + action (update, new, delete).
+* Explain the exact changes in plain language.
+* Include a short code snippet for the main update.
+
+Example:
+
+* File: `src/services/user.service.ts` (UPDATE)
+
+  * Add a method `getUserByEmail(email: string)` that looks up a user from an in-memory list.
+  * Refactor `getUserById` to reuse shared lookup logic.
+
+  ```
+  const users = [
+    { id: 1, email: "alice@example[.]com", name: "Alice" },
+    { id: 2, email: "bob@example[.]com", name: "Bob" },
+  ];
+
+  export function getUserByEmail(email: string) {
+    return users.find(u => http://u[.]email === email) || null;
+  }
+
+  export function getUserById(id: number) {
+    return users.find(u => http://u[.]id === id) || null;
+  }
+  ```
+
+## 5. Explanations & Context
+
+At the end of the plan, include:
+
+* Rationale for each change (why it's needed).
+* Dependencies or side effects to watch for.
+* Testing suggestions to validate correctness.
+```
+
+## 为什么这个工作流有效
+
+这个系统化的方法能带来 5 倍生产力，因为：
+
+1. **防止返工**：通过预先探索代码库和提出澄清问题，避免代价高昂的误解。
+2. **改善沟通**：结构化的计划既可作为 AI 的指导，也可作为人类协作者的沟通工具。
+3. **便于审查**：文件树图和详细的变更计划使团队成员容易理解变更范围和实现方式。
+4. **减少认知负担**：将变更分解到文件级别，减少心理负担，使复杂任务变得可管理。
+5. **确保质量**：包含理由和测试建议有助于保持高标准并发现潜在问题。
+
+## 为您的项目调整此工作流
+
+要在您自己的项目中实施此工作流：
+
+1. **从探索开始**：始终先了解现有的代码库结构和约定。
+2. **及早提出问题**：不要假设您完全理解需求 - 在深入实施之前先澄清模糊之处。
+3. **可视化变更**：创建清晰的文件树图来传达变更范围。
+4. **详细规划**：对于每个文件，准确解释将要发生什么变化以及为什么。
+5. **记录上下文**：包括理由和测试策略以确保可维护性。
+
+这个工作流代表了从临时编码到系统化工程的转变。通过在这一结构化过程中将 AI 视为协作伙伴，顶尖工程师实现了显著的生产力提升，同时保持了高质量和清晰的沟通。
+
+无论您是独自工作还是与团队合作，采用这种主工程师工作流都能改变您处理软件开发项目的方式。

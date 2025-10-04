@@ -1,15 +1,48 @@
 # Changelog
 
-All notable changes and content publications to this project will be documented in this file.
+All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased]
+## [2025-10-04] - Master Engineering Workflow for 5x Productivity
 
 ### Added
-- Project changelog system for tracking content publications
-- Automated content workflow documentation
+- **[best-practices]** New article: "The Master Engineering Workflow That Delivers 5x Productivity"
+  - Source: Twitter post analysis
+  - Author: DeepToAI Team
+  - Languages: EN/ZH
+  - Type: Best Practices Guide
+  - Description: Discover the systematic prompt engineering workflow used by top engineers to achieve 5x higher throughput. Learn how to plan engineering projects from scratch with structured exploration, clarifying questions, file tree diagrams, and detailed change plans.
+  - Files:
+    - EN: `/content/docs/en/best-practices/master-engineering-workflow-5x-productivity.mdx`
+    - ZH: `/content/docs/zh/best-practices/master-engineering-workflow-5x-productivity.mdx`
+  - Features:
+    - 5-step engineering workflow for systematic project planning
+    - Codebase exploration techniques
+    - Clarifying questions framework
+    - File tree visualization with status markers
+    - File-by-file change planning with code snippets
+    - Rationale and context documentation
+    - Productivity improvement strategies
+
+## [2025-09-30] - Enhanced Context Engineering Guide
+
+### Updated
+- **[best-practices]** Enhanced article: "Effective Context Engineering for AI Agents"
+  - Source: Anthropic Engineering Team
+  - Author: Anthropic Engineering Team & DeepToAI Team
+  - Languages: EN/ZH
+  - Type: Comprehensive Guide
+  - Description: Significantly expanded the context engineering article with comprehensive practices for Claude Code users, showing how to apply context engineering principles to AI-assisted coding workflows with specific techniques and strategies.
+  - Files:
+    - EN: `/content/docs/en/best-practices/effective-context-engineering-for-ai-agents.mdx`
+    - ZH: `/content/docs/zh/best-practices/effective-context-engineering-for-ai-agents.mdx`
+  - Enhancements:
+    - Added Claude Code specific context engineering practices
+    - Expanded CLAUDE.md file management strategies
+    - Enhanced file loading and context optimization techniques
+    - Improved tool selection and efficiency guidelines
+    - Added advanced context window management patterns
+    - Integrated document-first workflow approaches
+    - Added real-world case studies and examples
 
 ---
 
@@ -17,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Each entry should follow this format:
 
-```markdown
+````
 ## [Date] - Publication Title
 
 ### Added
@@ -361,7 +394,7 @@ After each content publication, update this changelog with:
 - [ ] Index update (`npm run update-indexes`)
 
 ### Automation Commands
-```bash
+```
 # Add to recent posts
 npm run recent-posts add <article-path> <language>
 
