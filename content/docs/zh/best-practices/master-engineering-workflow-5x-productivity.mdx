@@ -14,7 +14,7 @@ tags: ["提示工程", "生产力", "工程工作流", "AI 辅助开发", "规�
 
 ## 原始提示词
 
-```prompt
+```
 ## 1. Explore the Codebase
 
 * List relevant directories to show project structure.
@@ -39,7 +39,6 @@ Use markers for status:
 * DELETE = deletion
 
 Example:
-```
 /src
  ├── services
  │    ├── UPDATE user.service.ts
@@ -47,7 +46,6 @@ Example:
  ├── utils
  │    └── DELETE legacy-helpers.ts
  └── UPDATE index.ts
-```
 
 ## 4. File-by-File Change Plan
 
@@ -64,20 +62,18 @@ Example:
   * Add a method `getUserByEmail(email: string)` that looks up a user from an in-memory list.
   * Refactor `getUserById` to reuse shared lookup logic.
 
-  ```
   const users = [
     { id: 1, email: "alice@example[.]com", name: "Alice" },
     { id: 2, email: "bob@example[.]com", name: "Bob" },
   ];
 
   export function getUserByEmail(email: string) {
-    return users.find(u => http://u[.]email === email) || null;
+    return users.find(u => u.email === email) || null;
   }
 
   export function getUserById(id: number) {
-    return users.find(u => http://u[.]id === id) || null;
+    return users.find(u => u.id === id) || null;
   }
-  ```
 
 ## 5. Explanations & Context
 
